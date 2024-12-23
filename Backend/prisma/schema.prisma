@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("LOCAL_DATABASE_URL")
+}
+
+model User {
+  id                 Int       @id @default(autoincrement())
+  email              String    @unique
+  password           String
+  name               String
+  phone              String?
+  bitcoinBalance     Float     @default(0.0)
+  ethereumBalance    Float     @default(0.0)
+  usdtBalance        Float     @default(0.0)
+  usdcBalance        Float     @default(0.0)
+  transactions       Transaction[]
+  investmentPlan     InvestmentPlan?
+  withdrawalRequests WithdrawalRequest[]
+  notifications      Notification[]
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+}
+
+model Transaction {
+  id          Int       @id @default(autoincrement())
+  type        TransactionType
+  asset       AssetType
+  amount      Float
+  status      TransactionStatus
+  date        DateTime  @default(now())
+  details     String?
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id])
+  name        String?
+  phone       String?
+  planName    String?
+  planId      Int?
+  plan        InvestmentPlan? @relation(fields: [planId], references: [id])
+}
+
+model InvestmentPlan {
+  id            Int       @id @default(autoincrement())
+  plan          String
+  minimumAmount Int
+  maximumAmount Int
+  interestRate  Float
+  totalReturns  Int
+  userId        Int?       @unique
+  user          User?      @relation(fields: [userId], references: [id])
+  transactions  Transaction[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model WithdrawalRequest {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id])
+  amount      Float
+  asset       AssetType
+  network     String
+  address     String?
+  status      RequestStatus
+  createdAt   DateTime  @default(now())
+}
+
+model Notification {
+  id          Int       @id @default(autoincrement())
+  message     String
+  read        Boolean   @default(false)
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id])
+  createdAt   DateTime  @default(now())
+}
+
+enum TransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  SUBSCRIPTION
+}
+
+enum AssetType {
+  BITCOIN
+  ETHEREUM
+  USDT
+  USDC
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  ACTIVE
+  INACTIVE
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
