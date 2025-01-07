@@ -25,6 +25,8 @@ interface Withdrawal {
   createdAt: string;
 }
 
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
+
 const WithdrawalHistory = () => {
   const [withdrawals, setWithdrawals] = useState<Withdrawal[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,7 +35,7 @@ const WithdrawalHistory = () => {
   useEffect(() => {
     const fetchWithdrawals = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/withdrawals', {
+        const response = await axios.get(`${apiBaseUrl}/api/withdrawals`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           },

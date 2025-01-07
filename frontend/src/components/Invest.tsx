@@ -61,11 +61,13 @@ const InvestmentPlans = () => {
   const [showInsufficientDialog, setShowInsufficientDialog] = useState(false);
   const navigate = useNavigate();
 
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
+
   useEffect(() => {
     const fetchInvestmentPlans = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:3001/api/investments', {
+        const response = await axios.get(`${apiBaseUrl}/api/investments`, {
           headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('token')
           }
@@ -81,7 +83,7 @@ const InvestmentPlans = () => {
 
     const fetchBalances = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/users/balances', {
+        const response = await axios.get(`${apiBaseUrl}/api/users/balances`, {
           headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('token')
           },
@@ -121,7 +123,7 @@ const InvestmentPlans = () => {
     const assetType = match ? match[0] : '';
 
     try {
-      const response = await axios.post('http://localhost:3001/api/investments/subscribe', {
+      const response = await axios.post(`${apiBaseUrl}/api/investments/subscribe`, {
         userId: localStorage.getItem('userId'),
         planId: selectedPlan.id,
         asset: assetType.toUpperCase(),

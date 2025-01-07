@@ -5,6 +5,8 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
+
 const AdminOverview = () => {
   const [totalUsers, setTotalUsers] = useState(0);
   const [totalTransactions, setTotalTransactions] = useState(0);
@@ -16,17 +18,17 @@ const AdminOverview = () => {
       setLoading(true);
       try {
         const [usersResponse, transactionsResponse, investmentsResponse] = await Promise.all([
-          axios.get('http://localhost:3001/api/users/count', {
+          axios.get(`${apiBaseUrl}/api/users/count`, {
             headers: {
               'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
             }
           }),
-          axios.get('http://localhost:3001/api/transactions/count', {
+          axios.get(`${apiBaseUrl}/api/transactions/count`, {
             headers: {
               'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
             }
           }),
-          axios.get('http://localhost:3001/api/investments/count', {
+          axios.get(`${apiBaseUrl}/api/investments/count`, {
             headers: {
               'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
             }

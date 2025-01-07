@@ -2,6 +2,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
+
 const PublicRoute = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -17,7 +19,7 @@ const PublicRoute = ({ children }) => {
                     return;
                 }
 
-                const response = await axios.post('http://localhost:3001/token/validate', {
+                const response = await axios.post(`${apiBaseUrl}/token/validate`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     },

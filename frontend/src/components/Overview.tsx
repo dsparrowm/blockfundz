@@ -49,6 +49,8 @@ const Overview = () => {
   // Get user from store
   const user = useStore((state) => state.user);
 
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
+
   // Fetch transactions and balances effect
   useEffect(() => {
     const fetchTransactionsAndBalances = async () => {
@@ -56,7 +58,7 @@ const Overview = () => {
         setIsLoading(true);
         
         // Fetch transactions
-        const transactionsResponse = await axios.get("http://localhost:3001/api/users/transactions", {
+        const transactionsResponse = await axios.get(`${apiBaseUrl}/api/users/transactions`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -67,7 +69,7 @@ const Overview = () => {
         setTransactions(transactionsResponse.data.transactions);
 
         // Fetch balances
-        const balancesResponse = await axios.get("http://localhost:3001/api/users/balances", {
+        const balancesResponse = await axios.get(`${apiBaseUrl}/api/users/balances`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },

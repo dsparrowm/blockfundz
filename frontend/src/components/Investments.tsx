@@ -52,10 +52,12 @@ const Investments = () => {
 
   const [investments, setInvestments] = useState<Investment[]>([]);
 
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
+
   useEffect(() => {
     const fetchInvestments = async () => {
       try {
-        const response = await axios.get('/api/investmentPlan');
+        const response = await axios.get(`${apiBaseUrl}/api/investmentPlan`);
         setInvestments(response.data);
       } catch (error) {
         console.error('Error fetching investments:', error);

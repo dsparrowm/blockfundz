@@ -18,6 +18,8 @@ interface WithdrawalRequest {
   createdAt: string;
 }
 
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
+
 const WithdrawalRequestManagement = () => {
   const [withdrawalRequests, setWithdrawalRequests] = useState<WithdrawalRequest[]>([]);
   const [loading, setLoading] = useState(true);
@@ -29,7 +31,7 @@ const WithdrawalRequestManagement = () => {
     const fetchWithdrawalRequests = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:3001/api/withdrawals', {
+        const response = await axios.get(`${apiBaseUrl}/api/withdrawals`, {
           headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
           }

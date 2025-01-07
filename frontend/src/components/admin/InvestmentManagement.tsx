@@ -22,6 +22,8 @@ interface Investment {
   createdAt: string;
 }
 
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
+
 const InvestmentManagement = () => {
   const [investments, setInvestments] = useState<Investment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,7 +35,7 @@ const InvestmentManagement = () => {
     const fetchInvestments = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:3001/api/investments', {
+        const response = await axios.get(`${apiBaseUrl}/api/investments`, {
           headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
           }

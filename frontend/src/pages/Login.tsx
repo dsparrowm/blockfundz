@@ -36,6 +36,9 @@ const Login = () => {
   const setUser = useStore(state => state.setUser)
   const navigate = useNavigate();
 
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
+
+
   // Add useEffect to check for existing token and validate
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -44,7 +47,7 @@ const Login = () => {
       if (token) {
         try {
           // Add your token validation endpoint here
-          const response = await axios.post("http://localhost:3001/token/validate", {
+          const response = await axios.post(`${apiBaseUrl}/token/validate`, {
             headers: {
               'Authorization': "Bearer " + localStorage.getItem("token")
             }
@@ -100,7 +103,7 @@ const Login = () => {
     setSuccessMessage("");
     
     try {
-      const response = await axios.post("http://localhost:3001/api/auth/signin", formData)
+      const response = await axios.post(`${apiBaseUrl}/api/auth/signin`, formData)
       console.log(response.data)
       toast.success("Login successful", {className:"text-[15px] px-4 py-2"})
       setUser(response.data.user)

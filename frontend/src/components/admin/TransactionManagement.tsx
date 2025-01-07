@@ -18,6 +18,8 @@ interface Transaction {
   phone: string;
 }
 
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
+
 const TransactionManagement = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
@@ -29,7 +31,7 @@ const TransactionManagement = () => {
     const fetchTransactions = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:3001/api/transactions', {
+        const response = await axios.get(`${apiBaseUrl}/api/transactions`, {
           headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
           }

@@ -26,6 +26,8 @@ interface InvestmentPlan {
   totalReturns: number;
 }
 
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
+
 const InvestmentPlansManagement = () => {
   const [investmentPlans, setInvestmentPlans] = useState<InvestmentPlan[]>([]);
   const [loading, setLoading] = useState(true);
@@ -68,7 +70,7 @@ const InvestmentPlansManagement = () => {
   const handleEditPlan = async (updatedPlan: InvestmentPlan) => {
     if (!updatedPlan) return; // Ensure updatedPlan is not null or undefined
     try {
-      const response = await axios.put(`http://localhost:3001/api/investments/${updatedPlan.id}`, updatedPlan, {
+      const response = await axios.put(`${apiBaseUrl}/api/investments/${updatedPlan.id}`, updatedPlan, {
         headers: {
           'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
         }
@@ -83,7 +85,7 @@ const InvestmentPlansManagement = () => {
 
   const handleDeletePlan = async (planId: number) => {
     try {
-      await axios.delete(`http://localhost:3001/api/investments/${planId}`, {
+      await axios.delete(`${apiBaseUrl}/api/investments/${planId}`, {
         headers: {
           'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
         }

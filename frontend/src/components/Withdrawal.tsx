@@ -14,6 +14,8 @@ const Withdraw = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -21,7 +23,7 @@ const Withdraw = () => {
     setSuccess('');
 
     try {
-      const response = await axios.post('http://localhost:3001/api/withdrawals', {
+      const response = await axios.post(`${apiBaseUrl}/api/withdrawals`, {
         userId: localStorage.getItem('userId'),
         amount: parseFloat(amount),
         asset,

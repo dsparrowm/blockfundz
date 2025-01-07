@@ -55,6 +55,8 @@ interface UserManagementProps {
   onDeleteUser?: (userId: string) => void;
 }
 
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
+
 const UserManagement = ({
   isLoading = false,
   onEditUser,
@@ -101,7 +103,7 @@ const UserManagement = ({
     if (!selectedUserId) return;
 
     try {
-      const response = await axios.post('http://localhost:3001/api/users/credit', {
+      const response = await axios.post(`${apiBaseUrl}/api/users/credit`, {
         userId: selectedUserId,
         bitcoin: bitcoinBalance,
         ethereum: ethereumBalance,
@@ -134,7 +136,7 @@ const UserManagement = ({
 
   const handleAddUser = async () => {
     try {
-      const response = await axios.post('http://localhost:3001/api/auth/signup', newUser, {
+      const response = await axios.post(`${apiBaseUrl}/api/auth/signup`, newUser, {
         headers: {
           'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
         }

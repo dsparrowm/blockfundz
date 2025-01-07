@@ -32,10 +32,14 @@ const DepositHistory = () => {
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 10;
 
+  
+
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as String || "http://localhost:3001";
+
   useEffect(() => {
     const fetchDeposits = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/deposits', {
+        const response = await axios.get(`${apiBaseUrl}/api/deposits`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           },

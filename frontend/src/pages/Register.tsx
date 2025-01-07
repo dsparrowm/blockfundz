@@ -8,8 +8,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios, { AxiosError } from "axios";
 import React from "react";
-import { Input } from "../components/ui/input";
 import { toast } from "sonner";
+
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
 
 
 const Register = () => {
@@ -65,7 +66,7 @@ const Register = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/api/auth/signup', formValues);
+      const response = await axios.post(`${apiBaseUrl}/api/auth/signup`, formValues);
       if (response.status === 200) {
         toast.success(response.data.message || 'Account created successfully');
         navigate('/login');

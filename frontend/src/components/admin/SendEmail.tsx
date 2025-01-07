@@ -9,6 +9,8 @@ import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
 import axios from 'axios';
 
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
+
 const EmailSenderComponent = () => {
   // State management
   const [recipientMode, setRecipientMode] = useState('single');
@@ -28,7 +30,7 @@ const EmailSenderComponent = () => {
         { id: '2', name: 'Jane Smith', email: 'jane@example.com' },
         { id: '3', name: 'Mike Johnson', email: 'mike@example.com' }
       ];
-      const userResponse = await axios.get('http://localhost:3001/api/users', {
+      const userResponse = await axios.get(`${apiBaseUrl}/api/users`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
         }
@@ -63,7 +65,7 @@ const EmailSenderComponent = () => {
     try {
       // email sending
       console.log('Sending email to:', recipients);
-      const response = await axios.post('http://localhost:3001/api/email', {
+      const response = await axios.post(`${apiBaseUrl}api/email`, {
         recipients,
         subject: emailSubject,
         body: emailBody
