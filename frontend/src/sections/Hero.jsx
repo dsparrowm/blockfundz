@@ -78,7 +78,7 @@ const Hero = () => {
             whileHover="hover"
             variants={textVariants}
           >
-            BlockFundz
+            NexGen
           </motion.span>
         </h1>
         <p className='font-montserrat text-gray-400 text-lg leading-8 mt-6 mb-10 max-w-2xl'>

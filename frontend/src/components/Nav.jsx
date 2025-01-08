@@ -48,7 +48,7 @@ const Nav = () => {
               <span className='text-3xl text-orange-500 mr-1 pt-2'>
                 <ion-icon name="logo-ionic"></ion-icon>
               </span>
-              BlockFundz
+              NexGen
             </div>
           </Link>
 

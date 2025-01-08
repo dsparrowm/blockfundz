@@ -84,10 +84,10 @@ const Footer = () => {
                   <a href="/">
                       <img src={logo} alt="Logo" width={40} height={10}/>
                   </a>
-                  <p className='text-[15px] text-orange-500 leading-10'>BlockFundz</p>
+                  <p className='text-[15px] text-orange-500 leading-10'>NexGen</p>
               </div>
               <p className="text-sm text-gray-400">
-                © {currentYear} BlockFundz. All rights reserved.
+                © {currentYear} NexGen. All rights reserved.
               </p>
             </div>
 

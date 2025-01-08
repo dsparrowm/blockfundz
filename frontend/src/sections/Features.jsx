@@ -91,7 +91,7 @@ const Features = () => {
         </motion.h2>
         <motion.img 
           src={blogo} 
-          alt="BlockFundz Logo" 
+          alt="NexGen Logo" 
           className='mx-auto'
           initial="hidden"
           animate="visible"

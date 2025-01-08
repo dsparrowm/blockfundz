@@ -117,7 +117,7 @@ const Login = () => {
         <a href="">
           <img src={logo} alt="logo" width={50} height={10}/>
         </a>
-        <p className='text-[30px] text-orange-500 leading-8'>BlockFundz</p>
+        <p className='text-[30px] text-orange-500 leading-8'>NexGen</p>
       </div>
       <div className="relative backdrop-blur-lg bg-white/5 p-8 rounded-2xl shadow-xl border border-white/10 w-full max-w-md">
         <form action="" className="space-y-6" onSubmit={handleSubmit}>
