@@ -14,8 +14,7 @@ import PageWrapper from './components/loading/PageWrapper';
 
 const App = () => {
   return (
-    <LoadingProvider>
-      <Preloader />
+    <>
       {/* <Toaster richColors position={"top-center"} /> */}
 
       <Routes>
@@ -65,7 +64,7 @@ const App = () => {
           {/* 404 Page */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-    </LoadingProvider>
+    </>
   );
 };
 
