@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { toast } from 'sonner';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
@@ -24,12 +24,6 @@ const EmailSenderComponent = () => {
   // Fetch users on component mount (mock data for demonstration)
   useEffect(() => {
     const fetchUsers = async () => {
-      // In a real app, replace with actual API call to fetch users
-      const mockUsers = [
-        { id: '1', name: 'John Doe', email: 'john@example.com' },
-        { id: '2', name: 'Jane Smith', email: 'jane@example.com' },
-        { id: '3', name: 'Mike Johnson', email: 'mike@example.com' }
-      ];
       const userResponse = await axios.get(`${apiBaseUrl}/api/users`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
@@ -45,18 +39,18 @@ const EmailSenderComponent = () => {
   const handleSendEmail = async () => {
     // Validate inputs
     if (!emailSubject || !emailBody) {
-      toast("Validation Error", {description: "Please enter email subject and body"});
+      toast("Please enter email subject and body");
       return;
     }
 
     // Determine recipients based on mode
     const recipients = 
       recipientMode === 'single' 
-        ? [{ email: singleRecipient }] 
-        : selectedUsers.map(user => ({ email: user.email }));
+        ? [singleRecipient] 
+        : selectedUsers.map(user => user.email);
 
     if (recipients.length === 0) {
-      toast('Recipient Error', {description: 'Please select at least one recipient'});
+      toast('Please select at least one recipient');
       return;
     }
 
@@ -65,7 +59,7 @@ const EmailSenderComponent = () => {
     try {
       // email sending
       console.log('Sending email to:', recipients);
-      const response = await axios.post(`${apiBaseUrl}api/email`, {
+      const response = await axios.post(`${apiBaseUrl}/api/email`, {
         recipients,
         subject: emailSubject,
         body: emailBody
@@ -77,9 +71,7 @@ const EmailSenderComponent = () => {
       });
 
       if (response.status === 200) {
-        toast.success('Email Sent', {
-          description: `Email sent to ${recipients.length} recipient(s)`,
-        });
+        toast(`Email sent to ${recipients.length} recipient(s)`);
 
         // Reset form
         setEmailSubject('');
@@ -90,9 +82,7 @@ const EmailSenderComponent = () => {
         throw new Error('Failed to send email');
       }
     } catch (error) {
-      toast.error('Send Failed', {
-        description: 'Could not send email. Please try again.',
-      });
+      toast('Could not send email. Please try again.');
     } finally {
       setIsLoading(false);
     }

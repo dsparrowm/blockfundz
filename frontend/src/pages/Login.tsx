@@ -104,7 +104,6 @@ const Login = () => {
     
     try {
       const response = await axios.post(`${apiBaseUrl}/api/auth/signin`, formData)
-      console.log(response.data)
       toast.success("Login successful", {className:"text-[15px] px-4 py-2"})
       setUser(response.data.user)
       localStorage.setItem("userId", response.data.user.id)

@@ -8,10 +8,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios, { AxiosError } from "axios";
 import React from "react";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
-
 
 const Register = () => {
   const [globalError, setGlobalError] = useState<string | null>(null);
@@ -23,7 +22,7 @@ const Register = () => {
     password: '',
     phone: ''
   });
-
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -65,6 +64,7 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await axios.post(`${apiBaseUrl}/api/auth/signup`, formValues);
       if (response.status === 200) {
@@ -75,10 +75,11 @@ const Register = () => {
       let responseErrors: Array<{ path: string; message: string }> | undefined;
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError<ZodErrorResponse>;
+        console.log("The error code is: ", axiosError.response?.data)
         if (axiosError.response?.status === 400 || axiosError.response?.status === 401) {
           if (axiosError.response?.data.errors) {
-            console.log("This is the error from the server: ", axiosError.response.data.errors[0].message);
-            toast.error(axiosError.response.data.errors[0].message, {className:"text-[15px] px-4 py-2"})
+            toast.error(axiosError.response.data.message, { className: "text-[15px] px-4 py-2" })
+
             responseErrors = axiosError.response.data.errors;
           }
 
@@ -90,12 +91,16 @@ const Register = () => {
           } else {
             setGlobalError(axiosError.response.data.message || 'Login failed');
           }
+        } else if (axiosError.response?.status === 409) {
+          setGlobalError("User already exists. Please try logging in.");
         } else {
           setGlobalError("An unexpected error occurred. Please try again.");
         }
       } else {
         setGlobalError("Network error. Please check your connection.");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -104,7 +109,7 @@ const Register = () => {
       <a href="" onClick={() => navigate('/')}>
         <div className="mb-2 flex items-center">
           <img src={logo} alt="logo" width={50} height={10}/>
-          <p className='text-[30px] text-white leading-8'>Block<span className="text-orange-500">Fundz</span></p>
+          <p className='text-[30px] text-white leading-8'>Nex<span className="text-orange-500">Gen</span></p>
         </div>
       </a>
       <div className="relative backdrop-blur-lg bg-white/5 p-8 rounded-2xl shadow-xl border border-white/10 w-full max-w-md">
@@ -198,8 +203,9 @@ const Register = () => {
           <button
               type="submit"
               className="w-full bg-white/10 text-white rounded-lg py-3 font-medium hover:bg-white/20 transition-all duration-300 border border-white/10"
+              disabled={loading}
             >
-              Sign up
+              {loading ? 'Signing up...' : 'Sign up'}
             </button>
 
             {/* Sign Up Link */}

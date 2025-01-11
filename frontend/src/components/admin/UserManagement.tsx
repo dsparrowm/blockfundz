@@ -82,8 +82,8 @@ const UserManagement = ({
     const fetchUsers = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:3001/api/users', {
-          headers: {
+        const response = await axios.get(`${apiBaseUrl}/api/users`, {
+         headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
           }
         }); // Adjust the API endpoint as necessary
