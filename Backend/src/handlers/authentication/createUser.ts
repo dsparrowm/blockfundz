@@ -4,59 +4,96 @@ import { Request, Response } from 'express';
 import hashPassword from "../../helpers/hashPassword";
 import createJWT from "../../helpers/createJwt";
 import { createUserSchema } from "../../utils/validationSchemas";
+import RegisterEmail from "../../helpers/registerEmail";
+
 
 const createNewUser = async (req: Request, res: Response) => {
-    /**
-     * Check if user already exists
-     */
+    // Start a transaction
     try {
-        const { email, password, name, phone } = await createUserSchema.parseAsync(req.body);
-        const userExists = await prisma.user.findUnique({
-            where: {
-                email,
+        const result = await prisma.$transaction(async (tx) => {
+            // Validate request body
+            const { email, password, name, phone } = await createUserSchema.parseAsync(req.body);
+
+            // Check if user exists within transaction
+            const userExists = await tx.user.findUnique({
+                where: { email }
+            });
+
+            if (userExists) {
+                throw new Error('User already exists');
             }
-        })
-    
-        if (userExists) {
-            res.status(409)
-            res.json({message: "User already Exists", isSuccess: false});
-            return;
-        }
-    
-        /**
-         * if user doesn't exist, go ahead to create a new user
-         */
-        const hashedPassword = await hashPassword(password);
-        const createdUser = await prisma.user.create({
-            data: {
-                email,
-                password: hashedPassword,
-                name,
-                phone
-            }
-        })
-        delete createdUser.password
-        const payload = {
-            id: createdUser.id,
-            email: createdUser.email,
-            name: createdUser.name,
-            phone: createdUser.phone
-        }
-        const token = createJWT(payload);
-        res.status(200)
-        res.json({message: "Account Created successfully", token, createdUser, isSuccess: true});
+
+            // Hash password
+            const hashedPassword = await hashPassword(password);
+
+            // Create user within transaction
+            const createdUser = await tx.user.create({
+                data: {
+                    email,
+                    password: hashedPassword,
+                    name,
+                    phone
+                }
+            });
+
+            // Send registration email
+            await RegisterEmail(email);
+
+            // Prepare response payload
+            const { password: _, ...userWithoutPassword } = createdUser;
+            const payload = {
+                id: createdUser.id,
+                email: createdUser.email,
+                name: createdUser.name,
+                phone: createdUser.phone
+            };
+
+            const token = createJWT(payload);
+
+            return {
+                token,
+                createdUser: userWithoutPassword
+            };
+        }, {
+            // Transaction options
+            maxWait: 5000, // 5s maximum wait time
+            timeout: 10000  // 10s timeout
+        });
+
+        return res.status(200).json({
+            message: "Account created successfully",
+            ...result,
+            isSuccess: true
+        });
+
     } catch (err) {
+        // Handle different types of errors
         if (err instanceof z.ZodError) {
             const formattedError = err.errors.map(e => ({
-               path: e.path.join('.'),
-               message: e.message
-            }))
-         res.status(400)
-         return res.json({errors: formattedError, isSuccess: false})
-         }
-        res.status(500)
-        res.json({message: err.message, isSuccess: false})   
+                path: e.path.join('.'),
+                message: e.message
+            }));
+            return res.status(400).json({
+                errors: formattedError,
+                isSuccess: false
+            });
+        }
+
+        // Handle user exists error
+        if (err.message === 'User already exists') {
+            return res.status(409).json({
+                message: "User already exists",
+                isSuccess: false
+            });
+        }
+
+        // Handle all other errors
+        return res.status(500).json({
+            message: "An error occurred while creating the account",
+            error: err.message,
+            isSuccess: false
+        });
     }
-}
+};
 
 export default createNewUser;

@@ -23,6 +23,8 @@ interface LoginFormData {
   password: string;
 }
 
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
+
 
 const Login = () => {
   const [formData, setFormData] = useState<LoginFormData>({
@@ -69,7 +71,7 @@ const Login = () => {
     setSuccessMessage("");
     
     try {
-      const response = await axios.post("http://localhost:3001/api/auth/admin/login", formData)
+      const response = await axios.post(`${apiBaseUrl}/api/auth/admin/login`, formData)
       localStorage.setItem("adminToken", response.data.token)
       toast.success("Login successful", {className:"text-[15px] px-4 py-2"})
       setAdminUser(response.data.user)
