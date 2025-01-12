@@ -150,7 +150,7 @@ const Login = () => {
       <a href="" onClick={goHome}>
         <div className="mb-2 flex items-center">
           <img src={logo} alt="logo" width={50} height={10}/>
-          <p className='text-[30px] text-white leading-8'>Block<span className="text-orange-500">Fundz</span></p>
+          <p className='text-[30px] text-white leading-8'>Nex<span className="text-orange-500">Gen</span></p>
         </div>
       </a>
       <div className="relative backdrop-blur-lg bg-white/5 p-8 rounded-2xl shadow-xl border border-white/10 w-full max-w-md">

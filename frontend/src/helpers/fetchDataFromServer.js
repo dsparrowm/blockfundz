@@ -1,5 +1,5 @@
 
-const authUrl = 'http://localhost:3001/api/auth'
+const authUrl = 'https://blockfundzapi.onrender.com/api/auth'
 const protectedUrl = 'http://localhost:3001/api'
 
 const fetchDataFromServer = async (endpoint, method, body = null) => {

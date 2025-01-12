@@ -95,7 +95,7 @@ const Preloader = () => {
           ref={logoRef}
           className="text-4xl font-bold mb-8 text-primary"
         >
-          NexGenCrypto
+          NexGen
         </h1>
         
         <div 

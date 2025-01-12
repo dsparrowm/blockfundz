@@ -38,7 +38,7 @@ const InvestmentPlansManagement = () => {
     const fetchInvestmentPlans = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:3001/api/investments', {
+        const response = await axios.get(`${apiBaseUrl}/api/investments`, {
           headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
           }
@@ -56,7 +56,7 @@ const InvestmentPlansManagement = () => {
 
   const handleAddPlan = async (newPlan: { plan: string; minimumAmount: number; maximumAmount: number; interestRate: number; totalReturns: number }) => {
     try {
-      const response = await axios.post('http://localhost:3001/api/investments/add', newPlan, {
+      const response = await axios.post(`${apiBaseUrl}/api/investments/add`, newPlan, {
         headers: {
           'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
         }
