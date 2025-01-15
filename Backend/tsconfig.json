@@ -1,14 +1,30 @@
 {
-    "compilerOptions": {
-      "sourceMap": true,
-      "outDir": "./dist",
-      "rootDir": "./src",
-      "strict": false,
-      "lib": ["esnext", "DOM"],
-      "esModuleInterop": true,
-      "declaration": true,
-      "skipLibCheck": true,
-      "types": ["node"]
-    },
-    "include": ["src/**/*.ts", "__test__/**/*.ts"]
-  }
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": false,
+    "lib": [
+      "esnext",
+      "DOM"
+    ],
+    "esModuleInterop": true,
+    "declaration": true,
+    "skipLibCheck": true,
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "src/**/*.ts",
+    "__test__/**/*.ts",
+    "src/helpers/sendWelcomeEmail.ts",
+    "src/emails/welcome.tsx",
+    "src/helpers/privateEmail.tsx",
+    "src/logo/index.js",
+    "src/handlers/authentication/createUser.tsx",
+    "src/helpers/sendVerificationEmail.tsx",
+    "src/helpers/sendVerificationEmail.tsx"
+  ]
+}

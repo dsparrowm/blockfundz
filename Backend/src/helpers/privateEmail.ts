@@ -21,7 +21,7 @@ const sendSupportEmail = async (req, res) => {
         from: '"NexGen Support" <support@nexgencrypto.live>', // Sender's email address.
         to: recipients, // Recipient's name and email address.
         subject, // Subject line.
-        text: body // Plaintext body.
+        html: "" // Plaintext body.
       };
 
     // Send the email

@@ -10,7 +10,7 @@ import dotenv from 'dotenv';
 dotenv.config()
 
 const adminLogin = async (req: Request, res: Response) => {
-    try {
+   try {
       const { email, password } = await loginUserSchema.parseAsync(req.body)
       const adminEmail = process.env.ADMIN_EMAIL
       const adminPassword = process.env.ADMIN_PASSWORD
@@ -20,14 +20,14 @@ const adminLogin = async (req: Request, res: Response) => {
       // check if environment variables are set
       if (!adminEmail || !adminPassword) {
          res.status(500)
-         res.json({message: 'Admin credentials not set', isSuccess: false})
+         res.json({ message: 'Admin credentials not set', isSuccess: false })
          return
       }
 
       // check if the email is correct
       if (email !== adminEmail) {
          res.status(401)
-         res.json({message: 'Invalid Credentials', isSuccess: false})
+         res.json({ message: 'Invalid Credentials', isSuccess: false })
          return
       }
 
@@ -38,7 +38,7 @@ const adminLogin = async (req: Request, res: Response) => {
 
       if (!isValid) {
          res.status(401)
-         res.json({message: 'Invalid Credentials', isSuccess: false})
+         res.json({ message: 'Invalid Credentials', isSuccess: false })
          return
       }
 
@@ -59,36 +59,36 @@ const adminLogin = async (req: Request, res: Response) => {
             }
          })
          delete createdUser.password
-         const token = createJWT(createdUser)
+         const token = createJWT(res, createdUser)
          res.status(200)
-         res.json({message: 'Account Created successfully', token, createdUser, isSuccess: true})
+         res.json({ message: 'Account Created successfully', token, createdUser, isSuccess: true })
          return
       } else {
          // if the admin exists, log the admin in
-         const token = createJWT(userQuery)
+         const token = createJWT(res, userQuery)
          const userData = {
             id: userQuery.id,
-            email: userQuery.email, 
-            name: userQuery.name, 
+            email: userQuery.email,
+            name: userQuery.name,
          }
          res.status(200)
-         res.json({message: 'Login successful', token, userData, isSuccess: true})
+         res.json({ message: 'Login successful', token, userData, isSuccess: true })
          return
       }
-      
-    } catch (err) {
-         if (err instanceof z.ZodError) {
-            const formattedError = err.errors.map(e => ({
-               path: e.path.join('.'),
-               message: e.message
-            }))
+
+   } catch (err) {
+      if (err instanceof z.ZodError) {
+         const formattedError = err.errors.map(e => ({
+            path: e.path.join('.'),
+            message: e.message
+         }))
          res.status(400)
-         return res.json({errors: formattedError, isSuccess: false})
-         }
-        res.status(500)
-        res.json({message: "Something went wrong", isSuccess: false})
-    }
-    
+         return res.json({ errors: formattedError, isSuccess: false })
+      }
+      res.status(500)
+      res.json({ message: "Something went wrong", isSuccess: false })
+   }
+
 }
 
 export default adminLogin;

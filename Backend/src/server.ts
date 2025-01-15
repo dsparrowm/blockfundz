@@ -1,4 +1,5 @@
 import express from 'express';
+import path from "path";
 import morgan from 'morgan';
 import cors from 'cors';
 import protect from './helpers/protect';
@@ -21,6 +22,8 @@ app.use(express.urlencoded({extended: true}))
 app.use("/api/auth", authenticationRoute)
 app.use("/api", protect, routes)
 app.use('/token', tokenValidationRouter)
+// Serve the 'logo' directory as static files
+app.use("/static", express.static(path.join(__dirname, "logo")));
 
 app.get('/status', healthCheck)
 

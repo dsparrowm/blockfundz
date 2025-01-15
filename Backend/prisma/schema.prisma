@@ -13,6 +13,11 @@ model User {
   password           String
   name               String
   phone              String?
+  verificationToken  String?
+  verificationTokenExpiresAt  DateTime?
+  isVerified         Boolean? @default(false)
+  resetPasswordToken String?
+  resetPasswordTokenExpiresAt DateTime?
   bitcoinBalance     Float     @default(0.0)
   ethereumBalance    Float     @default(0.0)
   usdtBalance        Float     @default(0.0)
