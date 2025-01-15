@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { Mail, MessageSquare, MapPin, Phone, Clock, Send } from 'lucide-react';
+import axios from 'axios';
+
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -17,30 +20,35 @@ const ContactUs = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically handle the form submission
-    setIsSubmitted(true);
-    setTimeout(() => setIsSubmitted(false), 3000);
+    try {
+      const response = await axios.post(`${apiBaseUrl}/api/contact`, formData);
+      if (response.status === 200) {
+        setIsSubmitted(true);
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
   };
 
   const contactMethods = [
     {
       icon: <Mail className="w-6 h-6" />,
       title: "Email Us",
-      content: "support@cryptoinvest.com",
+      content: "support@nexgencrypto.live",
       description: "24/7 customer support"
     },
     {
       icon: <MessageSquare className="w-6 h-6" />,
       title: "Live Chat",
-      content: "Available 24/7",
+      content: "Coming Soon",
       description: "Instant response time"
     },
     {
       icon: <Phone className="w-6 h-6" />,
       title: "Call Us",
-      content: "+1 (888) 123-4567",
+      content: "+1 (929) 532 941",
       description: "Mon-Fri 9AM-6PM EST"
     }
   ];
@@ -79,13 +87,14 @@ const ContactUs = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div className="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10">
             <h3 className="text-2xl font-bold mb-6 text-white-400">Send Us a Message</h3>
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label className="block text-sm font-medium mb-2 text-white-400">Name</label>
                 <input
                   type="text"
                   name="name"
                   value={formData.name}
+                  onChange={handleChange}
                   className="w-full px-4 py-2 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 text-white"
                   required
                 />
@@ -96,6 +105,7 @@ const ContactUs = () => {
                   type="email"
                   name="email"
                   value={formData.email}
+                  onChange={handleChange}
                   className="w-full px-4 py-2 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 text-white"
                   required
                 />
@@ -106,6 +116,7 @@ const ContactUs = () => {
                   type="text"
                   name="subject"
                   value={formData.subject}
+                  onChange={handleChange}
                   className="w-full px-4 py-2 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 text-white"
                   required
                 />
@@ -115,6 +126,7 @@ const ContactUs = () => {
                 <textarea
                   name="message"
                   value={formData.message}
+                  onChange={handleChange}
                   rows="4"
                   className="w-full px-4 py-2 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 text-white"
                   required
@@ -165,15 +177,13 @@ const ContactUs = () => {
         </div>
 
         {/* Success Message */}
-        {/* {isSubmitted && (
+        {isSubmitted && (
           <div className="fixed bottom-4 right-4">
-            <Alert className="bg-green-500 text-white border-none">
-              <AlertDescription>
-                Message sent successfully! We'll get back to you soon.
-              </AlertDescription>
-            </Alert>
+            <div className="bg-green-500 text-white border-none p-4 rounded-lg">
+              Message sent successfully! We'll get back to you soon.
+            </div>
           </div>
-        )} */}
+        )}
       </div>
   )
 };

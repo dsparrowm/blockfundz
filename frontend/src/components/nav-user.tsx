@@ -29,6 +29,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { useStore } from "../store/useStore"
+import { useNavigate } from "react-router-dom"
 
 export function NavUser({
   user,
@@ -40,8 +41,14 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
-  // const userData = useStore(state => state.user)
-  // const firstTwoLetters = userData.name.slice(0, 2);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Clear user data from local storage or state management
+    localStorage.removeItem('token');
+    // Redirect to login page
+    navigate('/login');
+  };
 
   return (
     <SidebarMenu>
@@ -100,7 +107,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
               <LogOut />
               Log out
             </DropdownMenuItem>

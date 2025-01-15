@@ -7,7 +7,6 @@ import { toast } from "sonner"
 import axios, { AxiosError } from 'axios';
 import React from "react";
 import { useStore } from "../store/useStore";
-
 // Type for Zod error response
 interface ZodErrorResponse {
   message: string;
@@ -61,6 +60,7 @@ const Login = () => {
         } catch (error) {
           // If token validation fails, remove the token
           localStorage.removeItem("token");
+          
         }
       }
     };
@@ -108,6 +108,7 @@ const Login = () => {
       setUser(response.data.user)
       localStorage.setItem("userId", response.data.user.id)
       localStorage.setItem("token", response.data.token)
+      localStorage.setItem("isLoggedIn", "yes")
       navigate('/dashboard');
 
     } catch (error) {
@@ -149,7 +150,9 @@ const Login = () => {
     <main className="relative text-white flex justify-center items-center min-h-screen p-4 flex-col">
       <a href="" onClick={goHome}>
         <div className="mb-2 flex items-center">
-          <img src={logo} alt="logo" width={50} height={10}/>
+          <span className='text-3xl text-orange-500 mr-1 pt-2'>
+              <img src="" alt="" />
+          </span>
           <p className='text-[30px] text-white leading-8'>Nex<span className="text-orange-500">Gen</span></p>
         </div>
       </a>

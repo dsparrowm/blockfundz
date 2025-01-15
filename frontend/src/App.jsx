@@ -11,6 +11,7 @@ import PublicRoute from './helpers/protectRoutes'
 import { ToastContainer, toast } from 'react-toastify';
 import Preloader, { LoadingProvider } from './components/loading/Preloader';
 import PageWrapper from './components/loading/PageWrapper';
+import ProtectedRoute from './utils/ProtectedRoutes';
 
 const App = () => {
   return (
@@ -52,9 +53,15 @@ const App = () => {
         <Route path="/signup" element={<AuthLayout><Register /></AuthLayout>} />
         <Route path="/admin/login" element={<AuthLayout><AdminLogin /></AuthLayout>} />
 
+
+        {/* Add the protected Routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<DashboardLayout><Page /></DashboardLayout>} />
+          <Route path="/admin/dashboard" element={<DashboardLayout><Page /></DashboardLayout>} />
+        </Route>
+
         {/* Dashboard Routes */}
-        <Route path="/dashboard" element={<DashboardLayout><Page /></DashboardLayout>} />
-        <Route path="/admin/dashboard" element={<DashboardLayout><Page /></DashboardLayout>} />
+        
 
         {/* Regular Pages */}
         <Route path="/contact" element={<MainLayout><Contact /></MainLayout>} />
