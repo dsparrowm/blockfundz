@@ -9,12 +9,10 @@ import { sendVerificationEmail } from "../../helpers/sendVerificationEmail";
 
 const createNewUser = async (req: Request, res: Response) => {
   const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
-  const { email, password, name, phone } = await createUserSchema.parseAsync(req.body);
   // Start a transaction
   try {
+    const { email, password, name, phone } = await createUserSchema.parseAsync(req.body);
     const result = await prisma.$transaction(async (tx) => {
-      // Validate request body
-      const { email, password, name, phone } = await createUserSchema.parseAsync(req.body);
 
       // Check if user exists within transaction
       const userExists = await tx.user.findUnique({

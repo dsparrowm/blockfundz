@@ -32,7 +32,8 @@ const signin = async (req: Request, res: Response) => {
          id: userQuery.id,
          email: userQuery.email
       }
-      const token = createJWT(res, payload)
+      await createJWT(res, payload)
+
       const user = {
          id: userQuery.id,
          email: userQuery.email,
@@ -43,7 +44,7 @@ const signin = async (req: Request, res: Response) => {
 
       }
       res.status(200)
-      res.json({ message: 'Login successful', token, isSuccess: true, user })
+      res.json({ message: 'Login successful', isSuccess: true, user })
    } catch (err) {
       if (err instanceof z.ZodError) {
          const formattedError = err.errors.map(e => ({

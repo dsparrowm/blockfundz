@@ -7,7 +7,7 @@ import { HomeLayout, DashboardLayout, AuthLayout, MainLayout } from './component
 import { Toaster } from "sonner"
 import TestToast from './pages/TestToast';
 import NotFoundPage from './pages/NotFoundPage';
-import PublicRoute from './helpers/protectRoutes' 
+import PublicRoute from './helpers/protectRoutes'
 import { ToastContainer, toast } from 'react-toastify';
 import Preloader, { LoadingProvider } from './components/loading/Preloader';
 import PageWrapper from './components/loading/PageWrapper';
@@ -54,21 +54,17 @@ const App = () => {
         <Route path="/admin/login" element={<AuthLayout><AdminLogin /></AuthLayout>} />
 
 
-        {/* Add the protected Routes */}
-        <Route element={<ProtectedRoute />}>
-          <Route path="/dashboard" element={<DashboardLayout><Page /></DashboardLayout>} />
-          <Route path="/admin/dashboard" element={<DashboardLayout><Page /></DashboardLayout>} />
-        </Route>
-
         {/* Dashboard Routes */}
-        
+        <Route path="/dashboard" element={<DashboardLayout><Page /></DashboardLayout>} />
+        <Route path="/admin/dashboard" element={<DashboardLayout><Page /></DashboardLayout>} />
+
 
         {/* Regular Pages */}
         <Route path="/contact" element={<MainLayout><Contact /></MainLayout>} />
 
         <Route path="/test" element={<TestToast />} />
-          
-          {/* 404 Page */}
+
+        {/* 404 Page */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
