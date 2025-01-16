@@ -22,29 +22,27 @@ const App = () => {
         {/* Home Page with all sections */}
         <Route path="/" element={
           <HomeLayout>
-            <PageWrapper>
-              <section className="xl:padding-l padding-b bg-coral-black">
-                <Hero />
-              </section>
-              {/* <section className="padding bg-coral-black text-white mb-20">
+            <section className="xl:padding-l padding-b bg-coral-black">
+              <Hero />
+            </section>
+            {/* <section className="padding bg-coral-black text-white mb-20">
                 <AboutUs />
               </section> */}
-              <section id="service" className="padding-x py-1 bg-coral-black mb-20">
-                <Features />
-              </section>
-              <section id='howitworks' className="padding bg-coral-black py-10 relative overflow-hidden mb-20">
-                <HowItWorks />
-              </section>
-              <section id='about' className="padding-x py-10 mb-40">
-                <OurTeam />
-              </section>
-              <section id='pricing' className="padding-x py-10 bg-coral-black mb-20">
-                <Pricing />
-              </section>
-              <section className="padding-x py-1 pb-12 bg-coral-black mb-20">
-                <TestimonialSection />
-              </section>
-            </PageWrapper>
+            <section id="service" className="padding-x py-1 bg-coral-black mb-20">
+              <Features />
+            </section>
+            <section id='howitworks' className="padding bg-coral-black py-10 relative overflow-hidden mb-20">
+              <HowItWorks />
+            </section>
+            <section id='about' className="padding-x py-10 mb-40">
+              <OurTeam />
+            </section>
+            <section id='pricing' className="padding-x py-10 bg-coral-black mb-20">
+              <Pricing />
+            </section>
+            <section className="padding-x py-1 pb-12 bg-coral-black mb-20">
+              <TestimonialSection />
+            </section>
           </HomeLayout>
         } />
 

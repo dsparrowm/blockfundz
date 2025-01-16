@@ -52,7 +52,6 @@ interface UserManagementProps {
   users: User[];
   isLoading?: boolean;
   onEditUser?: (user: User) => void;
-  onDeleteUser?: (userId: string) => void;
 }
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
@@ -60,13 +59,12 @@ const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localh
 const UserManagement = ({
   isLoading = false,
   onEditUser,
-  onDeleteUser
 }: UserManagementProps) => {
-  const [bitcoinBalance, setBitcoinBalance ] = useState(0);
-  const [ethereumBalance, setEthereumBalance ] = useState(0);
-  const [usdtBalance, setUsdtBalance ] = useState(0);
-  const [usdcBalance, setUsdcBalance ] = useState(0);
-  const [bnbBalance, setBnbBalance ] = useState(0);
+  const [bitcoinBalance, setBitcoinBalance] = useState(0);
+  const [ethereumBalance, setEthereumBalance] = useState(0);
+  const [usdtBalance, setUsdtBalance] = useState(0);
+  const [usdcBalance, setUsdcBalance] = useState(0);
+  const [bnbBalance, setBnbBalance] = useState(0);
   const [usersData, setUsersData] = useState<User[]>([]);
   const [loading, setLoading] = useState(isLoading);
   const [searchText, setSearchText] = useState('');
@@ -83,7 +81,7 @@ const UserManagement = ({
       setLoading(true);
       try {
         const response = await axios.get(`${apiBaseUrl}/api/users`, {
-         headers: {
+          headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
           }
         }); // Adjust the API endpoint as necessary
@@ -126,7 +124,7 @@ const UserManagement = ({
       setBnbBalance(0);
 
       // Update user balance in the UI
-      setUsersData(usersData.map(user => 
+      setUsersData(usersData.map(user =>
         user.id === selectedUserId ? { ...user, balance: user.balance + bitcoinBalance + ethereumBalance + usdtBalance + usdcBalance + bnbBalance } : user
       ));
     } catch (error) {
@@ -153,6 +151,28 @@ const UserManagement = ({
   const handleViewBalances = (user: User) => {
     setSelectedUser(user);
     setIsBalanceDialogOpen(true);
+  };
+
+  const handleDeleteUser = async (userId: string) => {
+    try {
+      const user = { id: userId };
+      const response = await axios.delete(`${apiBaseUrl}/api/users`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+        },
+        data: user
+      });
+
+      if (response.status === 200) {
+        toast.success('User deleted successfully');
+        setUsersData(usersData.filter(user => user.id !== userId));
+      } else {
+        throw new Error('Failed to delete user');
+      }
+    } catch (error) {
+      toast.error('Could not delete user. Please try again.');
+      console.error('Error deleting user:', error);
+    }
   };
 
   const filteredUsers = useMemo(() => {
@@ -246,11 +266,11 @@ const UserManagement = ({
                               <Label htmlFor="bitcoin" className="text-right">
                                 Bitcoin
                               </Label>
-                              <Input 
-                                id="bitcoin" 
+                              <Input
+                                id="bitcoin"
                                 value={bitcoinBalance}
-                                onChange={(event) => setBitcoinBalance(Number(event.target.value))} 
-                                className="col-span-3" 
+                                onChange={(event) => setBitcoinBalance(Number(event.target.value))}
+                                className="col-span-3"
                               />
                             </div>
                             <div className="grid grid-cols-4 items-center gap-4">
@@ -258,18 +278,18 @@ const UserManagement = ({
                                 Ethereum
                               </Label>
                               <Input
-                                id="ethereum" 
+                                id="ethereum"
                                 value={ethereumBalance}
                                 onChange={(event) => setEthereumBalance(Number(event.target.value))}
-                                className="col-span-3" 
+                                className="col-span-3"
                               />
                             </div>
                             <div className="grid grid-cols-4 items-center gap-4">
                               <Label htmlFor="usdt" className="text-right">
                                 USDT
                               </Label>
-                              <Input 
-                                id="usdt" 
+                              <Input
+                                id="usdt"
                                 value={usdtBalance}
                                 onChange={(event) => setUsdtBalance(Number(event.target.value))}
                                 className="col-span-3" />
@@ -278,18 +298,18 @@ const UserManagement = ({
                               <Label htmlFor="usdc" className="text-right">
                                 USDC
                               </Label>
-                              <Input 
-                                id="usdc" 
+                              <Input
+                                id="usdc"
                                 value={usdcBalance}
-                                onChange={(event) => setUsdcBalance(Number(event.target.value))} 
+                                onChange={(event) => setUsdcBalance(Number(event.target.value))}
                                 className="col-span-3" />
                             </div>
                             <div className="grid grid-cols-4 items-center gap-4">
                               <Label htmlFor="bnb" className="text-right">
                                 BNB
                               </Label>
-                              <Input 
-                                id="bnb" 
+                              <Input
+                                id="bnb"
                                 value={bnbBalance}
                                 onChange={(event) => setBnbBalance(Number(event.target.value))}
                                 className="col-span-3" />
@@ -362,7 +382,7 @@ const UserManagement = ({
                             <AlertDialogFooter>
                               <AlertDialogCancel>Cancel</AlertDialogCancel>
                               <AlertDialogAction
-                                onClick={() => onDeleteUser?.(user.id)}
+                                onClick={() => handleDeleteUser(user.id)}
                               >
                                 Delete
                               </AlertDialogAction>

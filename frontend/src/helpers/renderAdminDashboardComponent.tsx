@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import {useStore} from "../store/useStore";
+import { useStore } from "../store/useStore";
 import AdminOverview from "../components/admin/AdminOverview";
 import Users from "../components/Users";
 import Analytics from "../components/Analytics";
 import UserManagement from "../components/admin/UserManagement";
-import {useState} from "react";
-import {userData} from "../constants"
+import { useState } from "react";
+import { userData } from "../constants"
 import handleEditUser from "./handleEditUser";
 import handleDeleteUser from "./handleDeleteUser";
 import InvestmentManagement from "@/components/admin/InvestmentManagement";
@@ -19,8 +19,8 @@ const renderAdminDashboardComponent = () => {
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
 
-    const activeComponent = useStore((state) => state.activeAdminComponent);
-    const [overviewData, setOverviewData] = useState({
+  const activeComponent = useStore((state) => state.activeAdminComponent);
+  const [overviewData, setOverviewData] = useState({
     totalUsers: 0,
     totalInvestors: 0,
     requestedWithdrawals: 0,
@@ -42,24 +42,24 @@ const renderAdminDashboardComponent = () => {
     }, 1000);
   }, []);
 
-    switch (activeComponent) {
+  switch (activeComponent) {
     case 'Dashboard':
-        return <AdminOverview />;
+      return <AdminOverview />;
     case 'Manage Investments':
-        return <InvestmentManagement />;
+      return <InvestmentManagement />;
     case 'Manage Transactions':
-        return <TransactionManagement />;
+      return <TransactionManagement />;
     case 'Withdrawal Requests':
-        return <WithdrawalRequestManagement />;
+      return <WithdrawalRequestManagement />;
     case 'Users Management':
-        return <UserManagement users={userData} onEditUser={handleEditUser} onDeleteUser={handleDeleteUser} isLoading={loading}/>;
+      return <UserManagement users={userData} onEditUser={handleEditUser} isLoading={loading} />;
     case 'Manage Plans':
-        return <InvestmentPlanManagement />;
+      return <InvestmentPlanManagement />;
     case 'Send Mail':
-        return <SendEmail />;
+      return <SendEmail />;
     default:
-        return null;
-    }
-    };
+      return null;
+  }
+};
 
-  export default renderAdminDashboardComponent;
+export default renderAdminDashboardComponent;
