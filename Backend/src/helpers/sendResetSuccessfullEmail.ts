@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { PASSWORD_RESET_REQUEST_TEMPLATE } from '../emails/emailTemplates';
+import { PASSWORD_RESET_SUCCESS_TEMPLATE } from '../emails/emailTemplates';
 
 
 const supportEmail = process.env.NAMECHEAP_SUPPORT_EMAIL;
@@ -19,22 +19,22 @@ const transporter = nodemailer.createTransport({
 });
 
 
-const sendForgotPasswordEmail = async (recipientEmail: string, resetUrl: string) => {
+const sendResetSuccessfulEmail = async (recipientEmail: string) => {
 
     const mailOptions = {
         from: '"NexGen Support" <support@nexgencrypto.live>', // Sender info
         to: recipientEmail, // Recipient
-        subject: "Reset Your Password", // Subject line
-        html: PASSWORD_RESET_REQUEST_TEMPLATE(resetUrl), // HTML content
+        subject: "Password Reset Successful", // Subject line
+        html: PASSWORD_RESET_SUCCESS_TEMPLATE, // HTML content
     };
 
     try {
         await transporter.sendMail(mailOptions);
-        return { message: "Password reset link sent to your Email", isSuccess: true };
+        return { message: "Password reset successful", isSuccess: true };
     } catch (error) {
         console.error("Error sending email:", error);
         throw new Error("Email sending failed");
     }
 };
 
-export default sendForgotPasswordEmail;
+export default sendResetSuccessfulEmail;

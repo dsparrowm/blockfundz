@@ -56,7 +56,7 @@ export const PASSWORD_RESET_SUCCESS_TEMPLATE = `
       <li>Avoid using the same password across multiple sites</li>
     </ul>
     <p>Thank you for helping us keep your account secure.</p>
-    <p>Best regards,<br>Your App Team</p>
+    <p>Best regards,<br>NexGen Team</p>
   </div>
   <div style="text-align: center; margin-top: 20px; color: #888; font-size: 0.8em;">
     <p>This is an automated message, please do not reply to this email.</p>
@@ -65,7 +65,7 @@ export const PASSWORD_RESET_SUCCESS_TEMPLATE = `
 </html>
 `;
 
-export const PASSWORD_RESET_REQUEST_TEMPLATE = `
+export const PASSWORD_RESET_REQUEST_TEMPLATE = (resetURL: string) => `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -82,7 +82,7 @@ export const PASSWORD_RESET_REQUEST_TEMPLATE = `
     <p>We received a request to reset your password. If you didn't make this request, please ignore this email.</p>
     <p>To reset your password, click the button below:</p>
     <div style="text-align: center; margin: 30px 0;">
-      <a href="{resetURL}" style="background-color: #FFA500; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Reset Password</a>
+      <a href="${resetURL}" style="background-color: #FFA500; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Reset Password</a>
     </div>
     <p>This link will expire in 1 hour for security reasons.</p>
     <p>Best regards,<br>NexGen Team</p>

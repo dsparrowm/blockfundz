@@ -33,7 +33,8 @@ const forgotPassword = async (req: Request, res: Response) => {
         });
 
         // Send reset password email
-        await sendForgotPasswordEmail(email, `${Client_url}/reset-password/${resetToken}`);
+        const sendPasswordResetEmail = await sendForgotPasswordEmail(email, `${Client_url}/reset-password/${resetToken}`);
+        res.status(200).json({ message: sendPasswordResetEmail.message, isSuccess: sendPasswordResetEmail.isSuccess });
 
     } catch (error) {
         res.status(500)
