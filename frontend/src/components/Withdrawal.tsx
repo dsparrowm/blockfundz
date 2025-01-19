@@ -23,6 +23,7 @@ const Withdraw = () => {
     setSuccess('');
 
     try {
+
       const response = await axios.post(`/api/withdrawals`, {
         userId: localStorage.getItem('userId'),
         amount: parseFloat(amount),
