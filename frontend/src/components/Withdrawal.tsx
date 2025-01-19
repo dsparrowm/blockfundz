@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import axiosInstance from '../api/axiosInstance';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -14,7 +15,6 @@ const Withdraw = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,17 +23,17 @@ const Withdraw = () => {
     setSuccess('');
 
     try {
-      const response = await axios.post(`${apiBaseUrl}/api/withdrawals`, {
+      const response = await axios.post(`/api/withdrawals`, {
         userId: localStorage.getItem('userId'),
         amount: parseFloat(amount),
         asset,
         network,
         address,
-      }, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
+      },
+        {
+          withCredentials: true
+        }
+      );
 
       setSuccess('Withdrawal request created successfully');
       setAmount('');

@@ -1,12 +1,14 @@
 import { FaUser } from "react-icons/fa";
 import { FaLock } from "react-icons/fa";
 import { logo } from "../assets/icons";
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { toast } from "sonner"
+import { toast } from "sonner";
 import axios, { AxiosError } from 'axios';
 import React from "react";
 import { useStore } from "../store/useStore";
+import Cookies from 'js-cookie';
+
 // Type for Zod error response
 interface ZodErrorResponse {
   message: string;
@@ -31,36 +33,34 @@ const Login = () => {
   const [globalError, setGlobalError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
-  
-  const setUser = useStore(state => state.setUser)
+
+  const setUser = useStore(state => state.setUser);
   const navigate = useNavigate();
 
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
 
-
   // Add useEffect to check for existing token and validate
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    
+    const token = Cookies.get("token");
+
     const validateToken = async () => {
       if (token) {
         try {
           // Add your token validation endpoint here
-          const response = await axios.post(`${apiBaseUrl}/token/validate`, {
+          const response = await axios.post(`${apiBaseUrl}/token/validate`, {}, {
             headers: {
-              'Authorization': "Bearer " + localStorage.getItem("token")
-            }
+              'Authorization': `Bearer ${token}`
+            },
+            withCredentials: true
           });
-          console.log(response.data)
           if (response.data.valid) {
             // If token is valid, automatically redirect to dashboard
-            toast.success("Already logged in", {className:"text-[15px] px-4 py-2"});
+            toast.success("Already logged in", { className: "text-[15px] px-4 py-2" });
             navigate('/dashboard');
           }
         } catch (error) {
           // If token validation fails, remove the token
-          localStorage.removeItem("token");
-          
+          Cookies.remove("token");
         }
       }
     };
@@ -92,8 +92,8 @@ const Login = () => {
   };
 
   const goHome = () => {
-    navigate('/')
-  }
+    navigate('/');
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,32 +101,33 @@ const Login = () => {
     setGlobalError(null);
     setLoading(true);
     setSuccessMessage("");
-    
-    try {
-      const response = await axios.post(`${apiBaseUrl}/api/auth/signin`, formData)
-      toast.success("Login successful", {className:"text-[15px] px-4 py-2"})
-      setUser(response.data.user)
-      localStorage.setItem("userId", response.data.user.id)
-      localStorage.setItem("token", response.data.token)
-      localStorage.setItem("isLoggedIn", "yes")
-      navigate('/dashboard');
 
+    try {
+      const response = await axios.post(`${apiBaseUrl}/api/auth/signin`, formData, { withCredentials: true });
+      toast.success("Login successful", { className: "text-[15px] px-4 py-2" });
+      setUser(response.data.user);
+      localStorage.setItem("userId", response.data.user.id);
+      localStorage.setItem("userEmail", response.data.user.email);
+      Cookies.set("token", response.data.token, { expires: 7 });
+      localStorage.setItem("isLoggedIn", "yes");
+      console.log("Token received from backend:", response.data.token);
+      navigate('/dashboard');
     } catch (error) {
       let errorMessage = "Login failed";
-      
+
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError<ZodErrorResponse>;
-        
+
         if (axiosError.response?.status === 400 || axiosError.response?.status === 401 || axiosError.response?.status === 404) {
           if (axiosError.response.data.errors) {
             errorMessage = axiosError.response.data.errors[0].message;
-            
+
             // Optionally, handle field-specific errors
             const formErrors = axiosError.response.data.errors.reduce((acc, err) => {
               acc[err.path] = err.message;
               return acc;
             }, {} as Record<string, string>);
-            
+
             setError(formErrors);
           } else if (axiosError.response.data.message) {
             errorMessage = axiosError.response.data.message;
@@ -137,21 +138,20 @@ const Login = () => {
       } else {
         errorMessage = "Network error. Please check your connection.";
       }
-      
+
       // Use toast for error message instead of setting global error
-      toast.error(errorMessage, {className:"text-[15px] font-semibold px-4 py-2"});
-      
+      toast.error(errorMessage, { className: "text-[15px] font-semibold px-4 py-2" });
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
     <main className="relative text-white flex justify-center items-center min-h-screen p-4 flex-col">
       <a href="" onClick={goHome}>
         <div className="mb-2 flex items-center">
           <span className='text-3xl text-orange-500 mr-1 pt-2'>
-              <img src="" alt="" />
+            <img src={logo} alt="logo" width={50} height={10} />
           </span>
           <p className='text-[30px] text-white leading-8'>Nex<span className="text-orange-500">Gen</span></p>
         </div>
@@ -160,8 +160,8 @@ const Login = () => {
         <form action="" className="space-y-6 " onSubmit={handleSubmit}>
           <div className="space-y-8 ">
             <div className="text-center">
-                <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
-                <p className="text-white/60">Sign in to your account</p>
+              <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
+              <p className="text-white/60">Sign in to your account</p>
             </div>
           </div>
           <div className="space-y-2">
@@ -175,7 +175,7 @@ const Login = () => {
                 value={formData.email}
                 type="email"
                 className="w-full bg-white/5 border border-white/10 rounded-lg px-11 py-3 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-white/20"
-                placeholder="Enter your email" 
+                placeholder="Enter your email"
                 onChange={handleChange}
               />
               {error.email && (
@@ -183,7 +183,7 @@ const Login = () => {
               )}
             </div>
           </div>
-          
+
           <div className="space-y-2">
             <label className="text-white/80 text-sm font-medium pl-1">Password</label>
             <div className="relative">
@@ -215,26 +215,24 @@ const Login = () => {
           </div>
 
           <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-white/10 text-white rounded-lg py-3 font-medium hover:bg-white/20 transition-all duration-300 border border-white/10"
-            >
-              {loading ? "Signing in..." : "Sign In"}
-            </button>
+            type="submit"
+            disabled={loading}
+            className="w-full bg-white/10 text-white rounded-lg py-3 font-medium hover:bg-white/20 transition-all duration-300 border border-white/10"
+          >
+            {loading ? "Signing in..." : "Sign In"}
+          </button>
 
-            {/* Sign Up Link */}
-            <p className="text-center text-white/60">
-              Don't have an account?{' '}
-              <Link to="/signup">
-                <a href="#" className="hover:underline text-orange-500">
-                  Sign up
-                </a>
-              </Link>
-            </p>
+          {/* Sign Up Link */}
+          <p className="text-center text-white/60">
+            Don't have an account?{' '}
+            <Link to="/signup" className="hover:underline text-orange-500">
+              Sign up
+            </Link>
+          </p>
         </form>
       </div>
     </main>
-  )
+  );
 }
 
-export default Login
+export default Login;

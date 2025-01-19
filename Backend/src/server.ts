@@ -8,22 +8,25 @@ import tokenValidationRouter from './routes/validateToken';
 import routes from './routes/index';
 import healthCheck from './handlers/healthCheck';
 import helmet from 'helmet';
-
+import cookieParser from 'cookie-parser';
+import authMiddleware from './middleware/authMiddleware';
 
 const app = express();
 
 app.use(helmet())
-app.use(cors())
+app.use(cors({
+    origin: 'http://localhost:5173', // Replace with your frontend's origin
+    credentials: true // required for cookies
+}));
 app.use(morgan('dev'))
 app.use(express.json())
-app.use(express.urlencoded({extended: true}))
+app.use(cookieParser())
+app.use(express.urlencoded({ extended: true }))
 
 //  Routers
 app.use("/api/auth", authenticationRoute)
-app.use("/api", protect, routes)
+app.use("/api", authMiddleware, routes) // Protect routes with authMiddleware
 app.use('/token', tokenValidationRouter)
-// Serve the 'logo' directory as static files
-app.use("/static", express.static(path.join(__dirname, "logo")));
 
 app.get('/status', healthCheck)
 

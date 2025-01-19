@@ -1,17 +1,14 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { HowItWorks, Hero, AboutUs, OurTeam, TestimonialSection, Features, Pricing, FAQSection } from './sections';
-import { Login, About, Contact, Register, AdminLogin } from './pages';
+import { HowItWorks, Hero, OurTeam, TestimonialSection, Features, Pricing } from './sections';
+import { Login, Contact, Register, AdminLogin } from './pages';
 import Page from './app/dashboard/Page';
 import { HomeLayout, DashboardLayout, AuthLayout, MainLayout } from './components/layout';
-import { Toaster } from "sonner"
 import TestToast from './pages/TestToast';
 import NotFoundPage from './pages/NotFoundPage';
 import PublicRoute from './helpers/protectRoutes'
-import { ToastContainer, toast } from 'react-toastify';
-import Preloader, { LoadingProvider } from './components/loading/Preloader';
-import PageWrapper from './components/loading/PageWrapper';
-import ProtectedRoute from './utils/ProtectedRoutes';
+import EmailVerificationPage from './pages/EmailVerificationPage';
+import VerifiedEmailSuccessPage from './pages/VerifiedEmailSuccessPage';
 
 const App = () => {
   return (
@@ -59,6 +56,10 @@ const App = () => {
 
         {/* Regular Pages */}
         <Route path="/contact" element={<MainLayout><Contact /></MainLayout>} />
+        <Route path="/verify-email" element={<EmailVerificationPage />} />
+        <Route path="/email-verified" element={<VerifiedEmailSuccessPage />} />
+
+        {/* Test Page */}
 
         <Route path="/test" element={<TestToast />} />
 

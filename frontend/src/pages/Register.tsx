@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import axios, { AxiosError } from "axios";
 import React from "react";
 import { toast } from "sonner";
+import { useStore } from '../store/useStore';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
 
@@ -27,7 +28,10 @@ const Register = () => {
 
   const navigate = useNavigate();
 
-  interface InputChangeEvent extends React.ChangeEvent<HTMLInputElement> {}
+  const setUser = useStore(state => state.setUser);
+  const setUserEmail = useStore(state => state.setUserEmail)
+
+  interface InputChangeEvent extends React.ChangeEvent<HTMLInputElement> { }
 
   const handleInputChange = (e: InputChangeEvent) => {
     const { name, value } = e.target;
@@ -68,8 +72,9 @@ const Register = () => {
     try {
       const response = await axios.post(`${apiBaseUrl}/api/auth/signup`, formValues);
       if (response.status === 200) {
-        toast.success(response.data.message || 'Account created successfully');
-        navigate('/login');
+        setUser(response.data.createdUser)
+        setUserEmail(response.data.createdUser.email)
+        navigate('/verify-email');
       }
     } catch (error) {
       let responseErrors: Array<{ path: string; message: string }> | undefined;
@@ -78,7 +83,7 @@ const Register = () => {
         if (axiosError.response?.status === 400 || axiosError.response?.status === 401) {
           if (axiosError.response?.data.errors) {
             console.log("This is the error from the server: ", axiosError.response.data.errors[0].message);
-            toast.error(axiosError.response.data.errors[0].message, {className:"text-[15px] px-4 py-2"})
+            toast.error(axiosError.response.data.errors[0].message, { className: "text-[15px] px-4 py-2" })
             responseErrors = axiosError.response.data.errors;
           }
 
@@ -103,16 +108,16 @@ const Register = () => {
     <main className="relative text-white flex justify-center items-center min-h-screen p-4 flex-col">
       <a href="" onClick={() => navigate('/')}>
         <div className="mb-2 flex items-center">
-          <img src={logo} alt="logo" width={50} height={10}/>
-          <p className='text-[30px] text-white leading-8'>Block<span className="text-orange-500">Fundz</span></p>
+          <img src={logo} alt="logo" width={50} height={10} />
+          <p className='text-[30px] text-white leading-8'>Nex<span className="text-orange-500">Gen</span></p>
         </div>
       </a>
       <div className="relative backdrop-blur-lg bg-white/5 p-8 rounded-2xl shadow-xl border border-white/10 w-full max-w-md">
         <form action="" className="space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-8 ">
             <div className="text-center">
-                <h1 className="text-3xl font-bold text-white mb-2">Create Account</h1>
-                <p className="text-white/60">Sign up to get started</p>
+              <h1 className="text-3xl font-bold text-white mb-2">Create Account</h1>
+              <p className="text-white/60">Sign up to get started</p>
             </div>
           </div>
           <div className="space-y-2">
@@ -175,10 +180,10 @@ const Register = () => {
                 value={phone}
                 onChange={setPhone}
               />
-              
+
             </div>
           </div>
-          
+
           <div className="space-y-2">
             <label className="text-white/80 text-sm font-medium pl-1">Password</label>
             <div className="relative">
@@ -196,20 +201,20 @@ const Register = () => {
           </div>
 
           <button
-              type="submit"
-              className="w-full bg-white/10 text-white rounded-lg py-3 font-medium hover:bg-white/20 transition-all duration-300 border border-white/10"
-            >
-              Sign up
-            </button>
+            type="submit"
+            className="w-full bg-white/10 text-white rounded-lg py-3 font-medium hover:bg-white/20 transition-all duration-300 border border-white/10"
+          >
+            Sign up
+          </button>
 
-            {/* Sign Up Link */}
-            <p className="text-center text-white/60">
-              Already have an account?{' '}
-              <Link to="/login" className="hover:underline text-orange-500">
-                Sign in
-              </Link>
-             
-            </p>
+          {/* Sign Up Link */}
+          <p className="text-center text-white/60">
+            Already have an account?{' '}
+            <Link to="/login" className="hover:underline text-orange-500">
+              Sign in
+            </Link>
+
+          </p>
         </form>
       </div>
     </main>

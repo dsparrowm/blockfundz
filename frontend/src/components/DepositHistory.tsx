@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ArrowDown, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import axios from 'axios';
+import axiosInstance from '../api/axiosInstance';
 import { Button } from '@/components/ui/button';
 
 const DepositHistory = () => {
@@ -32,22 +33,17 @@ const DepositHistory = () => {
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 10;
 
-  
-
-  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as String || "http://localhost:3001";
 
   useEffect(() => {
     const fetchDeposits = async () => {
       try {
-        const response = await axios.get(`${apiBaseUrl}/api/deposits`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          },
+        const response = await axiosInstance.get('/api/deposits', {
           params: {
             userId: localStorage.getItem('userId'),
             page: currentPage,
             limit: itemsPerPage
-          }
+          },
+          withCredentials: true
         });
         setDeposits(response.data.deposits);
         setTotalPages(Math.ceil(response.data.total / itemsPerPage));
@@ -146,7 +142,7 @@ const DepositHistory = () => {
             </TableHeader>
             <TableBody>
               {deposits.map((deposit) => (
-                <TableRow 
+                <TableRow
                   key={deposit.id}
                   className="hover:bg-neutral-800 border-neutral-700"
                 >
@@ -162,11 +158,11 @@ const DepositHistory = () => {
                   <TableCell>{deposit.network}</TableCell>
                   <TableCell>
                     <span className={`px-2 py-1 rounded-full text-xs font-medium
-                      ${deposit.status === 'COMPLETED' 
-                        ? 'bg-green-500/20 text-green-500' 
+                      ${deposit.status === 'COMPLETED'
+                        ? 'bg-green-500/20 text-green-500'
                         : deposit.status === 'PENDING'
-                        ? 'bg-yellow-500/20 text-yellow-500'
-                        : 'bg-red-500/20 text-red-500'
+                          ? 'bg-yellow-500/20 text-yellow-500'
+                          : 'bg-red-500/20 text-red-500'
                       }`}>
                       {deposit.status}
                     </span>
@@ -178,8 +174,8 @@ const DepositHistory = () => {
           </Table>
         </div>
         <div className="flex justify-between items-center mt-4">
-          <Button 
-            onClick={handlePreviousPage} 
+          <Button
+            onClick={handlePreviousPage}
             disabled={currentPage === 1}
             className="bg-neutral-800 border-neutral-700 text-white"
           >
@@ -188,8 +184,8 @@ const DepositHistory = () => {
           <span className="text-neutral-500">
             Page {currentPage} of {totalPages}
           </span>
-          <Button 
-            onClick={handleNextPage} 
+          <Button
+            onClick={handleNextPage}
             disabled={currentPage === totalPages}
             className="bg-neutral-800 border-neutral-700 text-white"
           >

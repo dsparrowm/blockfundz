@@ -3,36 +3,36 @@ import jwt from 'jsonwebtoken';
 
 
 declare global {
-    namespace Express {
-      interface Request {
-        user?: any;
-      }
+  namespace Express {
+    interface Request {
+      user?: any;
     }
   }
+}
 
 const protect = (req: Request, res: Response, next: NextFunction) => {
-    const bearer = req.headers.authorization;
+  const bearer = req.headers.authorization;
 
-    if (!bearer) {
-        return res.status(401).json({message: "Not Authorized", isSuccess: false});
-    }
+  if (!bearer) {
+    return res.status(401).json({ message: "Not Authorized", isSuccess: false });
+  }
 
-    const [, token] = bearer.split(' ');
-    if (!token) {
-        res.status(401).json({message: "Not a valid token", isSuccess: false});
-        return;
-    }
-    try {
-        const user = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = user;
-        console.log(`The req object is ${req.user}`)
-        next();
-        return;
+  const [, token] = bearer.split(' ');
+  if (!token) {
+    res.status(401).json({ message: "Not a valid token", isSuccess: false });
+    return;
+  }
+  try {
+    const user = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = user;
+    console.log(`The req object is ${req.user}`)
+    next();
+    return;
 
-    } catch (err) {
-        res.status(401).json({message: "Not Authorized", isSuccess: false});
-        return;
-    }
+  } catch (err) {
+    res.status(401).json({ message: "Not Authorized", isSuccess: false });
+    return;
+  }
 }
 
 export default protect;

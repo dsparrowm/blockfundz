@@ -24,11 +24,10 @@ const createJWT = (res: Response, payload: Payload) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
-        maxAge: 86400, // 1 day
+        maxAge: 86400 * 1000, // 1 day in milliseconds
     });
 
     return token;
 }
-
 
 export default createJWT;

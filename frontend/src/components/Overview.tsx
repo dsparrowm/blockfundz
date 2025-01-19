@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Card, 
-  CardHeader, 
-  CardTitle, 
-  CardContent 
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent
 } from "@/components/ui/card";
 import {
   Table,
@@ -14,7 +14,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useStore } from '../store/useStore';
-import axios from 'axios';
+import axiosInstance from '../api/axiosInstance';
+import Cookies from 'js-cookie';
 
 const Overview = () => {
   // State for transactions
@@ -36,7 +37,7 @@ const Overview = () => {
     usdtBalance: number;
     usdcBalance: number;
   }
-  
+
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [balances, setBalances] = useState<Balances | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,40 +46,36 @@ const Overview = () => {
   // Filter states
   const [typeFilter, setTypeFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
-  
+
   // Get user from store
   const user = useStore((state) => state.user);
 
-  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
 
   // Fetch transactions and balances effect
   useEffect(() => {
     const fetchTransactionsAndBalances = async () => {
       try {
         setIsLoading(true);
-        
+
+
         // Fetch transactions
-        const transactionsResponse = await axios.get(`${apiBaseUrl}/api/users/transactions`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
+        const transactionsResponse = await axiosInstance.get('/api/users/transactions', {
           params: {
             userId: user.id,
           },
+          withCredentials: true,
         });
         setTransactions(transactionsResponse.data.transactions);
 
         // Fetch balances
-        const balancesResponse = await axios.get(`${apiBaseUrl}/api/users/balances`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
+        const balancesResponse = await axiosInstance.get('/api/users/balances', {
           params: {
             userId: user.id,
           },
+          withCredentials: true,
         });
         setBalances(balancesResponse.data.balances);
-  
+
       } catch (error) {
         setTransactions([]);
         setError({ message: 'Error fetching data' });

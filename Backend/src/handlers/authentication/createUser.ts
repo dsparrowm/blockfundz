@@ -6,7 +6,6 @@ import createJWT from "../../helpers/createJwt";
 import { createUserSchema } from "../../utils/validationSchemas";
 import { sendVerificationEmail } from "../../helpers/sendVerificationEmail";
 
-
 const createNewUser = async (req: Request, res: Response) => {
   const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
   // Start a transaction
@@ -68,6 +67,9 @@ const createNewUser = async (req: Request, res: Response) => {
 
     // send verification email
     await sendVerificationEmail(email, verificationToken);
+
+    // Set token as a cookie
+    res.cookie('token', result.token, { httpOnly: true, secure: true });
 
     return res.status(200).json({
       message: "Account created successfully",

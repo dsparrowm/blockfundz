@@ -1,21 +1,15 @@
 import jwt from 'jsonwebtoken';
 import prisma from '../../db';
+import { Request, Response } from 'express';
 
-const validateToken = async (req, res) => {
-  const Authorization = 
-    req.headers['authorization']?.split(' ')[1] || // Bearer token format
-    req.headers['x-access-token'] || 
-    req.headers['token'] ||
-    req.body.token ||
-    req.query.token;
-  console.log("Headers", Authorization);
-  console.log("Request made to validate token", Authorization);
+const verifyToken = async (req: Request, res: Response) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  console.log("Request made to validate token", token);
 
-  if (!Authorization) {
+  if (!token) {
     return res.status(401).json({ message: 'No token provided', valid: false });
   }
 
-  const token = Authorization.split(' ')[1];
   console.log("Token extracted from header", token);
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -42,4 +36,4 @@ const validateToken = async (req, res) => {
   }
 };
 
-export default validateToken;
+export default verifyToken;
