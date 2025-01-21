@@ -46,7 +46,7 @@ const EmailVerificationPage = () => {
                 navigate('/email-verified');
             }
         } catch (error) {
-            toast.error('Invalid verification code. Please try again.');
+            toast('Invalid verification code. Please try again.');
         } finally {
             setIsLoading(false);
         }

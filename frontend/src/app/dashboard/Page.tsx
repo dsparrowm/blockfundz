@@ -22,7 +22,6 @@ import renderAdminDashboardComponent from "../../helpers/renderAdminDashboardCom
 import { useStore } from "../../store/useStore"
 import { useLocation } from "react-router-dom";
 import { extractBalances } from "../../helpers/extractCoinBalances";
-import {coins} from "../../constants"
 
 
 
@@ -34,7 +33,7 @@ export default function Page() {
   const userData = useStore(state => state.user)
   const data = userData?.balances ? extractBalances(userData.balances) : {}
   const coin = Object.entries(data)
-  const coins = coin.map(([key, value]) => ({name: key, balance: value}))
+  const coins = coin.map(([key, value]) => ({ name: key, balance: value }))
 
   return (
     <SidebarProvider>
@@ -57,17 +56,17 @@ export default function Page() {
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0 ">
-          {!isAdmin ? 
+          {!isAdmin ?
             <div>
               {/* <div className="grid auto-rows-min gap-4 md:grid-cols-4 mb-6">
                 {coins.map((coin) => (
                 <DashboardCard key={coin.name} coin={coin} />
               ))}
               </div> */}
-                
-                  {renderUserDashboardComponent()}
-        
-          </div> : renderAdminDashboardComponent() }
+
+              {renderUserDashboardComponent()}
+
+            </div> : renderAdminDashboardComponent()}
         </div>
 
       </SidebarInset>

@@ -72,7 +72,7 @@ const InvestmentPlans = () => {
         setInvestmentPlans(response.data.investmentPlans);
       } catch (error) {
         console.error('Error fetching investment plans:', error);
-        toast.error('Failed to fetch investment plans');
+        toast('Failed to fetch investment plans');
       } finally {
         setLoading(false);
       }
@@ -89,7 +89,7 @@ const InvestmentPlans = () => {
         setBalances(response.data.balances);
       } catch (error) {
         console.error('Error fetching balances:', error);
-        toast.error('Failed to fetch balances');
+        toast('Failed to fetch balances');
       }
     };
 
@@ -127,7 +127,7 @@ const InvestmentPlans = () => {
         withCredentials: true
       });
 
-      toast.success(response.data.message);
+      toast(response.data.message);
       setSelectedPlan(null);
       setShowAssetDialog(false);
 
@@ -138,7 +138,7 @@ const InvestmentPlans = () => {
         setShowInsufficientDialog(true);
       } else {
         // Display the specific error message from the backend
-        toast.error(error.response?.data?.message || 'An error occurred while subscribing to the plan');
+        toast(error.response?.data?.message || 'An error occurred while subscribing to the plan');
 
         // If it's an "already subscribed" error, we might want to reset the dialogs
         if (error.response?.data?.message?.includes('already subscribed')) {

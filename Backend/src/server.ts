@@ -13,9 +13,11 @@ import authMiddleware from './middleware/authMiddleware';
 
 const app = express();
 
+const clientBaseUrl = process.env.CLIENT_URL || "http://localhost:5173";
+
 app.use(helmet())
 app.use(cors({
-    origin: 'http://localhost:5173', // Replace with your frontend's origin
+    origin: clientBaseUrl, // Replace with your frontend's origin
     credentials: true // required for cookies
 }));
 app.use(morgan('dev'))

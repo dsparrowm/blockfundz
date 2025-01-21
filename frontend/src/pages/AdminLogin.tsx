@@ -73,7 +73,7 @@ const Login = () => {
     try {
       const response = await axios.post(`${apiBaseUrl}/api/auth/admin/login`, formData)
       localStorage.setItem("adminToken", response.data.token)
-      toast.success("Login successful", { className: "text-[15px] px-4 py-2" })
+      toast("Login successful", { className: "text-[15px] px-4 py-2 bg-green" })
       setAdminUser(response.data.user)
       navigate('/admin/dashboard');
 
@@ -83,10 +83,10 @@ const Login = () => {
         const axiosError = error as AxiosError<ZodErrorResponse>;
         if (axiosError.response?.status === 400 || axiosError.response?.status === 401 || axiosError.response?.status === 404) {
           if (axiosError.response.data.errors) {
-            toast.error(axiosError.response.data.errors[0].message, { className: "text-[15px] px-4 py-2" })
+            toast(axiosError.response.data.errors[0].message, { className: "text-[15px] px-4 py-2" })
             responseErrors = axiosError.response.data.errors;
           } else {
-            toast.error(axiosError.response.data.message, { className: "text-[15px] px-4 py-2" })
+            toast(axiosError.response.data.message, { className: "text-[15px] px-4 py-2" })
           }
           if (responseErrors) {
             const formErrors = responseErrors.reduce((acc, err) => {

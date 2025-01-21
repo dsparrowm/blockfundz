@@ -113,7 +113,7 @@ const UserManagement = ({
           'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
         }
       });
-      toast.success(response.data.message);
+      toast(response.data.message);
 
       // Reset balances
       setBitcoinBalance(0);
@@ -133,12 +133,12 @@ const UserManagement = ({
 
   const handleAddUser = async () => {
     try {
-      const response = await axios.post(`${apiBaseUrl}/api/auth/signup`, newUser, {
+      const response = await axios.post(`${apiBaseUrl}/api/auth/addNewUser`, newUser, {
         headers: {
           'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
         }
       });
-      toast.success(response.data.message);
+      toast(response.data.message);
       setUsersData([...usersData, response.data.createdUser]);
       setIsAddUserDialogOpen(false);
       setNewUser({ name: '', email: '', phone: '', password: '' });
@@ -163,13 +163,13 @@ const UserManagement = ({
       });
 
       if (response.status === 200) {
-        toast.success('User deleted successfully');
+        toast('User deleted successfully');
         setUsersData(usersData.filter(user => user.id !== userId));
       } else {
         throw new Error('Failed to delete user');
       }
     } catch (error) {
-      toast.error('Could not delete user. Please try again.');
+      toast('Could not delete user. Please try again.');
       console.error('Error deleting user:', error);
     }
   };
@@ -303,7 +303,7 @@ const UserManagement = ({
                                 onChange={(event) => setUsdcBalance(Number(event.target.value))}
                                 className="col-span-3" />
                             </div>
-                            <div className="grid grid-cols-4 items-center gap-4">
+                            {/* <div className="grid grid-cols-4 items-center gap-4">
                               <Label htmlFor="bnb" className="text-right">
                                 BNB
                               </Label>
@@ -312,7 +312,7 @@ const UserManagement = ({
                                 value={bnbBalance}
                                 onChange={(event) => setBnbBalance(Number(event.target.value))}
                                 className="col-span-3" />
-                            </div>
+                            </div> */}
                           </div>
                           <DialogFooter>
                             <Button type="submit" onClick={handleCredit}>

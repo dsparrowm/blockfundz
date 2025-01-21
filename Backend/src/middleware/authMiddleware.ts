@@ -7,7 +7,7 @@ interface JwtPayload {
 }
 
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    const token = req.cookies.token;
+    const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
 
     if (!token) {
         return res.status(401).json({ message: 'Not Authorized', isSuccess: false });
