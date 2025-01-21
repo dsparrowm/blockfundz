@@ -38,12 +38,6 @@ const createNewUser = async (req: Request, res: Response) => {
         }
       });
 
-      // Send registration email
-      // await sendWelcomeEmail(email, name);
-
-      // send verification email
-      await sendVerificationEmail(email, verificationToken);
-
       // Prepare response payload
       const { password: _, ...userWithoutPassword } = createdUser;
       const payload = {
