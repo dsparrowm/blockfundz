@@ -38,6 +38,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import axios from 'axios';
 import { toast } from 'sonner';
+import Spinner from '../spinners/Spinner';
 
 interface User {
   id: string;
@@ -202,7 +203,7 @@ const UserManagement = ({
         Add New User
       </Button>
       {loading ? (
-        <p>Loading...</p>
+        <Spinner />
       ) : (
         <>
           <Table className="text-white">

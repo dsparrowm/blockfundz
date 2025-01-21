@@ -16,6 +16,7 @@ import {
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Edit, Trash } from 'lucide-react';
+import Spinner from '../spinners/Spinner';
 
 interface InvestmentPlan {
   id: number;
@@ -101,7 +102,7 @@ const InvestmentPlansManagement = () => {
       <h2 className="text-xl font-bold mb-4 text-white-400">Manage Investment Plans</h2>
       <AddInvestmentPlanDialog onAddPlan={handleAddPlan} />
       {loading ? (
-        <p>Loading...</p>
+        <Spinner />
       ) : (
         <Table className="text-white">
           <TableHeader>

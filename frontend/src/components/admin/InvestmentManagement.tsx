@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
 import { Table, TableHeader, TableRow, TableCell, TableBody } from "@/components/ui/table"; // Adjust the import paths as necessary
 import { Button } from "@/components/ui/button";
+import Spinner from '../spinners/Spinner';
 
 interface Investment {
   id: number;
@@ -76,7 +77,7 @@ const InvestmentManagement = () => {
         className="rounded-md border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:ring-slate-400"
       />
       {loading ? (
-        <p>Loading...</p>
+        <Spinner />
       ) : (
         <>
           <Table className="text-white">

@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { toast } from 'sonner';
 import axiosInstance from '../api/axiosInstance';
+import Spinner from './spinners/Spinner';
 
 interface InvestmentPlan {
   id: number;
@@ -152,7 +153,7 @@ const InvestmentPlans = () => {
     <div className="container mx-auto p-4">
       <h2 className="text-2xl font-bold mb-6 text-white-400">Available Investment Plans</h2>
       {loading ? (
-        <p className="text-center">Loading...</p>
+        <Spinner />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {investmentPlans.map(plan => (

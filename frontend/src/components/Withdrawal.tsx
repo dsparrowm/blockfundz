@@ -5,6 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import Spinner from './spinners/Spinner';
 
 const Withdraw = () => {
   const [amount, setAmount] = useState('');
@@ -103,7 +104,7 @@ const Withdraw = () => {
             </Select>
           </div>
           <Button type="submit" className="w-full bg-orange-500 hover:bg-orange-700" disabled={loading}>
-            {loading ? "loading..." : 'Submit'}
+            {loading ? <Spinner /> : 'Submit'}
           </Button>
         </form>
       </CardContent>

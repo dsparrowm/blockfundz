@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import Spinner from '../spinners/Spinner';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
 
@@ -198,7 +199,7 @@ const EmailSenderComponent = () => {
             disabled={isLoading}
             className="w-full bg-orange-500"
           >
-            {isLoading ? 'Sending...' : 'Send Email'}
+            {isLoading ? (<Spinner />) : 'Send Email'}
             <Send className="ml-2 h-4 w-4" />
           </Button>
         </CardContent>

@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input';
 import axios from 'axios';
 import axiosInstance from '../api/axiosInstance';
 import { Button } from '@/components/ui/button';
+import Spinner from './spinners/Spinner';
 
 const DepositHistory = () => {
   interface Deposit {
@@ -80,7 +81,7 @@ const DepositHistory = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Spinner />;
   }
 
   if (error) {

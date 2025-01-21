@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import axios from 'axios';
 import axiosInstance from '../api/axiosInstance';
+import Spinner from './spinners/Spinner';
 
 interface Withdrawal {
   id: string;
@@ -69,7 +70,7 @@ const WithdrawalHistory = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Spinner />;
   }
 
   if (error) {

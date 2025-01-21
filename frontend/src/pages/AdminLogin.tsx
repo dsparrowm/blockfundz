@@ -7,6 +7,7 @@ import { useStore } from "../store/useStore";
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import Spinner from "src/components/spinners/Spinner";
 
 
 // Type for Zod error response
@@ -175,7 +176,7 @@ const Login = () => {
             type="submit"
             className="w-full bg-white/10 text-white rounded-lg py-3 font-medium hover:bg-white/20 transition-all duration-300 border border-white/10"
           >
-            {loading ? "Signing in..." : "Sign In"}
+            {loading ? (<Spinner />) : "Sign In"}
           </button>
 
           {/* Sign Up Link */}

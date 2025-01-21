@@ -16,6 +16,7 @@ import {
 import { useStore } from '../store/useStore';
 import axiosInstance from '../api/axiosInstance';
 import Cookies from 'js-cookie';
+import Spinner from './spinners/Spinner';
 
 const Overview = () => {
   // State for transactions
@@ -150,7 +151,7 @@ const Overview = () => {
     return (
       <Card className="w-full bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6">
         <div className="text-center py-10 text-gray-400">
-          Loading transactions...
+          Loading transactions...<Spinner />
         </div>
       </Card>
     );

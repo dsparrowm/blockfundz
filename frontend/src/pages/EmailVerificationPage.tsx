@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useStore } from "../store/useStore";
+import Spinner from 'src/components/spinners/Spinner';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
 
@@ -77,7 +78,7 @@ const EmailVerificationPage = () => {
                         className="w-full bg-orange-500 text-white py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors"
                         disabled={isLoading}
                     >
-                        {isLoading ? 'Verifying...' : 'Verify Email'}
+                        {isLoading ? (<Spinner />) : 'Verify Email'}
                     </button>
                 </form>
             </div>
