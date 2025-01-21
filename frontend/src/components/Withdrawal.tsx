@@ -24,7 +24,7 @@ const Withdraw = () => {
 
     try {
 
-      const response = await axios.post(`/api/withdrawals`, {
+      const response = await axiosInstance.post(`/api/withdrawals`, {
         userId: localStorage.getItem('userId'),
         amount: parseFloat(amount),
         asset,
@@ -103,7 +103,7 @@ const Withdraw = () => {
             </Select>
           </div>
           <Button type="submit" className="w-full bg-orange-500 hover:bg-orange-700" disabled={loading}>
-            {loading ? 'Submitting...' : 'Submit'}
+            {loading ? "loading..." : 'Submit'}
           </Button>
         </form>
       </CardContent>

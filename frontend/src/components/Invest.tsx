@@ -14,6 +14,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { toast } from 'sonner';
+import axiosInstance from '../api/axiosInstance';
 
 interface InvestmentPlan {
   id: number;
@@ -61,16 +62,12 @@ const InvestmentPlans = () => {
   const [showInsufficientDialog, setShowInsufficientDialog] = useState(false);
   const navigate = useNavigate();
 
-  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
-
   useEffect(() => {
     const fetchInvestmentPlans = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${apiBaseUrl}/api/investments`, {
-          headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem('token')
-          }
+        const response = await axiosInstance.get(`/api/investments`, {
+          withCredentials: true,
         });
         setInvestmentPlans(response.data.investmentPlans);
       } catch (error) {
@@ -83,13 +80,11 @@ const InvestmentPlans = () => {
 
     const fetchBalances = async () => {
       try {
-        const response = await axios.get(`${apiBaseUrl}/api/users/balances`, {
-          headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem('token')
-          },
+        const response = await axiosInstance.get(`/api/users/balances`, {
           params: {
             userId: localStorage.getItem('userId')
-          }
+          },
+          withCredentials: true
         });
         setBalances(response.data.balances);
       } catch (error) {
@@ -117,36 +112,34 @@ const InvestmentPlans = () => {
 
   const handleAssetSelection = async (asset: string) => {
     if (!selectedPlan || !balances) return;
-    
+
     const assetBalance = balances[asset as keyof Balances];
     const match = asset.match(/[a-z]+|[A-Z][a-z]*/g);
     const assetType = match ? match[0] : '';
 
     try {
-      const response = await axios.post(`${apiBaseUrl}/api/investments/subscribe`, {
+      const response = await axiosInstance.post(`/api/investments/subscribe`, {
         userId: localStorage.getItem('userId'),
         planId: selectedPlan.id,
         asset: assetType.toUpperCase(),
         amount: selectedPlan.minimumAmount
       }, {
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('token')
-        }
+        withCredentials: true
       });
-      
+
       toast.success(response.data.message);
       setSelectedPlan(null);
       setShowAssetDialog(false);
-      
+
     } catch (error: any) {
       setShowAssetDialog(false);
-      
+
       if (error.response?.data?.insufficientFunds) {
         setShowInsufficientDialog(true);
       } else {
         // Display the specific error message from the backend
         toast.error(error.response?.data?.message || 'An error occurred while subscribing to the plan');
-        
+
         // If it's an "already subscribed" error, we might want to reset the dialogs
         if (error.response?.data?.message?.includes('already subscribed')) {
           setSelectedPlan(null);
@@ -193,7 +186,7 @@ const InvestmentPlans = () => {
               Choose the asset you want to use for payment:
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <div className="grid grid-cols-2 gap-4 my-4">
+          <div className="grid grid-cols-2 gap-4 my-4 text-white-400">
             {Object.entries(balances).map(([asset, amount]) => (
               <button
                 key={asset}

@@ -13,33 +13,33 @@ const Deposits = () => {
   const [network, setNetwork] = useState('');
 
   const cryptoAssets = [
-    { 
-      id: 'BTC', 
+    {
+      id: 'BTC',
       name: 'Bitcoin',
       icon: Bitcoin,
       networks: ['Bitcoin Network'],
-      address: 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh'
+      address: 'bc1qjyrwte503a0vc7mwn3h52rz383wgh480pz9y63'
     },
-    { 
-      id: 'ETH', 
+    {
+      id: 'ETH',
       name: 'Ethereum',
       icon: Wallet,
-      networks: ['Ethereum Network', 'Arbitrum', 'Optimism'],
-      address: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e'
+      networks: ['Ethereum Network'],
+      address: '0x5C3250dC676c22E9BE847fc8e358F2E10073dfED'
     },
-    { 
-      id: 'USDT', 
+    {
+      id: 'USDT',
       name: 'USDT',
       icon: Wallet,
-      networks: ['Ethereum Network', 'Tron Network', 'BNB Chain'],
+      networks: ['Tron Network'],
       address: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e'
     },
-    { 
-      id: 'USDC', 
+    {
+      id: 'USDC',
       name: 'USDC',
       icon: Wallet,
-      networks: ['Ethereum Network', 'Solana', 'BNB Chain'],
-      address: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e'
+      networks: ['Ethereum Network', 'Tron Network'],
+      address: '0x5C3250dC676c22E9BE847fc8e358F2E10073dfED'
     }
   ];
 

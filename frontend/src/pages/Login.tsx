@@ -8,6 +8,8 @@ import axios, { AxiosError } from 'axios';
 import React from "react";
 import { useStore } from "../store/useStore";
 import Cookies from 'js-cookie';
+import axiosInstance from "../api/axiosInstance";
+import Spinner from "../components/spinners/Spinner";
 
 // Type for Zod error response
 interface ZodErrorResponse {
@@ -37,35 +39,15 @@ const Login = () => {
   const setUser = useStore(state => state.setUser);
   const navigate = useNavigate();
 
-  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+
 
   // Add useEffect to check for existing token and validate
   useEffect(() => {
-    const token = Cookies.get("token");
 
-    const validateToken = async () => {
-      if (token) {
-        try {
-          // Add your token validation endpoint here
-          const response = await axios.post(`${apiBaseUrl}/token/validate`, {}, {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            },
-            withCredentials: true
-          });
-          if (response.data.valid) {
-            // If token is valid, automatically redirect to dashboard
-            toast.success("Already logged in", { className: "text-[15px] px-4 py-2" });
-            navigate('/dashboard');
-          }
-        } catch (error) {
-          // If token validation fails, remove the token
-          Cookies.remove("token");
-        }
-      }
-    };
-
-    validateToken();
+    if (isLoggedIn === "yes") {
+      navigate('/dashboard');
+    }
   }, [navigate]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -103,14 +85,14 @@ const Login = () => {
     setSuccessMessage("");
 
     try {
-      const response = await axios.post(`${apiBaseUrl}/api/auth/signin`, formData, { withCredentials: true });
-      toast.success("Login successful", { className: "text-[15px] px-4 py-2" });
+      const response = await axiosInstance.post(`api/auth/signin`, formData, { withCredentials: true });
+      toast("Login successful", { className: "text-[15px] px-4 py-2" });
       setUser(response.data.user);
       localStorage.setItem("userId", response.data.user.id);
       localStorage.setItem("userEmail", response.data.user.email);
       Cookies.set("token", response.data.token, { expires: 7 });
       localStorage.setItem("isLoggedIn", "yes");
-      console.log("Token received from backend:", response.data.token);
+
       navigate('/dashboard');
     } catch (error) {
       let errorMessage = "Login failed";
@@ -121,7 +103,7 @@ const Login = () => {
         if (axiosError.response?.status === 400 || axiosError.response?.status === 401 || axiosError.response?.status === 404) {
           if (axiosError.response.data.errors) {
             errorMessage = axiosError.response.data.errors[0].message;
-
+            toast(errorMessage, { className: "text-[15px] font-semibold px-4 py-2" });
             // Optionally, handle field-specific errors
             const formErrors = axiosError.response.data.errors.reduce((acc, err) => {
               acc[err.path] = err.message;
@@ -140,7 +122,7 @@ const Login = () => {
       }
 
       // Use toast for error message instead of setting global error
-      toast.error(errorMessage, { className: "text-[15px] font-semibold px-4 py-2" });
+      toast(errorMessage, { className: "text-[15px] font-semibold px-4 py-2" });
     } finally {
       setLoading(false);
     }
@@ -219,7 +201,7 @@ const Login = () => {
             disabled={loading}
             className="w-full bg-white/10 text-white rounded-lg py-3 font-medium hover:bg-white/20 transition-all duration-300 border border-white/10"
           >
-            {loading ? "Signing in..." : "Sign In"}
+            {loading ? (<Spinner />) : "Sign In"}
           </button>
 
           {/* Sign Up Link */}

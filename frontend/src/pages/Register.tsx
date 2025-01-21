@@ -10,12 +10,13 @@ import axios, { AxiosError } from "axios";
 import React from "react";
 import { toast } from "sonner";
 import { useStore } from '../store/useStore';
-
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
+import axiosInstance from "../api/axiosInstance";
+import Spinner from "../components/spinners/Spinner";
 
 
 const Register = () => {
   const [globalError, setGlobalError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Record<string, string>>({});
   const [phone, setPhone] = useState('');
   const [formValues, setFormValues] = useState<FormValues>({
@@ -69,12 +70,18 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
+
     try {
-      const response = await axios.post(`${apiBaseUrl}/api/auth/signup`, formValues);
+      const response = await axiosInstance.post(`/api/auth/signup`, formValues);
       if (response.status === 200) {
         setUser(response.data.createdUser)
         setUserEmail(response.data.createdUser.email)
+        toast(response.data.message, { className: "text-[15px] px-4 py-2" });
         navigate('/verify-email');
+      } else if (response.status === 409) {
+        toast(response.data.message, { className: "text-[15px] px-4 py-2" });
+
       }
     } catch (error) {
       let responseErrors: Array<{ path: string; message: string }> | undefined;
@@ -82,14 +89,15 @@ const Register = () => {
         const axiosError = error as AxiosError<ZodErrorResponse>;
         if (axiosError.response?.status === 400 || axiosError.response?.status === 401) {
           if (axiosError.response?.data.errors) {
-            console.log("This is the error from the server: ", axiosError.response.data.errors[0].message);
-            toast.error(axiosError.response.data.errors[0].message, { className: "text-[15px] px-4 py-2" })
+            setLoading(false);
+            toast(axiosError.response.data.errors[0].message, { className: "text-[15px] px-4 py-2" })
             responseErrors = axiosError.response.data.errors;
           }
 
           if (responseErrors) {
             const formErrors = responseErrors.reduce((acc, err) => {
               acc[err.path] = err.message;
+
               return acc;
             }, {} as Record<string, string>);
           } else {
@@ -204,7 +212,9 @@ const Register = () => {
             type="submit"
             className="w-full bg-white/10 text-white rounded-lg py-3 font-medium hover:bg-white/20 transition-all duration-300 border border-white/10"
           >
-            Sign up
+            {loading ? (<Spinner />) : (
+              'Sign Up'
+            )}
           </button>
 
           {/* Sign Up Link */}

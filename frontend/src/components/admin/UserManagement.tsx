@@ -114,7 +114,6 @@ const UserManagement = ({
         }
       });
       toast.success(response.data.message);
-      console.log(response.data);
 
       // Reset balances
       setBitcoinBalance(0);

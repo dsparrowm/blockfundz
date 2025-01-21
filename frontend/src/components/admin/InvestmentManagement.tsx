@@ -2,7 +2,6 @@ import React, { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
 import { Table, TableHeader, TableRow, TableCell, TableBody } from "@/components/ui/table"; // Adjust the import paths as necessary
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 interface Investment {
   id: number;
@@ -40,7 +39,6 @@ const InvestmentManagement = () => {
             'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
           }
         });
-        console.log(response.data.investmentPlans);
         setInvestments(response.data.investmentPlans);
       } catch (error) {
         console.error('Error fetching investments:', error);
@@ -101,21 +99,21 @@ const InvestmentManagement = () => {
                   <TableCell colSpan={9} className='text-center'>No investments found</TableCell>
                 </TableRow>
               ) : (
-              <>
-                {paginatedInvestments.map(investment => (
-                  <TableRow key={investment.id}>
-                    <TableCell>{investment.id}</TableCell>
-                    <TableCell>{investment.plan}</TableCell>
-                    <TableCell>{investment.minimumAmount}</TableCell>
-                    <TableCell>{investment.maximumAmount}</TableCell>
-                    <TableCell>{investment.interestRate}</TableCell>
-                    <TableCell>{investment.totalReturn}</TableCell>
-                    <TableCell>{investment.user ? investment.user.name : 'N/A'}</TableCell>
-                    <TableCell>{investment.user ? investment.user.email : 'N/A'}</TableCell>
-                    <TableCell>{new Date(investment.createdAt).toLocaleString()}</TableCell>
-                  </TableRow>
-                ))}
-              </>
+                <>
+                  {paginatedInvestments.map(investment => (
+                    <TableRow key={investment.id}>
+                      <TableCell>{investment.id}</TableCell>
+                      <TableCell>{investment.plan}</TableCell>
+                      <TableCell>{investment.minimumAmount}</TableCell>
+                      <TableCell>{investment.maximumAmount}</TableCell>
+                      <TableCell>{investment.interestRate}</TableCell>
+                      <TableCell>{investment.totalReturn}</TableCell>
+                      <TableCell>{investment.user ? investment.user.name : 'N/A'}</TableCell>
+                      <TableCell>{investment.user ? investment.user.email : 'N/A'}</TableCell>
+                      <TableCell>{new Date(investment.createdAt).toLocaleString()}</TableCell>
+                    </TableRow>
+                  ))}
+                </>
               )}
             </TableBody>
           </Table>

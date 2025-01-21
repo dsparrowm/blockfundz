@@ -13,6 +13,7 @@ import { ArrowUp, Search, Download } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import axios from 'axios';
+import axiosInstance from '../api/axiosInstance';
 
 interface Withdrawal {
   id: string;
@@ -25,8 +26,6 @@ interface Withdrawal {
   createdAt: string;
 }
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
-
 const WithdrawalHistory = () => {
   const [withdrawals, setWithdrawals] = useState<Withdrawal[]>([]);
   const [loading, setLoading] = useState(true);
@@ -35,13 +34,11 @@ const WithdrawalHistory = () => {
   useEffect(() => {
     const fetchWithdrawals = async () => {
       try {
-        const response = await axios.get(`${apiBaseUrl}/api/withdrawals`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          },
+        const response = await axiosInstance.get(`/api/withdrawals`, {
           params: {
             userId: localStorage.getItem('userId')
-          }
+          },
+          withCredentials: true
         });
         setWithdrawals(response.data.withdrawalRequests);
       } catch (err) {
@@ -78,7 +75,7 @@ const WithdrawalHistory = () => {
   if (error) {
     return <div>{error}</div>;
   }
-  console.log("This is the value of withdrawals", withdrawals)
+
   return (
 
     <Card className="w-full bg-neutral-900 text-white">
@@ -86,8 +83,8 @@ const WithdrawalHistory = () => {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="flex items-center gap-4">
             <CardTitle className="text-xl font-semibold">Withdrawal History</CardTitle>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               size="sm"
               className="hidden md:flex items-center gap-2 bg-neutral-800 border-neutral-700 hover:bg-neutral-700"
             >
@@ -145,7 +142,7 @@ const WithdrawalHistory = () => {
             </TableHeader>
             <TableBody>
               {withdrawals.map((withdrawal) => (
-                <TableRow 
+                <TableRow
                   key={withdrawal.id}
                   className="hover:bg-neutral-800 border-neutral-700"
                 >
@@ -164,11 +161,11 @@ const WithdrawalHistory = () => {
                   <TableCell>{withdrawal.network}</TableCell>
                   <TableCell>
                     <span className={`px-2 py-1 rounded-full text-xs font-medium
-                      ${withdrawal.status === 'COMPLETED' 
-                        ? 'bg-green-500/20 text-green-500' 
+                      ${withdrawal.status === 'COMPLETED'
+                        ? 'bg-green-500/20 text-green-500'
                         : withdrawal.status === 'PENDING'
-                        ? 'bg-yellow-500/20 text-yellow-500'
-                        : 'bg-red-500/20 text-red-500'
+                          ? 'bg-yellow-500/20 text-yellow-500'
+                          : 'bg-red-500/20 text-red-500'
                       }`}>
                       {withdrawal.status}
                     </span>
@@ -179,22 +176,22 @@ const WithdrawalHistory = () => {
             </TableBody>
           </Table>
         </div>
-        
+
         <div className="mt-4 flex justify-between items-center text-sm text-neutral-400">
           <div>
             Showing 1-{withdrawals.length} of {withdrawals.length} transactions
           </div>
           <div className="flex gap-2">
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               disabled
               className="bg-neutral-800 border-neutral-700 hover:bg-neutral-700"
             >
               Previous
             </Button>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               size="sm"
               disabled
               className="bg-neutral-800 border-neutral-700 hover:bg-neutral-700"

@@ -8,7 +8,6 @@ const getWithdrawalRequests = async (req: Request, res: Response) => {
         user: true, // Include related user data
       },
     });
-    console.log(withdrawalRequests);
     res.status(200).json({ withdrawalRequests });
   } catch (err) {
     console.error('Error retrieving withdrawal requests:', err);

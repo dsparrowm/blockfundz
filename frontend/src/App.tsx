@@ -9,11 +9,11 @@ import NotFoundPage from './pages/NotFoundPage';
 import PublicRoute from './helpers/protectRoutes'
 import EmailVerificationPage from './pages/EmailVerificationPage';
 import VerifiedEmailSuccessPage from './pages/VerifiedEmailSuccessPage';
+import { Toaster } from "@/components/ui/sonner"
 
 const App = () => {
   return (
     <>
-      {/* <Toaster richColors position={"top-center"} /> */}
 
       <Routes>
         {/* Home Page with all sections */}
@@ -66,6 +66,7 @@ const App = () => {
         {/* 404 Page */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
+      <Toaster richColors position={"top-center"} />
     </>
   );
 };

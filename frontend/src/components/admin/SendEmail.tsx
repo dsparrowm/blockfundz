@@ -44,9 +44,9 @@ const EmailSenderComponent = () => {
     }
 
     // Determine recipients based on mode
-    const recipients = 
-      recipientMode === 'single' 
-        ? [singleRecipient] 
+    const recipients =
+      recipientMode === 'single'
+        ? [singleRecipient]
         : selectedUsers.map(user => user.email);
 
     if (recipients.length === 0) {
@@ -58,7 +58,6 @@ const EmailSenderComponent = () => {
 
     try {
       // email sending
-      console.log('Sending email to:', recipients);
       const response = await axios.post(`${apiBaseUrl}/api/email`, {
         recipients,
         subject: emailSubject,
@@ -96,7 +95,7 @@ const EmailSenderComponent = () => {
   }
 
   const toggleUserSelection = (user: User) => {
-    setSelectedUsers(prev => 
+    setSelectedUsers(prev =>
       prev.some(u => u.id === user.id)
         ? prev.filter(u => u.id !== user.id)
         : [...prev, user]
@@ -118,15 +117,15 @@ const EmailSenderComponent = () => {
             <Label className='text-white'>Recipient Mode</Label>
             <Switch
               checked={recipientMode === 'multiple'}
-              onCheckedChange={() => 
+              onCheckedChange={() =>
                 setRecipientMode(
                   recipientMode === 'single' ? 'multiple' : 'single'
                 )
               }
             />
             <span>
-              {recipientMode === 'single' 
-                ? 'Single Recipient' 
+              {recipientMode === 'single'
+                ? 'Single Recipient'
                 : 'Multiple Recipients'}
             </span>
           </div>
@@ -136,7 +135,7 @@ const EmailSenderComponent = () => {
             <div className="mb-4">
               <Label className='text-white'>Recipient Email</Label>
               <Input
-                className='text-coral-black' 
+                className='text-coral-black'
                 type="email"
                 placeholder="Enter recipient email"
                 value={singleRecipient}
@@ -148,16 +147,16 @@ const EmailSenderComponent = () => {
               <Label>Select Recipients</Label>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 {users.map(user => (
-                  <div 
+                  <div
                     key={user.id}
                     className={`border p-2 rounded cursor-pointer flex items-center 
-                      ${selectedUsers.some(u => u.id === user.id) 
-                        ? 'bg-blue-100 border-blue-500' 
+                      ${selectedUsers.some(u => u.id === user.id)
+                        ? 'bg-blue-100 border-blue-500'
                         : 'hover:bg-gray-600'}
                     `}
                     onClick={() => toggleUserSelection(user)}
                   >
-                    <input 
+                    <input
                       type="checkbox"
                       checked={selectedUsers.some(u => u.id === user.id)}
                       className="mr-2"
@@ -184,7 +183,7 @@ const EmailSenderComponent = () => {
           {/* Email Body */}
           <div className="mb-4">
             <Label className='text-white'>Email Body</Label>
-            <Textarea 
+            <Textarea
               className='text-coral-black'
               placeholder="Compose your email..."
               value={emailBody}
@@ -194,7 +193,7 @@ const EmailSenderComponent = () => {
           </div>
 
           {/* Send Button */}
-          <Button 
+          <Button
             onClick={handleSendEmail}
             disabled={isLoading}
             className="w-full bg-orange-500"

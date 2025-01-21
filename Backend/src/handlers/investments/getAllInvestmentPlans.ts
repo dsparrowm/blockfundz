@@ -8,7 +8,6 @@ const getAllInvestmentPlans = async (req: Request, res: Response) => {
         user: true
       }
     });
-    console.log("This is the investment plans", investmentPlans);
     res.status(200).json({ investmentPlans });
   } catch (err) {
     console.error('Error retrieving investment plans:', err);

@@ -28,7 +28,6 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { useStore } from "../store/useStore"
 import { useNavigate } from "react-router-dom"
 
 export function NavUser({
@@ -46,6 +45,7 @@ export function NavUser({
   const handleLogout = () => {
     // Clear user data from local storage or state management
     localStorage.removeItem('token');
+    localStorage.setItem('isLoggedIn', 'no');
     // Redirect to login page
     navigate('/login');
   };
@@ -67,7 +67,7 @@ export function NavUser({
                 <span className="truncate font-semibold text-white-400">{user.name}</span>
                 <span className="truncate text-xs text-orange-400">{user.email}</span>
               </div>
-              <ChevronsUpDown className="ml-auto size-4" color="white"/>
+              <ChevronsUpDown className="ml-auto size-4" color="white" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent

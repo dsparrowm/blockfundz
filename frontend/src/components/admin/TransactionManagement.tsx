@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
 import { Table, TableHeader, TableRow, TableCell, TableBody } from "@/components/ui/table";
-import { Button } from "@/components/ui/button"; 
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 interface Transaction {
@@ -56,7 +56,6 @@ const TransactionManagement = () => {
       transaction.phone.toLowerCase().includes(searchText.toLowerCase())
     );
   }, [transactions, searchText]);
-  console.log("transactions state", transactions);
   const paginatedTransactions = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -110,8 +109,8 @@ const TransactionManagement = () => {
                           ${transaction.status === 'COMPLETED' || transaction.status === 'ACTIVE'
                             ? 'bg-green-500/20 text-green-500'
                             : transaction.status === 'PENDING'
-                            ? 'bg-yellow-500/20 text-yellow-500'
-                            : 'bg-red-500/20 text-red-500'
+                              ? 'bg-yellow-500/20 text-yellow-500'
+                              : 'bg-red-500/20 text-red-500'
                           }`}>
                           {transaction.status}
                         </span>

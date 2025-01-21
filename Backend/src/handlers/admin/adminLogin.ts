@@ -15,8 +15,6 @@ const adminLogin = async (req: Request, res: Response) => {
       const adminEmail = process.env.ADMIN_EMAIL
       const adminPassword = process.env.ADMIN_PASSWORD
 
-      console.log(adminEmail, adminPassword)
-
       // check if environment variables are set
       if (!adminEmail || !adminPassword) {
          res.status(500)

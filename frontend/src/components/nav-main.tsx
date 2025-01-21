@@ -1,7 +1,7 @@
 "use client"
 
 import { ChevronRight, type LucideIcon } from "lucide-react"
-import {useStore} from "../store/useStore"
+import { useStore } from "../store/useStore"
 
 import {
   Collapsible,
@@ -38,15 +38,13 @@ interface NavMainProps {
   isAdmin: boolean
 }
 
-export function NavMain({isAdmin}: NavMainProps) {
+export function NavMain({ isAdmin }: NavMainProps) {
   const setComponent = !isAdmin ? useStore((state) => state.setActiveComponent) : useStore((state) => state.setActiveAdminComponent)
   const activeUserComponent = useStore((state) => state.activeComponent)
   const activeAdminComponent = useStore((state) => state.activeAdminComponent)
-  console.log(`adminComponent: ${activeAdminComponent}`)
-  console.log(`userComponent: ${activeUserComponent}`)
 
   const items = isAdmin ? data.adminNavMain : data.userNavMain
-  
+
   return (
     <SidebarGroup>
       {/* <SidebarGroupLabel>Platform</SidebarGroupLabel> */}
@@ -61,7 +59,7 @@ export function NavMain({isAdmin}: NavMainProps) {
             >
               <SidebarMenuItem>
                 <SidebarMenuButton tooltip={item.title} onClick={() => setComponent(item.title)}>
-                  {item.icon && <item.icon color="gray"/>}
+                  {item.icon && <item.icon color="gray" />}
                   <span className="text-gray-600 font-montserrat font-bold">{item.title}</span>
                   <ChevronRight color="gray" className="ml-auto transition-transform duration-200" />
                 </SidebarMenuButton>
@@ -94,7 +92,7 @@ export function NavMain({isAdmin}: NavMainProps) {
             >
               <SidebarMenuItem>
                 <SidebarMenuButton tooltip={item.title} onClick={() => setComponent(item.title)}>
-                  {item.icon && <item.icon color="gray"/>}
+                  {item.icon && <item.icon color="gray" />}
                   <span className="text-gray-600 font-montserrat font-bold">{item.title}</span>
                   <ChevronRight color="gray" className="ml-auto transition-transform duration-200" />
                 </SidebarMenuButton>

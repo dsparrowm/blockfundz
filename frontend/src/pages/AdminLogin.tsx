@@ -69,41 +69,40 @@ const Login = () => {
     setGlobalError(null);
     setLoading(true);
     setSuccessMessage("");
-    
+
     try {
       const response = await axios.post(`${apiBaseUrl}/api/auth/admin/login`, formData)
       localStorage.setItem("adminToken", response.data.token)
-      toast.success("Login successful", {className:"text-[15px] px-4 py-2"})
+      toast.success("Login successful", { className: "text-[15px] px-4 py-2" })
       setAdminUser(response.data.user)
       navigate('/admin/dashboard');
 
     } catch (error) {
-        let responseErrors: Array<{ path: string; message: string }> | undefined;
-        if (axios.isAxiosError(error)) {
-          const axiosError = error as AxiosError<ZodErrorResponse>;
-          if (axiosError.response?.status === 400 || axiosError.response?.status === 401 || axiosError.response?.status === 404) {
-            if (axiosError.response.data.errors) {
-              console.log(`this is the error from the server: ${axiosError.response.data.errors[0].message}`)
-              toast.error(axiosError.response.data.errors[0].message, {className:"text-[15px] px-4 py-2"})
-              responseErrors = axiosError.response.data.errors;
-            } else {
-              toast.error(axiosError.response.data.message, {className:"text-[15px] px-4 py-2"})
-            }
-            if (responseErrors) {
-              const formErrors = responseErrors.reduce((acc, err) => {
-                acc[err.path] = err.message;
-                return acc;
-              }, {} as Record<string, string>);
-            } else {
-              setGlobalError(axiosError.response.data.message || 'Login failed');
-            }
+      let responseErrors: Array<{ path: string; message: string }> | undefined;
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError<ZodErrorResponse>;
+        if (axiosError.response?.status === 400 || axiosError.response?.status === 401 || axiosError.response?.status === 404) {
+          if (axiosError.response.data.errors) {
+            toast.error(axiosError.response.data.errors[0].message, { className: "text-[15px] px-4 py-2" })
+            responseErrors = axiosError.response.data.errors;
           } else {
-            setGlobalError("An unexpected error occurred. Please try again.");
+            toast.error(axiosError.response.data.message, { className: "text-[15px] px-4 py-2" })
+          }
+          if (responseErrors) {
+            const formErrors = responseErrors.reduce((acc, err) => {
+              acc[err.path] = err.message;
+              return acc;
+            }, {} as Record<string, string>);
+          } else {
+            setGlobalError(axiosError.response.data.message || 'Login failed');
           }
         } else {
-          setGlobalError("Network error. Please check your connection.");
+          setGlobalError("An unexpected error occurred. Please try again.");
         }
-        console.log(error)
+      } else {
+        setGlobalError("Network error. Please check your connection.");
+      }
+      console.log(error)
     } finally {
       setLoading(false);
       // setFormData({
@@ -117,7 +116,7 @@ const Login = () => {
     <main className="relative text-white flex justify-center items-center min-h-screen p-4 flex-col">
       <div className="mb-2 flex items-center">
         <a href="">
-          <img src={logo} alt="logo" width={50} height={10}/>
+          <img src={logo} alt="logo" width={50} height={10} />
         </a>
         <p className='text-[30px] text-orange-500 leading-8'>NexGen</p>
       </div>
@@ -125,8 +124,8 @@ const Login = () => {
         <form action="" className="space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-8 ">
             <div className="text-center">
-                <h1 className="text-3xl font-bold text-white mb-2">Admin Login</h1>
-                <p className="text-white/60">Sign in to your account</p>
+              <h1 className="text-3xl font-bold text-white mb-2">Admin Login</h1>
+              <p className="text-white/60">Sign in to your account</p>
             </div>
           </div>
           <div className="space-y-2">
@@ -137,14 +136,14 @@ const Login = () => {
               </div>
               <input
                 onChange={handleChange}
-                value={formData.email} 
-                type="email" 
-                name="email"  
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-11 py-3 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-white/20" 
+                value={formData.email}
+                type="email"
+                name="email"
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-11 py-3 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-white/20"
                 placeholder="Enter your email" />
             </div>
           </div>
-          
+
           <div className="space-y-2">
             <label className="text-white/80 text-sm font-medium pl-1">Password</label>
             <div className="relative">
@@ -173,14 +172,14 @@ const Login = () => {
           </div> */}
 
           <button
-              type="submit"
-              className="w-full bg-white/10 text-white rounded-lg py-3 font-medium hover:bg-white/20 transition-all duration-300 border border-white/10"
-            >
-              {loading ? "Signing in..." : "Sign In"}
-            </button>
+            type="submit"
+            className="w-full bg-white/10 text-white rounded-lg py-3 font-medium hover:bg-white/20 transition-all duration-300 border border-white/10"
+          >
+            {loading ? "Signing in..." : "Sign In"}
+          </button>
 
-            {/* Sign Up Link */}
-            {/* <p className="text-center text-white/60 bg-transparent">
+          {/* Sign Up Link */}
+          {/* <p className="text-center text-white/60 bg-transparent">
               Don't have an account?{' '}
               <Link to="/signup">
                 <a href="#" className="hover:underline text-orange-500">

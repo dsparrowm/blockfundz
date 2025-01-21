@@ -75,7 +75,6 @@ const InvestmentPlansManagement = () => {
           'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
         }
       });
-      console.log(investmentPlans.map(plan => plan.id === updatedPlan.id ? response.data : plan));
       setInvestmentPlans(investmentPlans.map(plan => plan.id === updatedPlan.id ? response.data : plan));
       setEditPlan(null);
     } catch (error) {

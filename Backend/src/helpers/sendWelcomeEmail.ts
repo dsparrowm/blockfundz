@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { VERIFICATION_EMAIL_TEMPLATE } from '../emails/emailTemplates';
+import { VERIFICATION_EMAIL_TEMPLATE, WELCOME_EMAIL_TEMPLATE } from '../emails/emailTemplates';
 
 
 const supportEmail = process.env.NAMECHEAP_SUPPORT_EMAIL;
@@ -25,12 +25,11 @@ const sendWelcomeEmail = async (recipientEmail: string, userName: string) => {
     from: '"NexGen Team" <support@nexgencrypto.live>', // Sender info
     to: recipientEmail, // Recipient
     subject: "Welcome to NexGenCrypto!", // Subject line
-    html: VERIFICATION_EMAIL_TEMPLATE.replace("{name}", userName), // HTML content
+    html: WELCOME_EMAIL_TEMPLATE.replace("{name}", userName), // HTML content
   };
 
   try {
     await transporter.sendMail(mailOptions);
-    console.log(`Welcome email sent to ${recipientEmail}`);
   } catch (error) {
     console.error("Error sending email:", error);
     throw new Error("Email sending failed");

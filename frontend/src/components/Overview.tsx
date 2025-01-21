@@ -57,7 +57,6 @@ const Overview = () => {
       try {
         setIsLoading(true);
 
-
         // Fetch transactions
         const transactionsResponse = await axiosInstance.get('/api/users/transactions', {
           params: {
