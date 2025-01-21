@@ -7,7 +7,7 @@ import { useStore } from "../store/useStore";
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import Spinner from "src/components/spinners/Spinner";
+import Spinner from "../components/spinners/Spinner";
 
 
 // Type for Zod error response
