@@ -28,7 +28,7 @@ import blogo from './blogo.png'
 
 import Emily from './Emily.jpeg'
 import happywoman from './happywoman.jpeg'
-import david from "./david.jpeg"
+import david from './david.jpg'
 import connor from "./connor.jpeg"
 import ceo from "./ceo.jpeg"
 import cto from "./cto.jpeg"

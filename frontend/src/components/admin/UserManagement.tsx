@@ -134,7 +134,7 @@ const UserManagement = ({
 
   const handleAddUser = async () => {
     try {
-      const response = await axios.post(`${apiBaseUrl}/api/auth/addNewUser`, newUser, {
+      const response = await axios.post(`${apiBaseUrl}/api/auth/addUser`, newUser, {
         headers: {
           'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
         }
@@ -510,7 +510,7 @@ const UserManagement = ({
           </div>
           <DialogFooter>
             <Button type="submit" onClick={handleAddUser}>
-              Save changes
+              {loading ? (<Spinner />) : 'Add User'}
             </Button>
           </DialogFooter>
         </DialogContent>
