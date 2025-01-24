@@ -46,8 +46,8 @@ export function NavUser({
     // Clear user data from local storage or state management
     localStorage.removeItem('token');
     localStorage.setItem('isLoggedIn', 'no');
-    // Redirect to login page
-    navigate('/login');
+    // Redirect to Home page
+    navigate('/');
   };
 
   return (

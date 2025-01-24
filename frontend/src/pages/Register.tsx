@@ -13,7 +13,6 @@ import { useStore } from '../store/useStore';
 import axiosInstance from "../api/axiosInstance";
 import Spinner from "../components/spinners/Spinner";
 
-
 const Register = () => {
   const [globalError, setGlobalError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -23,9 +22,9 @@ const Register = () => {
     name: '',
     email: '',
     password: '',
+    confirmPassword: '',
     phone: ''
   });
-
 
   const navigate = useNavigate();
 
@@ -60,6 +59,7 @@ const Register = () => {
     name: string;
     email: string;
     password: string;
+    confirmPassword: string;
     phone: string;
   }
 
@@ -72,6 +72,12 @@ const Register = () => {
     e.preventDefault();
     setLoading(true);
 
+    if (formValues.password !== formValues.confirmPassword) {
+      setError({ confirmPassword: "Passwords do not match" });
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await axiosInstance.post(`/api/auth/signup`, formValues);
       if (response.status === 200) {
@@ -81,7 +87,6 @@ const Register = () => {
         navigate('/verify-email');
       } else if (response.status === 409) {
         toast(response.data.message, { className: "text-[15px] px-4 py-2" });
-
       }
     } catch (error) {
       let responseErrors: Array<{ path: string; message: string }> | undefined;
@@ -97,9 +102,9 @@ const Register = () => {
           if (responseErrors) {
             const formErrors = responseErrors.reduce((acc, err) => {
               acc[err.path] = err.message;
-
               return acc;
             }, {} as Record<string, string>);
+            setError(formErrors);
           } else {
             setGlobalError(axiosError.response.data.message || 'Login failed');
           }
@@ -109,6 +114,8 @@ const Register = () => {
       } else {
         setGlobalError("Network error. Please check your connection.");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -188,7 +195,6 @@ const Register = () => {
                 value={phone}
                 onChange={setPhone}
               />
-
             </div>
           </div>
 
@@ -202,9 +208,30 @@ const Register = () => {
                 name="password"
                 type="password"
                 onChange={handleInputChange}
+                value={formValues.password}
                 className="w-full bg-white/5 border border-white/10 rounded-lg px-11 py-3 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-white/20"
                 placeholder="Enter your password"
               />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-white/80 text-sm font-medium pl-1">Confirm Password</label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-3 flex items-center">
+                <FaLock className="h-5 w-5 text-white/40 " />
+              </div>
+              <input
+                name="confirmPassword"
+                type="password"
+                onChange={handleInputChange}
+                value={formValues.confirmPassword}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-11 py-3 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-white/20"
+                placeholder="Confirm your password"
+              />
+              {error.confirmPassword && (
+                <p className="text-red-500 text-sm mt-1">{error.confirmPassword}</p>
+              )}
             </div>
           </div>
 
@@ -223,7 +250,6 @@ const Register = () => {
             <Link to="/login" className="hover:underline text-orange-500">
               Sign in
             </Link>
-
           </p>
         </form>
       </div>
