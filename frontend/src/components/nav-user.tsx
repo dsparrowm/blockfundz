@@ -29,6 +29,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
+import { useStore } from "../store/useStore"
 
 export function NavUser({
   user,
@@ -41,6 +43,7 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar()
   const navigate = useNavigate();
+  const setActiveComponent = useStore(state => state.setActiveComponent);
 
   const handleLogout = () => {
     // Clear user data from local storage or state management
@@ -90,16 +93,16 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setActiveComponent('Invest')}>
                 <Sparkles />
                 Upgrade Plan
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
+              <DropdownMenuItem onClick={() => setActiveComponent('AccountSettings')}>
+                  <BadgeCheck />
+                  Account
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Bell />

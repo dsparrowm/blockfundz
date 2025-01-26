@@ -10,6 +10,7 @@ import PublicRoute from './helpers/protectRoutes'
 import EmailVerificationPage from './pages/EmailVerificationPage';
 import VerifiedEmailSuccessPage from './pages/VerifiedEmailSuccessPage';
 import { Toaster } from "@/components/ui/sonner"
+import LiveChat from './components/chat/liveChat';
 
 const App = () => {
   return (
@@ -67,6 +68,7 @@ const App = () => {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Toaster richColors position={"top-center"} />
+      <LiveChat />
     </>
   );
 };

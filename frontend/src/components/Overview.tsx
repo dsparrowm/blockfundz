@@ -200,19 +200,19 @@ const Overview = () => {
         <div className="mb-6">
           <h3 className="text-lg font-bold text-white-400 mb-4">Balances</h3>
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-gray-700 p-4 rounded-lg">
+            <div className="bg-gray-700 py-2 pl-4 rounded-lg">
               <h4 className="text-sm font-medium text-gray-400">Bitcoin Balance</h4>
               <p className="text-lg font-semibold text-white">{balances?.bitcoinBalance} BTC</p>
             </div>
-            <div className="bg-gray-700 p-4 rounded-lg">
+            <div className="bg-gray-700 py-2 pl-4 rounded-lg">
               <h4 className="text-sm font-medium text-gray-400">Ethereum Balance</h4>
               <p className="text-lg font-semibold text-white">{balances?.ethereumBalance} ETH</p>
             </div>
-            <div className="bg-gray-700 p-4 rounded-lg">
+            <div className="bg-gray-700 py-2 pl-4 rounded-lg">
               <h4 className="text-sm font-medium text-gray-400">USDT Balance</h4>
               <p className="text-lg font-semibold text-white">{balances?.usdtBalance} USDT</p>
             </div>
-            <div className="bg-gray-700 p-4 rounded-lg">
+            <div className="bg-gray-700 py-2 pl-4 rounded-lg">
               <h4 className="text-sm font-medium text-gray-400">USDC Balance</h4>
               <p className="text-lg font-semibold text-white">{balances?.usdcBalance} USDC</p>
             </div>

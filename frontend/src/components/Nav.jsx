@@ -5,9 +5,9 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 const Nav = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  
+
   const isHomePage = location.pathname === '/' || location.pathname === '';
-  
+
   const mainLinks = [
     { name: "Home", link: "/", hash: "home" },
     { name: "Service", link: "/", hash: "service" },
@@ -38,6 +38,14 @@ const Nav = () => {
     setOpen(false);
   };
 
+  const isActive = (link, hash) => {
+    if (link !== location.pathname) return false;
+    if (hash) {
+      return location.hash === `#${hash}`;
+    }
+    return true;
+  };
+
   return (
     <div className='shadow-md w-full fixed top-0 left-0 z-50'>
       <div className='bg-coral-black py-4 px-7'>
@@ -62,11 +70,15 @@ const Nav = () => {
             ${open ? 'top-20' : 'top-[-490px]'} 
             md:flex-1 transition-all duration-500 ease-in
             ${open ? 'flex flex-col' : 'hidden md:flex'}`}>
-            
+
             {/* Centered Navigation Links */}
             <ul className='md:flex md:items-center md:justify-center md:flex-1 pb-12 md:pb-0'>
               {mainLinks.map((link) => (
-                <li key={link.name} className='md:mx-4 text-xl my-7 md:my-0 text-center'>
+                <li
+                  key={link.name}
+                  className={`md:mx-4 text-xl my-7 md:my-0 text-center border-b-4 transition-all ${isActive(link.link, link.hash) ? 'border-orange-500' : 'border-transparent'
+                    }`}
+                >
                   <a
                     className='text-white cursor-pointer hover:text-orange-500 transition-colors'
                     onClick={() => handleNavigation(link.link, link.hash)}
