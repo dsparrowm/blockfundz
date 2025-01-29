@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Card,
   CardHeader,
@@ -17,40 +17,16 @@ import { useStore } from '../store/useStore';
 import axiosInstance from '../api/axiosInstance';
 import Cookies from 'js-cookie';
 import Spinner from './spinners/Spinner';
+import { AlertCircle, Bold } from 'lucide-react';
 
 const Overview = () => {
-  // State for transactions
-  interface Transaction {
-    id: number;
-    type: string;
-    asset: string;
-    amount: number;
-    status: string;
-    date: string;
-    txHash: string;
-    planName?: string;
-    duration?: string;
-  }
+  const [transactions, setTransactions] = useState([]);
+  const [balances, setBalances] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  interface Balances {
-    bitcoinBalance: number;
-    ethereumBalance: number;
-    usdtBalance: number;
-    usdcBalance: number;
-  }
-
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [balances, setBalances] = useState<Balances | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<{ message: string } | null>(null);
-
-  // Filter states
-  const [typeFilter, setTypeFilter] = useState('all');
-  const [statusFilter, setStatusFilter] = useState('all');
-
-  // Get user from store
-  const user = useStore((state) => state.user);
-
+  // Get user and setActiveComponent from global store
+  const user = useStore(state => state.user);
+  const setActiveComponent = useStore(state => state.setActiveComponent);
 
   // Fetch transactions and balances effect
   useEffect(() => {
@@ -75,210 +51,53 @@ const Overview = () => {
           withCredentials: true,
         });
         setBalances(balancesResponse.data.balances);
-
       } catch (error) {
-        setTransactions([]);
-        setError({ message: 'Error fetching data' });
+        console.error('Error fetching transactions and balances:', error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    // Fetch transactions and balances when component mounts or user changes
-    if (user) {
-      fetchTransactionsAndBalances();
-    }
-  }, [user]);
-
-  // Filter transactions
-  const filteredTransactions = transactions.filter(tx => {
-    const typeMatch = typeFilter === 'all' || tx.type === typeFilter;
-    const statusMatch = statusFilter === 'all' || tx.status === statusFilter;
-    return typeMatch && statusMatch;
-  });
-
-  // Format date
-  const formatDate = (dateString: string | number | Date) => {
-    return new Date(dateString).toLocaleString();
-  };
-
-  // Get status badge color
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return 'bg-green-100 text-green-800';
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'failed':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  // Get transaction type icon and color
-  const getTypeStyles = (type: string) => {
-    switch (type) {
-      case 'deposit':
-        return {
-          icon: '↓',
-          color: 'text-green-600',
-          bgColor: 'bg-green-100',
-        };
-      case 'withdrawal':
-        return {
-          icon: '↑',
-          color: 'text-red-600',
-          bgColor: 'bg-red-100',
-        };
-      case 'subscription':
-        return {
-          icon: '★',
-          color: 'text-purple-600',
-          bgColor: 'bg-purple-100',
-        };
-      default:
-        return {
-          icon: '•',
-          color: 'text-gray-600',
-          bgColor: 'bg-gray-100',
-        };
-    }
-  };
-
-  // Render loading state
-  if (isLoading) {
-    return (
-      <Card className="w-full bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6">
-        <div className="text-center py-10 text-gray-400">
-          Loading transactions...<Spinner />
-        </div>
-      </Card>
-    );
-  }
-
-  // Render error state
-  if (error) {
-    return (
-      <Card className="w-full bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6">
-        <div className="text-center py-10 text-red-400">
-          Error loading transactions: {error.message}
-        </div>
-      </Card>
-    );
-  }
+    fetchTransactionsAndBalances();
+  }, [user.id]);
 
   return (
-    <Card className="w-full bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/50 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10">
-      <CardHeader>
-        <CardTitle className="text-white-400 mb-7">Transaction History</CardTitle>
-        <div className="flex space-x-4 mt-4">
-          <select
-            value={typeFilter}
-            onChange={(e) => setTypeFilter(e.target.value)}
-            className="rounded-md border border-gray-300 px-3 py-1 text-white bg-gray-800/50 "
-          >
-            <option value="all">All Types</option>
-            <option value="deposit">Deposits</option>
-            <option value="withdrawal">Withdrawals</option>
-            <option value="subscription">Subscriptions</option>
-          </select>
-
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="rounded-md border border-gray-300 px-3 py-1 text-white-400 bg-gray-800/50 "
-          >
-            <option value="all">All Statuses</option>
-            <option value="completed">Completed</option>
-            <option value="pending">Pending</option>
-            <option value="failed">Failed</option>
-          </select>
+    <>
+      <div className="px-8 flex justify-between items-center">
+        <div className="mb-4 text-white space-y-2">
+          <p className="text-xl">Welcome</p>
+          <p className="text-[40px] font-bolder">{user.name}</p>
+          <p className="text-md text-gray-400">here's a summary of your account.</p>
         </div>
-      </CardHeader>
-      <CardContent>
-        <div className="mb-6">
-          <h3 className="text-lg font-bold text-white-400 mb-4">Balances</h3>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-gray-700 py-2 pl-4 rounded-lg">
-              <h4 className="text-sm font-medium text-gray-400">Bitcoin Balance</h4>
-              <p className="text-lg font-semibold text-white">{balances?.bitcoinBalance} BTC</p>
-            </div>
-            <div className="bg-gray-700 py-2 pl-4 rounded-lg">
-              <h4 className="text-sm font-medium text-gray-400">Ethereum Balance</h4>
-              <p className="text-lg font-semibold text-white">{balances?.ethereumBalance} ETH</p>
-            </div>
-            <div className="bg-gray-700 py-2 pl-4 rounded-lg">
-              <h4 className="text-sm font-medium text-gray-400">USDT Balance</h4>
-              <p className="text-lg font-semibold text-white">{balances?.usdtBalance} USDT</p>
-            </div>
-            <div className="bg-gray-700 py-2 pl-4 rounded-lg">
-              <h4 className="text-sm font-medium text-gray-400">USDC Balance</h4>
-              <p className="text-lg font-semibold text-white">{balances?.usdcBalance} USDC</p>
-            </div>
-          </div>
+        <div className="flex space-x-4">
+          <button className="bg-blue-500 text-white px-4 py-2 rounded text-bold">Invest & Earn</button>
+          <button className="bg-green-500 text-white px-4 py-2 rounded">Deposit Now</button>
         </div>
-        <div className="overflow-x-auto">
-          <Table className="text-white">
-            <TableHeader className="text-red-500">
-              <TableRow>
-                <TableHead>Type</TableHead>
-                <TableHead>Asset</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Details</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredTransactions.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={7} className="text-center py-10 text-gray-400">
-                    No Transactions yet
-                  </TableCell>
-                </TableRow>
-              ) : (
-                filteredTransactions.map((tx) => {
-                  const typeStyle = getTypeStyles(tx.type);
-                  return (
-                    <TableRow key={tx.id}>
-                      <TableCell>
-                        <div className="flex items-center space-x-2">
-                          <span className={`w-8 h-8 ${typeStyle.bgColor} ${typeStyle.color} rounded-full flex items-center justify-center`}>
-                            {typeStyle.icon}
-                          </span>
-                          <span className="capitalize">{tx.type}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>{tx.asset}</TableCell>
-                      <TableCell>{tx.amount}</TableCell>
-                      <TableCell>
-                        <span className={`px-2 py-1 rounded-full text-sm ${getStatusColor(tx.status)}`}>
-                          {tx.status}
-                        </span>
-                      </TableCell>
-                      <TableCell>{formatDate(tx.date)}</TableCell>
-                      <TableCell>
-                        {tx.type === 'subscription' ? (
-                          <div className="text-sm">
-                            <div>{tx.planName}</div>
-                            <div className="text-gray-500">{tx.duration}</div>
-                          </div>
-                        ) : (
-                          <div className="text-sm font-mono">
-                            {tx.txHash}
-                          </div>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })
-              )}
-            </TableBody>
-          </Table>
+      </div>
+      <div className="mt-4 pl-4 py-2 bg-white text-coral-black rounded flex items-center space-x-2 mx-8">
+        <AlertCircle className="w-6 h-6 text-yellow-600 font-bold" />
+        <span>
+          Caution: You need to verify your account to gain full functionality.{' '}
+          <span className="text-yellow-600 cursor-pointer" onClick={() => setActiveComponent('verify')}>
+            Let's get started!
+          </span>
+        </span>
+      </div>
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 px-8">
+        <div className="bg-white p-4 rounded shadow">
+          <p className="text-lg font-bold">Available Balance</p>
+          <p className="text-2xl">{balances.available}</p>
         </div>
-      </CardContent>
-    </Card>
+        <div className="bg-white p-4 rounded shadow">
+          <p className="text-lg font-bold">Total Deposit</p>
+          <p className="text-2xl">{balances.totalDeposit}</p>
+        </div>
+        <div className="bg-white p-4 rounded shadow">
+          <p className="text-lg font-bold">Total Withdrawals</p>
+          <p className="text-2xl">{balances.totalWithdrawals}</p>
+        </div>
+      </div>
+    </>
   );
 };
 

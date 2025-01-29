@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Bitcoin, Wallet, Copy, RefreshCcw } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Barcode from 'react-barcode';
 
 const Deposits = () => {
   const [selectedAsset, setSelectedAsset] = useState(null);
@@ -88,9 +89,10 @@ const Deposits = () => {
         {network && (
           <>
             <Tabs defaultValue="qr" className="w-full">
-              <TabsList className="grid w-full grid-cols-2 bg-zinc-800">
+              <TabsList className="grid w-full grid-cols-3 bg-zinc-800">
                 <TabsTrigger value="qr">QR Code</TabsTrigger>
                 <TabsTrigger value="address">Address</TabsTrigger>
+                <TabsTrigger value="barcode">Barcode</TabsTrigger>
               </TabsList>
               <TabsContent value="qr" className="mt-4">
                 <div className="bg-zinc-800 p-6 rounded-lg">
@@ -117,6 +119,14 @@ const Deposits = () => {
                       {copied ? 'Copied!' : <Copy className="w-4 h-4" />}
                     </Button>
                   </div>
+                </div>
+              </TabsContent>
+              <TabsContent value="barcode" className="mt-4">
+                <div className="bg-zinc-800 p-6 rounded-lg">
+                  <Barcode value={selectedAsset.address} />
+                  <p className="text-center mt-4 text-sm text-gray-400">
+                    Scan barcode to get deposit address
+                  </p>
                 </div>
               </TabsContent>
             </Tabs>

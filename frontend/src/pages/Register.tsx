@@ -1,13 +1,9 @@
-import { FaUser } from "react-icons/fa";
-import { FaLock } from "react-icons/fa";
+import React, { useState } from "react";
+import { FaUser, FaLock } from "react-icons/fa";
 import { logo } from "../assets/icons";
-import { Link } from 'react-router-dom';
-import PhoneInput from 'react-phone-input-2'
-import 'react-phone-input-2/lib/style.css'
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios, { AxiosError } from "axios";
-import React from "react";
+import { Link, useNavigate } from 'react-router-dom';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 import { toast } from "sonner";
 import { useStore } from '../store/useStore';
 import axiosInstance from "../api/axiosInstance";
@@ -29,7 +25,7 @@ const Register = () => {
   const navigate = useNavigate();
 
   const setUser = useStore(state => state.setUser);
-  const setUserEmail = useStore(state => state.setUserEmail)
+  const setUserEmail = useStore(state => state.setUserEmail);
 
   interface InputChangeEvent extends React.ChangeEvent<HTMLInputElement> { }
 
@@ -81,8 +77,8 @@ const Register = () => {
     try {
       const response = await axiosInstance.post(`/api/auth/signup`, formValues);
       if (response.status === 200) {
-        setUser(response.data.createdUser)
-        setUserEmail(response.data.createdUser.email)
+        setUser(response.data.createdUser);
+        setUserEmail(response.data.createdUser.email);
         toast(response.data.message, { className: "text-[15px] px-4 py-2" });
         navigate('/verify-email');
       } else if (response.status === 409) {
@@ -95,7 +91,7 @@ const Register = () => {
         if (axiosError.response?.status === 400 || axiosError.response?.status === 401) {
           if (axiosError.response?.data.errors) {
             setLoading(false);
-            toast(axiosError.response.data.errors[0].message, { className: "text-[15px] px-4 py-2" })
+            toast(axiosError.response.data.errors[0].message, { className: "text-[15px] px-4 py-2" });
             responseErrors = axiosError.response.data.errors;
           }
 
@@ -254,7 +250,7 @@ const Register = () => {
         </form>
       </div>
     </main>
-  )
+  );
 }
 
-export default Register
+export default Register;

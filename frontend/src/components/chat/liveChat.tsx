@@ -8,12 +8,12 @@ const LiveChat = () => {
 
     return (
         <div>
-        {/* Your component content */}
-        <TawkMessengerReact 
-            propertyId={propertyId}
-            widgetId={widgetId}
-            tawkMessengerRef={tawkMessengerRef}
-        />
+            {/* Your component content */}
+            <TawkMessengerReact
+                propertyId={propertyId}
+                widgetId={widgetId}
+                tawkMessengerRef={tawkMessengerRef}
+            />
         </div>
     );
 }
