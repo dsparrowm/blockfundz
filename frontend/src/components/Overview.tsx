@@ -104,20 +104,22 @@ const Overview = () => {
         </div>
       </div>
       {/* Left Column - Activity */}
-      <div className="md:col-span-2 bg-white p-6 rounded shadow">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold">Recent Activity</h2>
-          <button className="text-blue-600 hover:text-blue-800 font-medium">
-            See History
-          </button>
-        </div>
 
+      <div className="flex justify-between items-center mb-6 px-8 pt-8">
+        <h2 className="text-lg font-bold text-white-400">Recent Activity</h2>
+        <button className="text-blue-600 hover:text-blue-800 font-medium">
+          See History
+        </button>
+      </div>
+      <div className="md:col-span-2 bg-white px-6 py-2 rounded shadow mx-8">
         {/* Activity Item */}
         <div className="flex justify-between items-start">
-          <div>
-            <h3 className="font-semibold">Top up Apex account</h3>
-            <p className="text-sm text-gray-500">Jan 28,2025</p>
-            <span className="text-sm text-yellow-600">processing</span>
+          <div className='space-y-2'>
+            <h3 className="font-semibold text-sm">Top up Apex account</h3>
+            <div className="flex items-center gap-2">
+              <p className="text-sm text-gray-500">Jan 28,2025</p>
+              <span className="text-sm text-yellow-600">processing</span>
+            </div>
           </div>
           <div className="text-right">
             <p className="text-green-600 font-semibold">+M400,005.00</p>
