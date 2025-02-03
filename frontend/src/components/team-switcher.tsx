@@ -34,23 +34,25 @@ export function TeamSwitcher({
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenu>
-            <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-            >
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                <span className='text-3xl text-orange-500 mr-1 pt-2'>
-                  <ion-icon name="logo-ionic"></ion-icon>
-                </span>
-                {/* <activeTeam.logo className="size-4" /> */}
-              </div>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold text-lg bg-gradient-to-r from-orange-500 to-blue-500 text-gradient">
-                  NexGen
-                </span>
-              </div>
-              {/* <ChevronsUpDown className="ml-auto" /> */}
-            </SidebarMenuButton>
+          <SidebarMenuButton
+            size="md"
+            className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+          >
+            {/* <div className="flex items-center justify-center">
+              <span className='text-3xl text-orange-500 mr-1 pt-2 bg-t'>
+                <ion-icon name="logo-ionic" ></ion-icon>
+              </span>
+              <activeTeam.logo className="size-4" />
+              <img src={logo} alt="logo" height={40} width={40} className="bg-transparent" />
+            </div> */}
+            <img src={logo} alt="logo" height={30} width={40} className="bg-transparent" />
+            <div className="grid flex-1 text-left text-sm leading-tight">
+              <span className="truncate font-semibold text-lg bg-gradient-to-r from-orange-500 to-blue-500 text-gradient">
+                NexGen
+              </span>
+            </div>
+            {/* <ChevronsUpDown className="ml-auto" /> */}
+          </SidebarMenuButton>
           <DropdownMenuContent
             className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
             align="start"

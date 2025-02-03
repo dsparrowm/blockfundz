@@ -50,17 +50,7 @@ const Deposits = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const generateQRCode = (text) => {
-    // This creates a simple SVG QR-like pattern for illustration
-    // In a real app, you'd use a proper QR code library
-    return (
-      <svg viewBox="0 0 100 100" className="w-48 h-48 mx-auto">
-        <rect x="10" y="10" width="80" height="80" fill="none" stroke="currentColor" />
-        <path d="M20 20h20v20h-20z M60 20h20v20h-20z M20 60h20v20h-20z" fill="currentColor" />
-        <path d="M30 30h40v40h-40z" fill="none" stroke="currentColor" strokeDasharray="2" />
-      </svg>
-    );
-  };
+
 
   const handleNetworkChange = (network) => {
     setNetwork(network);
@@ -75,7 +65,7 @@ const Deposits = () => {
         <div className="space-y-2">
           <label className="text-sm text-gray-400">Select Network</label>
           <Select onValueChange={handleNetworkChange}>
-            <SelectTrigger className="w-full bg-zinc-800 border-zinc-700">
+            <SelectTrigger className="w-full bg-slate-300 border-slate-400">
               <SelectValue placeholder="Select network" />
             </SelectTrigger>
             <SelectContent>
@@ -88,32 +78,32 @@ const Deposits = () => {
 
         {network && (
           <>
-            <Tabs defaultValue="qr" className="w-full">
-              <TabsList className="grid w-full grid-cols-3 bg-zinc-800">
-                <TabsTrigger value="qr">QR Code</TabsTrigger>
+            <Tabs defaultValue="barcode" className="w-full text-bold">
+              <TabsList className="grid w-full grid-cols-2 bg-slate-800">
+                {/* <TabsTrigger value="qr">QR Code</TabsTrigger> */}
                 <TabsTrigger value="address">Address</TabsTrigger>
                 <TabsTrigger value="barcode">Barcode</TabsTrigger>
               </TabsList>
-              <TabsContent value="qr" className="mt-4">
+              {/* <TabsContent value="qr" className="mt-4">
                 <div className="bg-zinc-800 p-6 rounded-lg">
                   {generateQRCode(selectedAsset.address)}
                   <p className="text-center mt-4 text-sm text-gray-400">
                     Scan QR code to get deposit address
                   </p>
                 </div>
-              </TabsContent>
-              <TabsContent value="address" className="mt-4">
+              </TabsContent> */}
+              <TabsContent value="address" className="mt-4 bg-slate-300 p-6 rounded-lg">
                 <div className="space-y-4">
                   <div className="relative">
                     <Input
                       readOnly
                       value={selectedAsset.address}
-                      className="bg-zinc-800 border-zinc-700 pr-24"
+                      className="bg-slate-300 border-slate-600 pr-24"
                     />
                     <Button
                       size="sm"
                       variant="ghost"
-                      className="absolute right-1 top-1 text-gray-400 hover:text-white"
+                      className="absolute right-1 top-1 text-slate-800 hover:text-slate-800"
                       onClick={() => handleCopyAddress(selectedAsset.address)}
                     >
                       {copied ? 'Copied!' : <Copy className="w-4 h-4" />}
@@ -122,9 +112,9 @@ const Deposits = () => {
                 </div>
               </TabsContent>
               <TabsContent value="barcode" className="mt-4">
-                <div className="bg-zinc-800 p-6 rounded-lg">
+                <div className="bg-slate-500 p-6 rounded-lg">
                   <Barcode value={selectedAsset.address} />
-                  <p className="text-center mt-4 text-sm text-gray-400">
+                  <p className="text-center mt-4 text-md text-slate-100">
                     Scan barcode to get deposit address
                   </p>
                 </div>
@@ -132,8 +122,8 @@ const Deposits = () => {
             </Tabs>
 
             {/* Important Notes */}
-            <Alert className="bg-yellow-900/20 border-yellow-900/50 mt-6">
-              <AlertDescription className="text-yellow-500">
+            <Alert className="bg-slate-300 border-slate-400 mt-6">
+              <AlertDescription className="text-slate-800">
                 <ul className="list-disc pl-4 space-y-2 text-sm">
                   <li>Send only {selectedAsset.name} ({selectedAsset.id}) to this deposit address</li>
                   <li>Ensure you're using the {network} network</li>
@@ -143,15 +133,15 @@ const Deposits = () => {
             </Alert>
 
             {/* Transaction Details */}
-            <div className="space-y-4 bg-zinc-800/50 p-4 rounded-lg">
-              <h3 className="text-sm font-medium">Transaction Details</h3>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Processing Time</span>
+            <div className="space-y-4 bg-slate-300 p-4 rounded-lg">
+              <h3 className="text-md font-medium">Transaction Details</h3>
+              <div className="space-y-2 text-sm ">
+                <div className="flex justify-between text-gray-800">
+                  <span>Processing Time</span>
                   <span>10-30 minutes</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Network Fee</span>
+                <div className="flex justify-between text-gray-800">
+                  <span>Network Fee</span>
                   <span>Network-dependent</span>
                 </div>
               </div>
@@ -163,7 +153,7 @@ const Deposits = () => {
   };
 
   return (
-    <Card className="bg-zinc-900 text-white">
+    <Card className="bg-transparent text-slate-800">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-xl">Deposit</CardTitle>
         <Button variant="ghost" size="icon" className="text-gray-400">
@@ -174,14 +164,14 @@ const Deposits = () => {
         <div className="space-y-6">
           {/* Asset Selection */}
           <div className="space-y-2">
-            <label className="text-sm text-gray-400">Select Asset</label>
+            <label className="text-sm text-slate-800">Select Asset</label>
             <Select
               onValueChange={(value) => {
                 setSelectedAsset(cryptoAssets.find(asset => asset.id === value));
                 setNetwork('');
               }}
             >
-              <SelectTrigger className="w-full bg-zinc-800 border-zinc-700">
+              <SelectTrigger className="w-full bg-slate-300 border-slate-400">
                 <SelectValue placeholder="Select an asset" />
               </SelectTrigger>
               <SelectContent>

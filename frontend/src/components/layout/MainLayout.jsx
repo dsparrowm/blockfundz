@@ -7,7 +7,7 @@ export const MainLayout = ({ children, withNav = true, withFooter = true, classN
   const hideNav = ['/login', '/signup', '/admin/dashboard', '/dashboard', '/admin/login'].includes(location.pathname);
 
   return (
-    <main className={`relative ${className} bg-coral-black`}>
+    <main className={`relative ${className}`}>
       {withNav && !hideNav && <Nav />}
       {children}
       {withFooter && (
