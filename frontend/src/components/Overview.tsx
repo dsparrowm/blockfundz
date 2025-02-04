@@ -34,7 +34,7 @@ const Overview = () => {
     // Add more activities as needed
   ];
 
-  const isVerified = true;
+  const isVerified = false;
 
   const indexOfLastActivity = currentPage * activitiesPerPage;
   const indexOfFirstActivity = indexOfLastActivity - activitiesPerPage;
@@ -109,7 +109,7 @@ const Overview = () => {
           <span>
             Caution: You need to verify your account to gain full functionality.{' '}
             <span className="text-yellow-600 cursor-pointer" onClick={() => setActiveComponent('verify')}>
-              Let's get started!
+              Let's get started! to the moon
             </span>
           </span>
         </div>
