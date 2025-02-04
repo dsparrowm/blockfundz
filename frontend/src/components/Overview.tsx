@@ -103,7 +103,7 @@ const Overview = () => {
           <button className="bg-red-500 text-white px-4 py-2 rounded font-bold">Deposit Now</button>
         </div>
       </div>
-      {isVerified && (
+      {!isVerified && (
         <div className="mt-4 pl-4 py-2 bg-white text-coral-black rounded flex items-center space-x-2 mx-8 hidden">
           <AlertCircle className="w-6 h-6 text-yellow-600 font-bold" />
           <span>
