@@ -34,6 +34,8 @@ const Overview = () => {
     // Add more activities as needed
   ];
 
+  const isVerified = true;
+
   const indexOfLastActivity = currentPage * activitiesPerPage;
   const indexOfFirstActivity = indexOfLastActivity - activitiesPerPage;
   const currentActivities = activities.slice(indexOfFirstActivity, indexOfLastActivity);
@@ -90,7 +92,6 @@ const Overview = () => {
 
   return (
     <>
-      <div></div>
       <div className="px-8 flex justify-between items-center">
         <div className="mb-4 text-white space-y-2 mt-4">
           <p className="text-xl text-coral-black">Welcome</p>
@@ -102,15 +103,17 @@ const Overview = () => {
           <button className="bg-red-500 text-white px-4 py-2 rounded font-bold">Deposit Now</button>
         </div>
       </div>
-      <div className="mt-4 pl-4 py-2 bg-white text-coral-black rounded flex items-center space-x-2 mx-8">
-        <AlertCircle className="w-6 h-6 text-yellow-600 font-bold" />
-        <span>
-          Caution: You need to verify your account to gain full functionality.{' '}
-          <span className="text-yellow-600 cursor-pointer" onClick={() => setActiveComponent('verify')}>
-            Let's get started!
+      {isVerified && (
+        <div className="mt-4 pl-4 py-2 bg-white text-coral-black rounded flex items-center space-x-2 mx-8 hidden">
+          <AlertCircle className="w-6 h-6 text-yellow-600 font-bold" />
+          <span>
+            Caution: You need to verify your account to gain full functionality.{' '}
+            <span className="text-yellow-600 cursor-pointer" onClick={() => setActiveComponent('verify')}>
+              Let's get started!
+            </span>
           </span>
-        </span>
-      </div>
+        </div>
+      )}
       <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 px-8">
         {/* Available Balance Card */}
         <div className="bg-white p-4 rounded shadow border-b-4 border-b-green-500">

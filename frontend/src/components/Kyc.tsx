@@ -190,7 +190,6 @@ export function KYCVerification() {
                 <p className="text-gray-600 text-lg leading-relaxed">
                     To ensure the highest security standards and comply with financial regulations,
                     we need to verify your identity. This helps prevent fraud and protects all users.
-                    hello there iam using vscode
                 </p>
 
                 <div className="space-y-4">
