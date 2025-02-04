@@ -117,7 +117,7 @@ const Overview = () => {
       <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 px-8">
         {/* Available Balance Card */}
         <div className="bg-white p-4 rounded shadow border-b-4 border-b-green-500">
-          <p className="text-lg font-bold text-gray-600">Available Balance</p>
+          <p className="text-lg font-bold text-gray-600">Available Balance is been tested now</p>
 
           <p className="text-2xl font-bold mt-2">$2,000</p>
         </div>
