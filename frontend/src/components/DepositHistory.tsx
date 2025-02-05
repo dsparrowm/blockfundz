@@ -89,23 +89,23 @@ const DepositHistory = () => {
   }
 
   return (
-    <Card className="w-full bg-neutral-900 text-white">
+    <Card className="w-full bg-slate-300 text-slate-800">
       <CardHeader>
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <CardTitle className="text-xl font-semibold">Deposit History</CardTitle>
           <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto">
             <div className="relative">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-neutral-500" />
+              <Search className="absolute left-2 top-2.5 h-4 w-4 text-coral-black" />
               <Input
                 placeholder="Search by TxID"
-                className="pl-8 bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-500 w-full md:w-[200px]"
+                className="pl-8 bg-slate-100 border-neutral-700 text-slate-800 placeholder:text-slate-500 w-full md:w-[200px]"
               />
             </div>
             <Select defaultValue="all">
-              <SelectTrigger className="w-full md:w-[150px] bg-neutral-800 border-neutral-700">
+              <SelectTrigger className="w-full md:w-[150px] bg-slate-100 border-neutral-700">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
-              <SelectContent className="bg-neutral-800 border-neutral-700">
+              <SelectContent className="bg-slate-100 border-neutral-700">
                 <SelectItem value="all">All Status</SelectItem>
                 <SelectItem value="completed">COMPLETED</SelectItem>
                 <SelectItem value="pending">PENDING</SelectItem>
@@ -113,10 +113,10 @@ const DepositHistory = () => {
               </SelectContent>
             </Select>
             <Select defaultValue="all">
-              <SelectTrigger className="w-full md:w-[150px] bg-neutral-800 border-neutral-700">
+              <SelectTrigger className="w-full md:w-[150px] bg-slate-100 border-neutral-700">
                 <SelectValue placeholder="Asset" />
               </SelectTrigger>
-              <SelectContent className="bg-white border-neutral-700">
+              <SelectContent className="bg-slate-100 border-neutral-700">
                 <SelectItem value="all">All Assets</SelectItem>
                 <SelectItem value="btc">BITCOIN</SelectItem>
                 <SelectItem value="eth">ETHEREUM</SelectItem>
@@ -128,17 +128,17 @@ const DepositHistory = () => {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="rounded-md border border-neutral-800">
+        <div className="rounded-md border border-slate-500">
           <Table>
-            <TableHeader className="bg-neutral-800">
+            <TableHeader className="bg-slate-400">
               <TableRow className="hover:bg-neutral-800 border-neutral-700">
-                <TableHead className="text-neutral-200">TxID</TableHead>
-                <TableHead className="text-neutral-200">Type</TableHead>
-                <TableHead className="text-neutral-200">Asset</TableHead>
-                <TableHead className="text-neutral-200">Amount</TableHead>
-                <TableHead className="text-neutral-200">Network</TableHead>
-                <TableHead className="text-neutral-200">Status</TableHead>
-                <TableHead className="text-neutral-200">Date</TableHead>
+                <TableHead className="text-slate-800 font-bold">TxID</TableHead>
+                <TableHead className="text-slate-800 font-bold">Type</TableHead>
+                <TableHead className="text-slate-800 font-bold">Asset</TableHead>
+                <TableHead className="text-slate-800 font-bold">Amount</TableHead>
+                <TableHead className="text-slate-800 font-bold">Network</TableHead>
+                <TableHead className="text-slate-800 font-bold">Status</TableHead>
+                <TableHead className="text-slate-800 font-bold">Date</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

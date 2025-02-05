@@ -43,12 +43,12 @@ const Login = () => {
 
 
   // Add useEffect to check for existing token and validate
-  useEffect(() => {
+  // useEffect(() => {
 
-    if (isLoggedIn === "yes") {
-      navigate('/dashboard');
-    }
-  }, [navigate]);
+  //   if (isLoggedIn === "yes") {
+  //     navigate('/dashboard');
+  //   }
+  // }, [navigate]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const target = event.currentTarget as HTMLInputElement;

@@ -97,7 +97,7 @@ const WithdrawalRequestManagement = () => {
         <Spinner />
       ) : (
         <>
-          <Table className="text-white">
+          <Table className="text-slate-800">
             <TableHeader>
               <TableRow>
                 <TableCell>ID</TableCell>

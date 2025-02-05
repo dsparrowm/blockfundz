@@ -1,9 +1,13 @@
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const UserMenu = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const userInitials = 'DA';
     const userEmail = 'daviesaniefok32@gmail.com';
+
+    const location = useLocation()
+    const isAdmin = location.pathname.startsWith('/admin')
 
     const menuItems = [
         { label: 'View Profile', action: () => console.log('View Profile clicked') },
@@ -22,17 +26,17 @@ const UserMenu = () => {
                     }}
                     className="flex items-center justify-center h-8 w-8 rounded-full bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all"
                 >
-                    <span className="text-white font-medium">{userInitials}</span>
+                    <span className="text-white font-medium">{!isAdmin ? userInitials : "CN"}</span>
                 </button>
                 <div className='flex flex-col'>
-                    <span className="text-red-500 text-sm font-medium font-bold">Unverified</span>
-                    <span className="text-slate-800 text-sm font-medium">Davies Aniefiok</span>
+                    <span className="text-red-500 text-sm font-medium font-bold">{isAdmin ? 'Admin' : "Unverified"}</span>
+                    <span className="text-slate-800 text-sm font-medium">{isAdmin ? "Chief Mayor" : "Davies Aniefiok"}</span>
                 </div>
             </div>
 
             {/* Dropdown Menu */}
             {isMenuOpen && (
-                <div className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-slate-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-5000">
+                <div className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-slate-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
                     {/* User Info Section */}
                     <div className="px-4 py-3">
                         <p className="text-sm font-medium text-gray-900">Davies Aniefok</p>

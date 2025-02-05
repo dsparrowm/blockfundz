@@ -39,8 +39,6 @@ interface NavMainProps {
 
 export function NavMain({ isAdmin }: NavMainProps) {
   const setComponent = !isAdmin ? useStore((state) => state.setActiveComponent) : useStore((state) => state.setActiveAdminComponent)
-  const activeUserComponent = useStore((state) => state.activeComponent)
-  const activeAdminComponent = useStore((state) => state.activeAdminComponent)
 
   const items = isAdmin ? data.adminNavMain : data.userNavMain
   const currentDate = new Date().toLocaleDateString('en-US', {
@@ -52,31 +50,33 @@ export function NavMain({ isAdmin }: NavMainProps) {
   return (
     <div className="flex flex-col gap-4">
       {/* New Account Balance Section */}
-      <div className="px-4 py-6 border-b">
-        <h1 className="text-sm font-bold text-slate-600 mb-2">MAIN BALANCE</h1>
-        <h2 className="text-2xl font-bold text-red-500 mb-1">$0.00</h2>
-        <p className="text-sm text-gray-500 mb-4">{currentDate}</p>
+      {!isAdmin && (
+        <div className="px-4 py-6 border-b hidden md:block">
+          <h1 className="text-sm font-bold text-slate-600 mb-2">MAIN BALANCE</h1>
+          <h2 className="text-2xl font-bold text-red-500 mb-1">$0.00</h2>
+          <p className="text-sm text-gray-500 mb-4">{currentDate}</p>
 
-        <div className="space-y-3 mb-6">
-          <div className="flex justify-between text-sm">
-            <span className="text-gray-600 text-sm">Investment Profit</span>
-            <span className="font-semibold text-gray-800">$0.00</span>
+          <div className="space-y-3 mb-6">
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-600 text-sm">Investment Profit</span>
+              <span className="font-semibold text-gray-800">$0.00</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-600">Active Investment</span>
+              <span className="font-semibold text-gray-800">$0.00</span>
+            </div>
           </div>
-          <div className="flex justify-between text-sm">
-            <span className="text-gray-600">Active Investment</span>
-            <span className="font-semibold text-gray-800">$0.00</span>
+
+          <div className="flex flex-row gap-2">
+            <button onClick={() => setComponent('Deposits')} className="w-full py-2 bg-green-500 text-white rounded-md text-sm font-semibold hover:bg-green-600">
+              DEPOSIT
+            </button>
+            <button onClick={() => setComponent('Withdrawals')} className="w-full py-2 bg-orange-500 text-white rounded-md text-sm font-semibold hover:bg-red-600">
+              WITHDRAW
+            </button>
           </div>
         </div>
-
-        <div className="flex flex-row gap-2">
-          <button className="w-full py-2 bg-green-500 text-white rounded-md text-sm font-semibold hover:bg-green-600">
-            DEPOSIT
-          </button>
-          <button className="w-full py-2 bg-orange-500 text-white rounded-md text-sm font-semibold hover:bg-red-600">
-            WITHDRAW
-          </button>
-        </div>
-      </div>
+      )}
 
       {/* Existing Menu Section */}
       <SidebarGroup>

@@ -1,13 +1,13 @@
-import {Outlet, Navigate } from "react-router-dom";
+// import {Outlet, Navigate } from "react-router-dom";
 
-const ProtectedRoutes = () => {
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
+// const ProtectedRoutes = () => {
+//     const isLoggedIn = localStorage.getItem("isLoggedIn");
     
-    if (!isLoggedIn) {
-        return <Navigate to="/login" />;
-    }
+//     if (!isLoggedIn) {
+//         return <Navigate to="/login" />;
+//     }
     
-    return <Outlet />;
-}
+//     return <Outlet />;
+// }
 
-export default ProtectedRoutes;
+// export default ProtectedRoutes;

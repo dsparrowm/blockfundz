@@ -151,7 +151,7 @@ const InvestmentPlans = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-6 text-white-400">Available Investment Plans</h2>
+      <h2 className="text-2xl font-bold mb-6 text-coral-black">Available Investment Plans</h2>
       {loading ? (
         <Spinner />
       ) : (

@@ -17,7 +17,7 @@ import { useStore } from '../store/useStore';
 import axiosInstance from '../api/axiosInstance';
 import Cookies from 'js-cookie';
 import Spinner from './spinners/Spinner';
-import { AlertCircle, Bold } from 'lucide-react';
+import { AlertCircle, Bold, ArrowUpRight, ArrowDownLeft, DollarSign, CreditCard } from 'lucide-react';
 
 const Overview = () => {
   const [transactions, setTransactions] = useState([]);
@@ -26,23 +26,16 @@ const Overview = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const activitiesPerPage = 3;
 
-  const activities = [
-    { title: 'Top up Apex account', date: 'Jan 28, 2025', status: 'processing', amount: '+M400,005.00', balance: 'M400,005.00' },
-    { title: 'Withdraw from Apex account', date: 'Jan 27, 2025', status: 'completed', amount: '-M200,000.00', balance: 'M200,005.00' },
-    { title: 'Transfer to savings', date: 'Jan 26, 2025', status: 'completed', amount: '-M100,000.00', balance: 'M100,005.00' },
-    { title: 'Received payment', date: 'Jan 25, 2025', status: 'completed', amount: '+M50,000.00', balance: 'M150,005.00' },
-    // Add more activities as needed
-  ];
+
 
   const isVerified = false;
 
   const indexOfLastActivity = currentPage * activitiesPerPage;
   const indexOfFirstActivity = indexOfLastActivity - activitiesPerPage;
-  const currentActivities = activities.slice(indexOfFirstActivity, indexOfLastActivity);
 
 
   const handleNextPage = () => {
-    if (indexOfLastActivity < activities.length) {
+    if (indexOfLastActivity < transactions.length) {
       setCurrentPage(currentPage + 1);
     }
   };
@@ -90,6 +83,21 @@ const Overview = () => {
     fetchTransactionsAndBalances();
   }, [user.id]);
 
+  const getTransactionIcon = (type) => {
+    switch (type) {
+      case 'Top up Apex account':
+        return <ArrowUpRight className="w-5 h-5 text-green-500" />;
+      case 'Withdraw from Apex account':
+        return <ArrowDownLeft className="w-5 h-5 text-red-500" />;
+      case 'Transfer to savings':
+        return <DollarSign className="w-5 h-5 text-blue-500" />;
+      case 'Received payment':
+        return <CreditCard className="w-5 h-5 text-yellow-500" />;
+      default:
+        return <DollarSign className="w-5 h-5 text-gray-500" />;
+    }
+  };
+
   return (
     <>
       <div className="px-8 flex justify-between items-center">
@@ -99,39 +107,68 @@ const Overview = () => {
           <p className="text-[17px] text-gray-600">here's a summary of your account.</p>
         </div>
         <div className="flex space-x-4">
-          <button className="bg-slate-800 text-white px-4 py-2 rounded text-bold">Invest & Earn</button>
-          <button className="bg-red-500 text-white px-4 py-2 rounded font-bold">Deposit Now</button>
+          <button onClick={() => setActiveComponent('Invest')} className="bg-slate-800 text-white px-4 py-2 rounded text-bold">Invest & Earn</button>
+          <button onClick={() => setActiveComponent('Deposits')} className="bg-red-500 text-white px-4 py-2 rounded font-bold">Deposit Now</button>
         </div>
       </div>
       {!isVerified && (
-        <div className="mt-4 pl-4 py-2 bg-white text-coral-black rounded flex items-center space-x-2 mx-8 hidden">
+        <div className="mt-4 pl-4 py-2 bg-slate-200 text-coral-black rounded flex items-center space-x-2 mx-8">
           <AlertCircle className="w-6 h-6 text-yellow-600 font-bold" />
           <span>
             Caution: You need to verify your account to gain full functionality.{' '}
             <span className="text-yellow-600 cursor-pointer" onClick={() => setActiveComponent('verify')}>
-              Let's get started! to the moon
+              Let's get started!
             </span>
           </span>
         </div>
       )}
+
       <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 px-8">
         {/* Available Balance Card */}
         <div className="bg-white p-4 rounded shadow border-b-4 border-b-green-500">
-          <p className="text-lg font-bold text-gray-600">Available Balance is been tested now</p>
+          <p className="text-lg font-bold text-gray-600">Available Balance</p>
 
-          <p className="text-2xl font-bold mt-2">$2,000</p>
+          <p className="text-2xl font-bold mt-2">-----</p>
+          <div className='flex justify-between mt-4'>
+            <p className='text-slate-500'>Bitcoin Balance</p>
+            <p className="text-sm text-gray-600">{balances.bitcoinBalance} BTC</p>
+          </div>
+          <div className='flex justify-between mt-2'>
+            <p className='text-slate-500'>Ethereum Balance</p>
+            <p className="text-sm text-gray-600">{balances.ethereumBalance} ETH</p>
+          </div>
+          <div className='flex justify-between mt-2'>
+            <p className='text-slate-500'>Usdt Balance</p>
+            <p className="text-sm text-gray-600">{balances.usdtBalance} USDT</p>
+          </div>
+          <div className='flex justify-between mt-2'>
+            <p className='text-slate-500'>Usdc Balance</p>
+            <p className="text-sm text-gray-600">{balances.usdcBalance} USDC</p>
+          </div>
         </div>
 
         {/* Total Deposit Card */}
-        <div className="bg-white p-4 rounded shadow border-b-4 border-b-blue-500">
-          <p className="text-lg font-bold text-gray-600">Total Deposit</p>
-          <p className="text-2xl font-bold mt-2">$14,000</p>
+        <div className="bg-white p-4 rounded shadow border-b-4 border-b-blue-500 flex flex-col justify-between">
+          <div>
+            <p className="text-lg font-bold text-gray-600">Total Deposit</p>
+            <p className="text-2xl font-bold mt-2 text-gray-400">--------</p>
+          </div>
+          <div>
+            <p className='text-slate-500'>Deposit count</p>
+            <p>0</p>
+          </div>
         </div>
 
         {/* Total Withdrawals Card */}
-        <div className="bg-white p-4 rounded shadow border-b-4 border-b-orange-500">
-          <p className="text-lg font-bold text-gray-600">Total Withdrawals</p>
-          <p className="text-2xl font-bold mt-2">$12,000</p>
+        <div className="bg-white p-4 rounded shadow border-b-4 border-b-orange-500 flex flex-col justify-between">
+          <div>
+            <p className="text-lg font-bold text-gray-600">Total Withdrawals</p>
+            <p className="text-2xl font-bold mt-2">-------</p>
+          </div>
+          <div>
+            <p className='text-slate-500'>Withdrawal count</p>
+            <p>0</p>
+          </div>
         </div>
       </div>
       {/* Left Column - Activity */}
@@ -146,21 +183,33 @@ const Overview = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableCell>Title</TableCell>
+              <TableCell>Type</TableCell>
+              <TableCell>Asset</TableCell>
               <TableCell>Date</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Amount</TableCell>
-              <TableCell>Balance</TableCell>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {currentActivities.map((activity, index) => (
+            {transactions.slice(indexOfFirstActivity, indexOfLastActivity).map((transaction, index) => (
               <TableRow key={index}>
-                <TableCell>{activity.title}</TableCell>
-                <TableCell>{activity.date}</TableCell>
-                <TableCell>{activity.status}</TableCell>
-                <TableCell>{activity.amount}</TableCell>
-                <TableCell>{activity.balance}</TableCell>
+                <TableCell className="flex items-center gap-2">
+                  {getTransactionIcon(transaction.type)}
+                  {transaction.type}
+                </TableCell>
+                <TableCell>{transaction.asset}</TableCell>
+                <TableCell>{new Date(transaction.date).toLocaleDateString()}</TableCell>
+                <TableCell>
+                  <span
+                    className={`px-2 py-1 rounded-full text-white ${transaction.status === 'COMPLETED' || 'ACTIVE' ? 'bg-green-500' :
+                      transaction.status === 'PENDING' ? 'bg-yellow-500' :
+                        'bg-red-500'
+                      }`}
+                  >
+                    {transaction.status}
+                  </span>
+                </TableCell>
+                <TableCell>{transaction.amount}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -175,7 +224,7 @@ const Overview = () => {
           </button>
           <button
             onClick={handleNextPage}
-            disabled={indexOfLastActivity >= activities.length}
+            disabled={indexOfLastActivity >= transactions.length}
             className="text-blue-600 hover:text-blue-800 font-medium"
           >
             Next
@@ -183,7 +232,10 @@ const Overview = () => {
         </div>
       </div>
       <div className="pt-6 border-t mt-6 mx-8 bg-white p-4 rounded shadow">
-        <h3 className="font-semibold mb-4 text-lg">Refer Us & Earn</h3>
+        <div className='flex justify-between'>
+          <h3 className="font-semibold mb-4 text-lg">Refer Us & Earn</h3>
+          <span className='text-slate-400'>Coming Soon</span>
+        </div>
         <p className="text-md text-gray-600 mb-4">
           Use the below link to invite your friends.
         </p>

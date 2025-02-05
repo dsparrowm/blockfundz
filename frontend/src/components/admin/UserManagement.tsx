@@ -191,7 +191,7 @@ const UserManagement = ({
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
 
   return (
-    <div>
+    <div className='text-slate-800'>
       <input
         type="text"
         placeholder="Search users..."
@@ -206,7 +206,7 @@ const UserManagement = ({
         <Spinner />
       ) : (
         <>
-          <Table className="text-white">
+          <Table className="text-slate-800">
             <TableHeader>
               <TableRow>
                 <TableCell>Name</TableCell>
@@ -457,7 +457,7 @@ const UserManagement = ({
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Add New User</DialogTitle>
+            <DialogTitle className="bg-red-500">Add New User</DialogTitle>
             <DialogDescription>
               Fill in the details to add a new user. Click save when you're done.
             </DialogDescription>

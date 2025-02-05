@@ -99,12 +99,15 @@ const InvestmentPlansManagement = () => {
 
   return (
     <div>
-      <h2 className="text-xl font-bold mb-4 text-white-400">Manage Investment Plans</h2>
-      <AddInvestmentPlanDialog onAddPlan={handleAddPlan} />
+      <div className='flex justify-between my-8'>
+        <h2 className="text-xl font-bold mb-4 text-slate-800">Manage Investment Plans</h2>
+        <AddInvestmentPlanDialog onAddPlan={handleAddPlan} />
+      </div>
+
       {loading ? (
         <Spinner />
       ) : (
-        <Table className="text-white">
+        <Table className="text-slate-800">
           <TableHeader>
             <TableRow>
               <TableCell>ID</TableCell>

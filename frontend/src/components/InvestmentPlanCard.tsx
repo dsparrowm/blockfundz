@@ -20,8 +20,8 @@ const InvestmentPlanCard: React.FC<InvestmentPlanCardProps> = ({ plan, onSubscri
   return (
     <Card
       className={`relative ${plan.recommended
-          ? 'border-orange-400 shadow-lg bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6 border hover:border-orange-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/10'
-          : 'bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/50 hover:border-orange-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/10'
+        ? 'border-orange-400 shadow-lg bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6 border hover:border-orange-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/10'
+        : 'bg-slate-200 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/50 hover:border-orange-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/10'
         }`}
     >
       {/* {plan.recommended && (
@@ -33,33 +33,33 @@ const InvestmentPlanCard: React.FC<InvestmentPlanCardProps> = ({ plan, onSubscri
       )} */}
 
       <CardHeader>
-        <h3 className="text-2xl font-bold text-center text-white-400 capitalize">{plan.plan}</h3>
+        <h3 className="text-2xl font-bold text-center text-coral-black capitalize">{plan.plan}</h3>
       </CardHeader>
 
       <CardContent>
-        <div className="text-center mb-6">
+        <div className="text-center mb-6 text-coral-black">
           <span className="text-4xl font-bold text-orange-500">{plan.interestRate}%</span>
-          <span className="text-gray-300 block">daily interest</span>
+          <span className="block">daily interest</span>
         </div>
 
-        <ul className="space-y-3">
+        <ul className="space-y-3 text-coral-black">
           <li className="flex items-center space-x-3">
             <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
-            <span className="text-gray-300">Minimum Amount: {plan.minimumAmount}</span>
+            <span>Minimum Amount: ${plan.minimumAmount}</span>
           </li>
           <li className="flex items-center space-x-3">
             <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
-            <span className="text-gray-300">Maximum Amount: {plan.maximumAmount}</span>
+            <span>Maximum Amount: ${plan.maximumAmount}</span>
           </li>
           <li className="flex items-center space-x-3">
             <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
-            <span className="text-gray-300">Total Returns: {plan.totalReturns}%</span>
+            <span>Total Returns: {plan.totalReturns}%</span>
           </li>
         </ul>
       </CardContent>
 
       <CardFooter>
-        <Button onClick={() => onSubscribe(plan.id)} className="bg-white text-blue-800 font-bold py-2 px-4 rounded-full hover:bg-gray-200">Subscribe</Button>
+        <Button onClick={() => onSubscribe(plan.id)} className="bg-slate-100 text-blue-800 font-bold py-2 px-4 rounded-full hover:bg-gray-200">Subscribe</Button>
       </CardFooter>
     </Card>
   );

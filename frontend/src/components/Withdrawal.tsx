@@ -49,7 +49,7 @@ const Withdraw = () => {
   };
 
   return (
-    <Card className="w-full bg-neutral-900 text-white">
+    <Card className="w-full bg-slate-200 text-slate-800">
       <CardHeader>
         <CardTitle className="text-xl font-semibold">Withdraw</CardTitle>
       </CardHeader>
@@ -58,18 +58,18 @@ const Withdraw = () => {
           {error && <div className="text-red-500">{error}</div>}
           {success && <div className="text-green-500">{success}</div>}
           <div>
-            <label className="block text-sm font-medium text-neutral-200">Amount</label>
+            <label className="block text-sm font-medium">Amount</label>
             <Input
               type="number"
               onChange={(e) => setAmount(e.target.value)}
-              className="mt-1 block w-full bg-neutral-800 border-neutral-700 text-white"
+              className="mt-1 block w-full bg-slate-300 border-slate-100 text-slate-800"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-neutral-200">Asset</label>
+            <label className="block text-sm font-medium ">Asset</label>
             <Select value={asset} onValueChange={setAsset}>
-              <SelectTrigger className="w-full bg-neutral-800 border-neutral-700">
+              <SelectTrigger className="w-full bg-slate-300 border-sslate-100">
                 <SelectValue placeholder="Select asset" />
               </SelectTrigger>
               <SelectContent className="bg-white border-neutral-700">
@@ -81,29 +81,29 @@ const Withdraw = () => {
             </Select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-neutral-200">Withdrawal Address</label>
+            <label className="block text-sm font-medium">Withdrawal Address</label>
             <Input
               type="text"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              className="mt-1 block w-full bg-neutral-800 border-neutral-700 text-white"
+              className="mt-1 block w-full bg-slate-300 border-slate-100"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-neutral-200">Network</label>
+            <label className="block text-sm font-medium">Network</label>
             <Select value={network} onValueChange={setNetwork}>
-              <SelectTrigger className="w-full bg-neutral-800 border-neutral-700">
+              <SelectTrigger className="w-full bg-slate-300 border-slate-100">
                 <SelectValue placeholder="Select network" />
               </SelectTrigger>
-              <SelectContent className="bg-white border-neutral-700">
+              <SelectContent className="bg-white border-slate-100">
                 <SelectItem value="Bitcoin">Bitcoin</SelectItem>
                 <SelectItem value="Ethereum">Ethereum</SelectItem>
                 <SelectItem value="Tron">Tron</SelectItem>
               </SelectContent>
             </Select>
           </div>
-          <Button type="submit" className="w-full bg-orange-500 hover:bg-orange-700" disabled={loading}>
+          <Button type="submit" className="w-full bg-green-500 hover:bg-orange-700" disabled={loading}>
             {loading ? <Spinner /> : 'Submit'}
           </Button>
         </form>
