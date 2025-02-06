@@ -3,29 +3,43 @@ import { Helmet } from 'react-helmet';
 import { logo } from '../assets/icons'
 
 const MaintenancePage = () => {
-  const [timeLeft, setTimeLeft] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0
+  const [timeLeft, setTimeLeft] = useState(() => {
+    // Initialize state from localStorage if exists
+    const storedEnd = localStorage.getItem('maintenanceEndTime');
+    if (storedEnd) {
+      const endTime = Number(storedEnd);
+      return calculateTimeLeft(endTime);
+    }
+    return { days: 0, hours: 0, minutes: 0, seconds: 0 };
   });
 
-  // Set end time to 2 days from now
-  const endTime = useRef(Date.now() + 2 * 24 * 60 * 60 * 1000);
+  const calculateTimeLeft = (endTime) => {
+    const difference = endTime - Date.now();
+    if (difference <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+
+    return {
+      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+      minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+      seconds: Math.floor((difference % (1000 * 60)) / 1000)
+    };
+  };
+
 
   useEffect(() => {
+    // Get or initialize end time
+    let endTime = Number(localStorage.getItem('maintenanceEndTime'));
+    if (!endTime || endTime < Date.now()) {
+      endTime = Date.now() + 2 * 24 * 60 * 60 * 1000;
+      localStorage.setItem('maintenanceEndTime', endTime.toString());
+    }
+
     const timer = setInterval(() => {
-      const now = Date.now();
-      const difference = endTime.current - now;
+      const newTimeLeft = calculateTimeLeft(endTime);
+      setTimeLeft(newTimeLeft);
 
-      if (difference > 0) {
-        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-        setTimeLeft({ days, hours, minutes, seconds });
-      } else {
+      if (Object.values(newTimeLeft).every(val => val === 0)) {
+        localStorage.removeItem('maintenanceEndTime');
         clearInterval(timer);
       }
     }, 1000);

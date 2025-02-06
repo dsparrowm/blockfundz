@@ -104,18 +104,18 @@ const EmailSenderComponent = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-coral-black">
-      <Card className="w-full max-w-2xl text-white">
+    <div className="flex items-center justify-center min-h-screen bg-slate-200">
+      <Card className="w-full max-w-2xl text-slate-800">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Mail className="h-6 w-6 text-white" />
+            <Mail className="h-6 w-6 text-slate-800" />
             Send Email
           </CardTitle>
         </CardHeader>
         <CardContent>
           {/* Recipient Mode Selection */}
           <div className="flex items-center space-x-2 mb-4">
-            <Label className='text-white'>Recipient Mode</Label>
+            <Label className='text-slate-800'>Recipient Mode</Label>
             <Switch
               checked={recipientMode === 'multiple'}
               onCheckedChange={() =>
@@ -134,9 +134,9 @@ const EmailSenderComponent = () => {
           {/* Recipient Input */}
           {recipientMode === 'single' ? (
             <div className="mb-4">
-              <Label className='text-white'>Recipient Email</Label>
+              <Label className='text-slate-800 text-md'>Recipient Email</Label>
               <Input
-                className='text-coral-black'
+                className='text-slate-800'
                 type="email"
                 placeholder="Enter recipient email"
                 value={singleRecipient}
@@ -144,7 +144,7 @@ const EmailSenderComponent = () => {
               />
             </div>
           ) : (
-            <div className="mb-4 text-white">
+            <div className="mb-4 text-slate-800">
               <Label>Select Recipients</Label>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 {users.map(user => (
@@ -172,7 +172,7 @@ const EmailSenderComponent = () => {
 
           {/* Email Subject */}
           <div className="mb-4">
-            <Label className='text-white'>Subject</Label>
+            <Label className='text-slate-800 text-md'>Subject</Label>
             <Input
               className='text-coral-black'
               placeholder="Email Subject"
@@ -183,7 +183,7 @@ const EmailSenderComponent = () => {
 
           {/* Email Body */}
           <div className="mb-4">
-            <Label className='text-white'>Email Body</Label>
+            <Label className='text-slate-800 text-md'>Email Body</Label>
             <Textarea
               className='text-coral-black'
               placeholder="Compose your email..."
@@ -197,7 +197,7 @@ const EmailSenderComponent = () => {
           <Button
             onClick={handleSendEmail}
             disabled={isLoading}
-            className="w-full bg-orange-500"
+            className="w-full bg-slate-800 hover:bg-slate-900 text-white"
           >
             {isLoading ? (<Spinner />) : 'Send Email'}
             <Send className="ml-2 h-4 w-4" />
