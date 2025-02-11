@@ -14,7 +14,7 @@ import LiveChat from './components/chat/liveChat';
 import MaintenancePage from './components/MaintenancePage';
 
 const App = () => {
-  const maintenanceMode = true
+  const maintenanceMode = false
   return (
     <>
       {maintenanceMode ? (

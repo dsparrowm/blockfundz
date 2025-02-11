@@ -1,39 +1,35 @@
-import SibApiV3Sdk from 'sib-api-v3-sdk';
+import nodemailer from 'nodemailer';
 
+const supportEmail = process.env.NAMECHEAP_SUPPORT_EMAIL;
+const supportEmailPassword = process.env.NAMECHEAP_SUPPORT_PASSWORD;
 
-/**
- * Helper function responsible for sending invite links from organisations
- * @param email Email of the person to be invited
- * @param orgName Name of the organisation
- */
+// Configure the transporter
+const transporter = nodemailer.createTransport({
+  host: 'mail.privateemail.com', // Namecheap SMTP host
+  port: 465, // Use 587 for TLS/STARTTLS, or 465 for SSL
+  secure: true, // Set to true for port 465, false for other ports
+  auth: {
+    user: supportEmail, // Your email address
+    pass: supportEmailPassword, // Your email password
+  },
+  logger: true,
+  debug: true,
+});
 
-const defaultClient = SibApiV3Sdk.ApiClient.instance;
-const apiKey = defaultClient.authentications['api-key'];
-apiKey.apiKey = process.env.EMAIL_API_KEY;
-
-const sendEmail = async (mailOptions) => {
-
-    const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-    const sender = {
-      email: "support@blockfundz.com",
-      name: "BlockFundz"
-    }
-
-    try {
-      const sent = await apiInstance.sendTransacEmail({
-        subject: mailOptions.subject,
-        htmlContent: mailOptions.htmlContent,
-        sender,
-        messageVersions: [
-          {
-            to: mailOptions.recipients
-          }
-        ]
-      });
-      
-    } catch (error) {
-      throw new Error("there was an error sending the mail", error.message)
-    }
+interface EmailOptions {
+  from: string;
+  to: string;
+  subject: string;
+  html: string;
 }
+
+const sendEmail = async (options: EmailOptions) => {
+  try {
+    await transporter.sendMail(options);
+  } catch (error) {
+    console.error("Error sending email:", error);
+    throw new Error("Email sending failed");
+  }
+};
 
 export default sendEmail;

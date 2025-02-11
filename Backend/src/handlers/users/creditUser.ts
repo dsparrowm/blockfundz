@@ -2,11 +2,12 @@ import { Request, Response } from 'express';
 import prisma from '../../db';
 
 const creditUser = async (req: Request, res: Response) => {
-  const { userId, bitcoin, ethereum, usdt, usdc } = req.body;
+  const { userId, bitcoin, ethereum, usdt, usdc, mainBalance } = req.body;
   try {
     const user = await prisma.user.update({
       where: { id: Number(userId) },
       data: {
+        mainBalance: { increment: mainBalance },
         bitcoinBalance: { increment: bitcoin },
         ethereumBalance: { increment: ethereum },
         usdtBalance: { increment: usdt },
@@ -71,7 +72,7 @@ const creditUser = async (req: Request, res: Response) => {
       data: transactions,
     });
 
-    res.status(200).json({ message: 'User balances updated and transactions recorded successfully', user });
+    res.status(200).json({ message: 'User balances updated and transactions recorded successfully', isSuccess: true });
   } catch (error) {
     console.error('Error crediting user:', error);
     res.status(500).json({ message: 'Internal server error' });

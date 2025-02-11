@@ -548,16 +548,16 @@ export function KYCVerification() {
                                         <button
                                             onClick={handleSubmit}
                                             disabled={isLoading}
-                                            className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 disabled:opacity-50 flex items-center gap-2"
+                                            className="bg-slate-800 text-white px-6 py-2 rounded-lg hover:bg-slate-900 disabled:opacity-50 flex items-center gap-2"
                                         >
                                             {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-                                            Submit Verification
+                                            Submit
                                         </button>
                                     ) : (
                                         <button
                                             onClick={handleNext}
                                             disabled={isLoading}
-                                            className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 disabled:opacity-50 flex items-center gap-2"
+                                            className="bg-slate-800 text-white px-6 py-2 rounded-lg hover:bg-slate-900 disabled:opacity-50 flex items-center gap-2"
                                         >
                                             Next
                                             <ChevronRight className="w-4 h-4" />

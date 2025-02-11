@@ -34,10 +34,14 @@ const signin = async (req: Request, res: Response) => {
       }
       const token = createJWT(res, payload)
 
+      console.log("UserQuery from the backend: ", userQuery)
+
       const user = {
          id: userQuery.id,
          email: userQuery.email,
          name: userQuery.name,
+         isVerified: userQuery.isVerified,
+         mainBalance: userQuery.mainBalance,
          phone: userQuery.phone,
          transactions: userQuery.transactions,
          balances: [{ Bitcoin: userQuery.bitcoinBalance, Usdt: userQuery.usdtBalance, Usdc: userQuery.usdcBalance, Ethereum: userQuery.ethereumBalance }]

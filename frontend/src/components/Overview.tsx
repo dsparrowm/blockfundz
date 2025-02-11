@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Card,
   CardHeader,
@@ -22,113 +22,176 @@ import { AlertCircle, Bold, ArrowUpRight, ArrowDownLeft, DollarSign, CreditCard 
 const Overview = () => {
   const [transactions, setTransactions] = useState([]);
   const [balances, setBalances] = useState([]);
+  const [mainBalance, setMainBalance] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const activitiesPerPage = 3;
 
 
 
-  const isVerified = false;
-
   const indexOfLastActivity = currentPage * activitiesPerPage;
   const indexOfFirstActivity = indexOfLastActivity - activitiesPerPage;
 
+  const user = useStore(state => state.user);
+  const setUser = useStore(state => state.setUser);
+  const setActiveComponent = useStore(state => state.setActiveComponent);
+
+  // Memoize user ID to prevent unnecessary effect triggers
+  const userId = useMemo(() => user?.id, [user?.id]);
+
+  // User data effect
+  useEffect(() => {
+    const controller = new AbortController();
+    console.log('fetching user main Balance', user.mainBalance);
+
+    const fetchUserData = async () => {
+      try {
+        const response = await axiosInstance.get('/api/user', {
+          params: { userDataId: localStorage.getItem('userId') },
+          withCredentials: true,
+          signal: controller.signal
+        });
+
+        if (!controller.signal.aborted) {
+          setUser({
+            mainBalance: response.data.user.mainBalance ?? 0,
+            ...response.data.user
+          });
+        }
+      } catch (error) {
+        if (!controller.signal.aborted) {
+          console.error('User data error:', error);
+        }
+      }
+    };
+
+    fetchUserData();
+    return () => controller.abort();
+  }, [setUser]);
+
+
+  // Transactions and balances effect
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const fetchData = async () => {
+      if (!userId) return;
+
+      try {
+        setIsLoading(true);
+
+
+        const [mainBalRes, transRes, balanceRes] = await Promise.all([
+          axiosInstance.get(`/api/users/main-balance?userId=${userId}`, {
+            signal: controller.signal
+          }),
+          axiosInstance.get(`/api/users/transactions?userId=${userId}`, {
+            signal: controller.signal
+          }),
+          axiosInstance.get(`/api/users/balances?userId=${userId}`, {
+            signal: controller.signal
+          })
+        ]);
+
+        if (!controller.signal.aborted) {
+          setMainBalance(mainBalRes.data.mainBalance || 0);
+          setTransactions(transRes.data.transactions || []);
+          setBalances(balanceRes.data.balances || {});
+        }
+      } catch (error) {
+        if (!controller.signal.aborted) {
+          console.error('Data fetch error:', error);
+        }
+      } finally {
+        if (!controller.signal.aborted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchData();
+    return () => controller.abort();
+  }, [userId]);
+
+  // Memoize paginated transactions
+  const paginatedTransactions = useMemo(() => {
+    const start = (currentPage - 1) * activitiesPerPage;
+    const end = currentPage * activitiesPerPage;
+    return transactions.slice(start, end);
+  }, [transactions, currentPage]);
+
+
 
   const handleNextPage = () => {
-    if (indexOfLastActivity < transactions.length) {
-      setCurrentPage(currentPage + 1);
+    if (currentPage * activitiesPerPage < transactions.length) {
+      setCurrentPage(p => p + 1);
     }
   };
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
+      setCurrentPage(p => p - 1);
     }
   };
 
-  // Get user and setActiveComponent from global store
-  const user = useStore(state => state.user);
-  const setActiveComponent = useStore(state => state.setActiveComponent);
 
-  // Fetch transactions and balances effect
-  useEffect(() => {
-    const fetchTransactionsAndBalances = async () => {
-      try {
-        setIsLoading(true);
-
-        // Fetch transactions
-        const transactionsResponse = await axiosInstance.get('/api/users/transactions', {
-          params: {
-            userId: user.id,
-          },
-          withCredentials: true,
-        });
-        setTransactions(transactionsResponse.data.transactions);
-
-        // Fetch balances
-        const balancesResponse = await axiosInstance.get('/api/users/balances', {
-          params: {
-            userId: user.id,
-          },
-          withCredentials: true,
-        });
-        setBalances(balancesResponse.data.balances);
-      } catch (error) {
-        console.error('Error fetching transactions and balances:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchTransactionsAndBalances();
-  }, [user.id]);
-
-  const getTransactionIcon = (type) => {
+  const getTransactionIcon = (type: string) => {
     switch (type) {
-      case 'Top up Apex account':
-        return <ArrowUpRight className="w-5 h-5 text-green-500" />;
-      case 'Withdraw from Apex account':
-        return <ArrowDownLeft className="w-5 h-5 text-red-500" />;
-      case 'Transfer to savings':
-        return <DollarSign className="w-5 h-5 text-blue-500" />;
-      case 'Received payment':
-        return <CreditCard className="w-5 h-5 text-yellow-500" />;
-      default:
-        return <DollarSign className="w-5 h-5 text-gray-500" />;
+      case 'Top up Apex account': return <ArrowUpRight className="w-5 h-5 text-green-500" />;
+      case 'Withdraw from Apex account': return <ArrowDownLeft className="w-5 h-5 text-red-500" />;
+      case 'Transfer to savings': return <DollarSign className="w-5 h-5 text-blue-500" />;
+      case 'Received payment': return <CreditCard className="w-5 h-5 text-yellow-500" />;
+      default: return <DollarSign className="w-5 h-5 text-gray-500" />;
     }
   };
+
+  if (isLoading) {
+    return <div className="min-h-screen flex items-center justify-center"><Spinner /></div>;
+  }
 
   return (
     <>
       <div className="px-8 flex justify-between items-center">
         <div className="mb-4 text-white space-y-2 mt-4">
           <p className="text-xl text-coral-black">Welcome</p>
-          <p className="text-[40px] font-bolder text-coral-black">{user.name}</p>
-          <p className="text-[17px] text-gray-600">here's a summary of your account.</p>
+          <p className="text-[40px] font-bolder text-coral-black">{user?.name}</p>
+          <p className="text-[17px] text-gray-600">Here's a summary of your account.</p>
         </div>
         <div className="flex space-x-4">
-          <button onClick={() => setActiveComponent('Invest')} className="bg-slate-800 text-white px-4 py-2 rounded text-bold">Invest & Earn</button>
-          <button onClick={() => setActiveComponent('Deposits')} className="bg-red-500 text-white px-4 py-2 rounded font-bold">Deposit Now</button>
+          <button
+            onClick={() => setActiveComponent('Invest')}
+            className="bg-slate-800 text-white px-4 py-2 rounded text-bold"
+          >
+            Invest & Earn
+          </button>
+          <button
+            onClick={() => setActiveComponent('Deposits')}
+            className="bg-red-500 text-white px-4 py-2 rounded font-bold"
+          >
+            Deposit Now
+          </button>
         </div>
       </div>
-      {!isVerified && (
+      {!user?.isVerified && (
         <div className="mt-4 pl-4 py-2 bg-slate-200 text-coral-black rounded flex items-center space-x-2 mx-8">
           <AlertCircle className="w-6 h-6 text-yellow-600 font-bold" />
           <span>
             Caution: You need to verify your account to gain full functionality.{' '}
-            <span className="text-yellow-600 cursor-pointer" onClick={() => setActiveComponent('verify')}>
+            <span
+              className="text-yellow-600 cursor-pointer"
+              onClick={() => setActiveComponent('verify')}
+            >
               Let's get started!
             </span>
           </span>
         </div>
       )}
-
       <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 px-8">
         {/* Available Balance Card */}
         <div className="bg-white p-4 rounded shadow border-b-4 border-b-green-500">
-          <p className="text-lg font-bold text-gray-600">Available Balance</p>
+          <p className="text-lg font-bold text-gray-600">Main Balance</p>
 
-          <p className="text-2xl font-bold mt-2">-----</p>
+          <p className="text-2xl font-bold mt-2 text-red-500">${mainBalance.toLocaleString()}</p>
           <div className='flex justify-between mt-4'>
             <p className='text-slate-500'>Bitcoin Balance</p>
             <p className="text-sm text-gray-600">{balances.bitcoinBalance} BTC</p>
@@ -191,7 +254,7 @@ const Overview = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {transactions.slice(indexOfFirstActivity, indexOfLastActivity).map((transaction, index) => (
+            {paginatedTransactions.map((transaction, index) => (
               <TableRow key={index}>
                 <TableCell className="flex items-center gap-2">
                   {getTransactionIcon(transaction.type)}
@@ -201,9 +264,11 @@ const Overview = () => {
                 <TableCell>{new Date(transaction.date).toLocaleDateString()}</TableCell>
                 <TableCell>
                   <span
-                    className={`px-2 py-1 rounded-full text-white ${transaction.status === 'COMPLETED' || 'ACTIVE' ? 'bg-green-500' :
-                      transaction.status === 'PENDING' ? 'bg-yellow-500' :
-                        'bg-red-500'
+                    className={`px-2 py-1 rounded-full text-white ${transaction.status === 'COMPLETED' || transaction.status === 'ACTIVE'
+                      ? 'bg-green-500'
+                      : transaction.status === 'PENDING'
+                        ? 'bg-yellow-500'
+                        : 'bg-red-500'
                       }`}
                   >
                     {transaction.status}
@@ -214,18 +279,19 @@ const Overview = () => {
             ))}
           </TableBody>
         </Table>
+        {/* Pagination controls */}
         <div className="flex justify-between items-center mt-4">
           <button
             onClick={handlePreviousPage}
             disabled={currentPage === 1}
-            className="text-blue-600 hover:text-blue-800 font-medium"
+            className="text-blue-600 hover:text-blue-800 font-medium disabled:opacity-50"
           >
             Previous
           </button>
           <button
             onClick={handleNextPage}
-            disabled={indexOfLastActivity >= transactions.length}
-            className="text-blue-600 hover:text-blue-800 font-medium"
+            disabled={currentPage * activitiesPerPage >= transactions.length}
+            className="text-blue-600 hover:text-blue-800 font-medium disabled:opacity-50"
           >
             Next
           </button>

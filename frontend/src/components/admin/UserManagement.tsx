@@ -3,6 +3,7 @@ import { Table, TableHeader, TableBody, TableRow, TableCell } from '@/components
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Users, Edit, Trash } from 'lucide-react';
+import { useStore } from '../../store/useStore';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -39,13 +40,15 @@ import { Label } from "@/components/ui/label"
 import axios from 'axios';
 import { toast } from 'sonner';
 import Spinner from '../spinners/Spinner';
+import axiosInstance from '../../api/axiosInstance';
 
 interface User {
   id: string;
   name: string;
   email: string;
-  phone: string,
-  balance: number,
+  phone: string;
+  balance: number;
+  isVerified: boolean;
   createdAt: string;
 }
 
@@ -62,6 +65,7 @@ const UserManagement = ({
   onEditUser,
 }: UserManagementProps) => {
   const [bitcoinBalance, setBitcoinBalance] = useState(0);
+  const [mainBalance, setMainBalance] = useState(0);
   const [ethereumBalance, setEthereumBalance] = useState(0);
   const [usdtBalance, setUsdtBalance] = useState(0);
   const [usdcBalance, setUsdcBalance] = useState(0);
@@ -76,6 +80,9 @@ const UserManagement = ({
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isBalanceDialogOpen, setIsBalanceDialogOpen] = useState(false);
   const itemsPerPage = 5;
+  const userData = useStore(state => state.user)
+  const setUser = useStore(state => state.setUser)
+
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -104,6 +111,7 @@ const UserManagement = ({
     try {
       const response = await axios.post(`${apiBaseUrl}/api/users/credit`, {
         userId: selectedUserId,
+        mainBalance: mainBalance,
         bitcoin: bitcoinBalance,
         ethereum: ethereumBalance,
         usdt: usdtBalance,
@@ -118,6 +126,7 @@ const UserManagement = ({
 
       // Reset balances
       setBitcoinBalance(0);
+      setMainBalance(0);
       setEthereumBalance(0);
       setUsdtBalance(0);
       setUsdcBalance(0);
@@ -151,6 +160,25 @@ const UserManagement = ({
   const handleViewBalances = (user: User) => {
     setSelectedUser(user);
     setIsBalanceDialogOpen(true);
+  };
+
+  const handleVerifyUser = async (userId: string) => {
+    try {
+      const response = await axios.post(`${apiBaseUrl}/api/users/verify-user`, { userId }, {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
+        }
+      });
+      toast(response.data.message);
+
+      // Update user status in the UI
+      setUsersData(usersData.map(user =>
+        user.id === userId ? { ...user, isVerified: true } : user
+      ));
+      setUser({ ...userData, isVerified: true });
+    } catch (error) {
+      console.error('Error verifying user:', error);
+    }
   };
 
   const handleDeleteUser = async (userId: string) => {
@@ -191,7 +219,7 @@ const UserManagement = ({
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
 
   return (
-    <div className='text-slate-800'>
+    <div className='text-slate-800 text-lg'>
       <input
         type="text"
         placeholder="Search users..."
@@ -199,7 +227,7 @@ const UserManagement = ({
         onChange={(e) => setSearchText(e.target.value)}
         className="rounded-md border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:ring-slate-400"
       />
-      <Button onClick={() => setIsAddUserDialogOpen(true)} className="ml-4">
+      <Button onClick={() => setIsAddUserDialogOpen(true)} className="ml-4 bg-slate-500 hover:bg-slate-800">
         Add New User
       </Button>
       {loading ? (
@@ -212,6 +240,7 @@ const UserManagement = ({
                 <TableCell>Name</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Phone</TableCell>
+                <TableCell>Status</TableCell>
                 <TableCell>All Balances</TableCell>
                 <TableCell>Created At</TableCell>
                 <TableCell>Actions</TableCell>
@@ -222,6 +251,7 @@ const UserManagement = ({
               {isLoading ? (
                 Array.from({ length: 6 }).map((_, index) => (
                   <TableRow key={index}>
+                    <TableCell><Skeleton className="h-5 w-20" /></TableCell>
                     <TableCell><Skeleton className="h-5 w-20" /></TableCell>
                     <TableCell><Skeleton className="h-5 w-20" /></TableCell>
                     <TableCell><Skeleton className="h-5 w-20" /></TableCell>
@@ -244,7 +274,22 @@ const UserManagement = ({
                     <TableCell>{user.email}</TableCell>
                     <TableCell>{user.phone}</TableCell>
                     <TableCell>
-                      <Button variant="secondary" size="sm" onClick={() => handleViewBalances(user)}>
+                      <span className={user.isVerified ? 'text-green-500 text-lg' : 'text-red-500 text-lg'}>
+                        {user.isVerified ? 'Verified' : 'Unverified'}
+                      </span>
+                      {!user.isVerified && (
+                        <Button
+                          variant="secondary"
+                          className="ml-2 bg-slate-500 text-white hover:bg-slate-800"
+                          size="sm"
+                          onClick={() => handleVerifyUser(user.id)}
+                        >
+                          Verify
+                        </Button>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <Button variant="secondary" className="bg-slate-500 text-white text-md hover:bg-slate-900" size="sm" onClick={() => handleViewBalances(user)}>
                         View Balances
                       </Button>
                     </TableCell>
@@ -252,7 +297,7 @@ const UserManagement = ({
                     <TableCell>
                       <Dialog>
                         <DialogTrigger >
-                          <Button variant="secondary" size="sm" onClick={() => setSelectedUserId(user.id)}><span className='text-orange-500'>Credit</span></Button>
+                          <Button variant="secondary" className="bg-slate-500 text-white hover:bg-slate-800" size="sm" onClick={() => setSelectedUserId(user.id)}>Credit</Button>
                         </DialogTrigger>
                         <DialogContent className="sm:max-w-[425px]">
                           <DialogHeader>
@@ -262,6 +307,17 @@ const UserManagement = ({
                             </DialogDescription>
                           </DialogHeader>
                           <div className="grid gap-4 py-4">
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="mainBalance" className="text-right">
+                                Main Balance
+                              </Label>
+                              <Input
+                                id="mainBalance"
+                                value={mainBalance}
+                                onChange={(event) => setMainBalance(Number(event.target.value))}
+                                className="col-span-3"
+                              />
+                            </div>
                             <div className="grid grid-cols-4 items-center gap-4">
                               <Label htmlFor="bitcoin" className="text-right">
                                 Bitcoin
@@ -457,7 +513,7 @@ const UserManagement = ({
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle className="bg-red-500">Add New User</DialogTitle>
+            <DialogTitle>Add New User</DialogTitle>
             <DialogDescription>
               Fill in the details to add a new user. Click save when you're done.
             </DialogDescription>

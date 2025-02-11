@@ -25,7 +25,6 @@ const verifyEmail = async (req: Request, res: Response) => {
                 id: user.id
             },
             data: {
-                isVerified: true,
                 verificationToken: null,
                 verificationTokenExpiresAt: null
             }

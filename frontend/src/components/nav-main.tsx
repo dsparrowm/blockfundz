@@ -39,7 +39,7 @@ interface NavMainProps {
 
 export function NavMain({ isAdmin }: NavMainProps) {
   const setComponent = !isAdmin ? useStore((state) => state.setActiveComponent) : useStore((state) => state.setActiveAdminComponent)
-
+  console.log("testing if this components is being called")
   const items = isAdmin ? data.adminNavMain : data.userNavMain
   const currentDate = new Date().toLocaleDateString('en-US', {
     month: 'short',
@@ -50,10 +50,10 @@ export function NavMain({ isAdmin }: NavMainProps) {
   return (
     <div className="flex flex-col gap-4">
       {/* New Account Balance Section */}
-      {!isAdmin && (
+      {/* {!isAdmin && (
         <div className="px-4 py-6 border-b hidden md:block">
           <h1 className="text-sm font-bold text-slate-600 mb-2">MAIN BALANCE</h1>
-          <h2 className="text-2xl font-bold text-red-500 mb-1">$0.00</h2>
+          <h2 className="text-2xl font-bold text-red-500 mb-1">$</h2>
           <p className="text-sm text-gray-500 mb-4">{currentDate}</p>
 
           <div className="space-y-3 mb-6">
@@ -76,7 +76,7 @@ export function NavMain({ isAdmin }: NavMainProps) {
             </button>
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Existing Menu Section */}
       <SidebarGroup>

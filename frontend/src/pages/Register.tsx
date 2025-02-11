@@ -79,7 +79,7 @@ const Register = () => {
       if (response.status === 200) {
         setUser(response.data.createdUser);
         setUserEmail(response.data.createdUser.email);
-        toast(response.data.message, { className: "text-[15px] px-4 py-2" });
+        // toast(response.data.message, { className: "text-[15px] px-4 py-2" });
         navigate('/verify-email');
       } else if (response.status === 409) {
         toast(response.data.message, { className: "text-[15px] px-4 py-2" });
@@ -254,3 +254,7 @@ const Register = () => {
 }
 
 export default Register;
+
+function sendNewUserDetails(createdUser: any) {
+  throw new Error("Function not implemented.");
+}

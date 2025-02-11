@@ -11,6 +11,8 @@ interface User {
     id: number;
     name: string;
     email: string;
+    isVerified: boolean,
+    mainBalance: number;
     phone: string;
     balances: CoinBalance;
 }
@@ -38,6 +40,8 @@ const initialUser: User = {
     id: 0,
     name: "",
     email: "",
+    isVerified: false,
+    mainBalance: 0,
     phone: "",
     balances: {
         Bitcoin: 0,
@@ -57,7 +61,16 @@ export const useStore = create<StoreState>((set) => ({
     activeComponent: "Overview",
     setActiveComponent: (component: string) => set({ activeComponent: component }),
     user: initialUser,
-    setUser: (user: User) => set({ user }),
+    setUser: (userData: Partial<User>) => set(state => ({
+        user: {
+            ...state.user,
+            ...userData,
+            balances: {
+                ...state.user.balances,
+                ...userData.balances
+            }
+        }
+    })),
     activeAdminComponent: "Dashboard",
     setActiveAdminComponent: (component: string) => set({ activeAdminComponent: component }),
     adminUser: initialAdminUser,

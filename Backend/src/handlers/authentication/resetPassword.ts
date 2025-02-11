@@ -31,9 +31,9 @@ const resetPassword = async (req: Request, res: Response) => {
                 resetPasswordTokenExpiresAt: null
             }
         });
-        const sendResetEmail = await sendResetSuccessfullEmail(user.email);
+        await sendResetSuccessfullEmail(user.email);
         res.status(200);
-        res.json({ message: `${sendResetEmail.message}`, isSuccess: true });
+        res.json({ message: "Email sent successfully", isSuccess: true });
     }
     catch (error) {
         res.status(500);

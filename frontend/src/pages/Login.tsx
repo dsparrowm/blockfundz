@@ -87,7 +87,11 @@ const Login = () => {
     try {
       const response = await axiosInstance.post(`api/auth/signin`, formData, { withCredentials: true });
       toast("Login successful", { className: "text-[15px] px-4 py-2" });
-      setUser(response.data.user);
+      console.log('the user object: ', response.data.user)
+      setUser({
+        mainBalance: response.data.user.mainBalance ?? 0,
+        ...response.data.user
+      });
       localStorage.setItem("userId", response.data.user.id);
       localStorage.setItem("userEmail", response.data.user.email);
       Cookies.set("token", response.data.token, { expires: 7 });

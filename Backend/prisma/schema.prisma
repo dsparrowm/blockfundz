@@ -11,7 +11,7 @@ model User {
   id                 Int       @id @default(autoincrement())
   email              String    @unique
   password           String
-  mainBalance        Float?
+  mainBalance        Float?    @default(0.0)
   availableBalance   Float?
   name               String
   phone              String?
@@ -41,12 +41,12 @@ model Transaction {
   date        DateTime  @default(now())
   details     String?
   userId      Int
-  user        User      @relation(fields: [userId], references: [id])
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   name        String?
   phone       String?
   planName    String?
   planId      Int?
-  plan        InvestmentPlan? @relation(fields: [planId], references: [id])
+  plan        InvestmentPlan? @relation(fields: [planId], references: [id], onDelete: SetNull)
 }
 
 model InvestmentPlan {
@@ -57,7 +57,7 @@ model InvestmentPlan {
   interestRate  Float
   totalReturns  Int
   userId        Int?       @unique
-  user          User?      @relation(fields: [userId], references: [id])
+  user          User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactions  Transaction[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -66,7 +66,7 @@ model InvestmentPlan {
 model WithdrawalRequest {
   id          Int       @id @default(autoincrement())
   userId      Int
-  user        User      @relation(fields: [userId], references: [id])
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   amount      Float
   asset       AssetType
   network     String
@@ -80,7 +80,7 @@ model Notification {
   message     String
   read        Boolean   @default(false)
   userId      Int
-  user        User      @relation(fields: [userId], references: [id])
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt   DateTime  @default(now())
 }
 
