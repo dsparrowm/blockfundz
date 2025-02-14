@@ -3,7 +3,8 @@ import { Request, Response } from 'express';
 
 const getNumberOfUsers = async (req: Request, res: Response) => {
   try {
-    const users = await prisma.user.count();
+    const totalUsers = await prisma.user.count();
+    const users = totalUsers - 1;
     res.status(200).json({ users });
   } catch (err) {
     console.error('Error retrieving number of users:', err);

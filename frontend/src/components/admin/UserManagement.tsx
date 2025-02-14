@@ -4,6 +4,17 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Users, Edit, Trash } from 'lucide-react';
 import { useStore } from '../../store/useStore';
+import { CalendarIcon } from "lucide-react"
+import { format } from "date-fns"
+import { cn } from "@/lib/utils"
+import { Calendar } from "@/components/ui/calendar"
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -40,7 +51,7 @@ import { Label } from "@/components/ui/label"
 import axios from 'axios';
 import { toast } from 'sonner';
 import Spinner from '../spinners/Spinner';
-import axiosInstance from '../../api/axiosInstance';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
 interface User {
   id: string;
@@ -79,6 +90,18 @@ const UserManagement = ({
   const [newUser, setNewUser] = useState({ name: '', email: '', phone: '', password: '' });
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isBalanceDialogOpen, setIsBalanceDialogOpen] = useState(false);
+  const [isTransactionDialogOpen, setIsTransactionDialogOpen] = useState(false);
+  const [transaction, setTransaction] = useState({
+    type: '',
+    asset: '',
+    amount: 0,
+    status: 'pending',
+    date: new Date(),
+    name: '',
+    phone: '',
+    planName: ''
+  });
+
   const itemsPerPage = 5;
   const userData = useStore(state => state.user)
   const setUser = useStore(state => state.setUser)
@@ -160,6 +183,38 @@ const UserManagement = ({
   const handleViewBalances = (user: User) => {
     setSelectedUser(user);
     setIsBalanceDialogOpen(true);
+  };
+
+  const handleCreateTransaction = async () => {
+    if (!selectedUserId) return;
+
+    try {
+      const response = await axios.post(`${apiBaseUrl}/api/transactions`, {
+        userId: selectedUserId,
+        ...transaction,
+        date: transaction.date.toISOString() // Convert date to ISO string for API
+      }, {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
+        }
+      });
+
+      toast(response.data.message);
+      setIsTransactionDialogOpen(false);
+      setTransaction({
+        type: '',
+        asset: '',
+        amount: 0,
+        status: 'pending',
+        date: new Date(),
+        name: '',
+        phone: '',
+        planName: ''
+      });
+    } catch (error) {
+      console.error('Error creating transaction:', error);
+      toast('Failed to create transaction');
+    }
   };
 
   const handleVerifyUser = async (userId: string) => {
@@ -245,12 +300,14 @@ const UserManagement = ({
                 <TableCell>Created At</TableCell>
                 <TableCell>Actions</TableCell>
                 <TableCell>Actions</TableCell>
+                <TableCell>Actions</TableCell>
               </TableRow>
             </TableHeader>
             <TableBody>
               {isLoading ? (
                 Array.from({ length: 6 }).map((_, index) => (
                   <TableRow key={index}>
+                    <TableCell><Skeleton className="h-5 w-20" /></TableCell>
                     <TableCell><Skeleton className="h-5 w-20" /></TableCell>
                     <TableCell><Skeleton className="h-5 w-20" /></TableCell>
                     <TableCell><Skeleton className="h-5 w-20" /></TableCell>
@@ -360,16 +417,6 @@ const UserManagement = ({
                                 onChange={(event) => setUsdcBalance(Number(event.target.value))}
                                 className="col-span-3" />
                             </div>
-                            {/* <div className="grid grid-cols-4 items-center gap-4">
-                              <Label htmlFor="bnb" className="text-right">
-                                BNB
-                              </Label>
-                              <Input
-                                id="bnb"
-                                value={bnbBalance}
-                                onChange={(event) => setBnbBalance(Number(event.target.value))}
-                                className="col-span-3" />
-                            </div> */}
                           </div>
                           <DialogFooter>
                             <Button type="submit" onClick={handleCredit}>
@@ -391,7 +438,7 @@ const UserManagement = ({
                               <Edit className="h-4 w-4" />
                             </Button>
                           </SheetTrigger>
-                          <SheetContent>
+                          {/* <SheetContent>
                             <SheetHeader>
                               <SheetTitle>Edit profile</SheetTitle>
                               <SheetDescription>
@@ -417,7 +464,7 @@ const UserManagement = ({
                                 <Button type="submit">Save changes</Button>
                               </SheetClose>
                             </SheetFooter>
-                          </SheetContent>
+                          </SheetContent> */}
                         </Sheet>
                         <AlertDialog>
                           <AlertDialogTrigger>
@@ -446,6 +493,185 @@ const UserManagement = ({
                           </AlertDialogContent>
                         </AlertDialog>
                       </div>
+                    </TableCell>
+                    <TableCell>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            className="bg-blue-500 hover:bg-blue-700 text-white"
+                            onClick={() => setSelectedUserId(user.id)}
+                          >
+                            Create Transaction
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px]">
+                          <DialogHeader>
+                            <DialogTitle>Create Transaction</DialogTitle>
+                            <DialogDescription>
+                              Create a new transaction for this user.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="grid gap-4 py-4">
+                            {/* Name Field */}
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="name" className="text-right">
+                                Name
+                              </Label>
+                              <Input
+                                id="name"
+                                value={transaction.name}
+                                onChange={(e) => setTransaction({ ...transaction, name: e.target.value })}
+                                className="col-span-3"
+                              />
+                            </div>
+                            {/* Phone Field */}
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="phone" className="text-right">
+                                Phone
+                              </Label>
+                              <Input
+                                id="phone"
+                                value={transaction.phone}
+                                onChange={(e) => setTransaction({ ...transaction, phone: e.target.value })}
+                                className="col-span-3"
+                              />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="type" className="text-right">
+                                Type
+                              </Label>
+                              <Select
+                                onValueChange={(value) => {
+                                  let newStatus = '';
+                                  switch (value) {
+                                    case 'subscription':
+                                      newStatus = 'active';
+                                      break;
+                                    case 'withdrawal':
+                                      newStatus = 'pending';
+                                      break;
+                                    default:
+                                      newStatus = 'pending';
+                                  }
+                                  setTransaction(prev => ({
+                                    ...prev,
+                                    type: value,
+                                    status: newStatus,
+                                    planName: value === 'subscription' ? prev.planName : ''
+                                  }));
+                                }}
+                              >
+                                <SelectTrigger className="col-span-3">
+                                  <SelectValue placeholder="Select type" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="deposit">Deposit</SelectItem>
+                                  <SelectItem value="withdrawal">Withdrawal</SelectItem>
+                                  <SelectItem value="subscription">Subscription</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            {/* Plan Name Field (Conditional) */}
+                            {transaction.type === 'subscription' && (
+                              <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="planName" className="text-right">
+                                  Plan Name
+                                </Label>
+                                <Input
+                                  id="planName"
+                                  value={transaction.planName}
+                                  onChange={(e) => setTransaction({ ...transaction, planName: e.target.value })}
+                                  className="col-span-3"
+                                />
+                              </div>
+                            )}
+
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="asset" className="text-right">
+                                Asset
+                              </Label>
+                              <Select
+                                onValueChange={(value) => setTransaction({ ...transaction, asset: value })}
+                              >
+                                <SelectTrigger className="col-span-3">
+                                  <SelectValue placeholder="Select asset" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="bitcoin">Bitcoin</SelectItem>
+                                  <SelectItem value="ethereum">Ethereum</SelectItem>
+                                  <SelectItem value="usdt">USDT</SelectItem>
+                                  <SelectItem value="usdt">USDC</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="amount" className="text-right">
+                                Amount
+                              </Label>
+                              <Input
+                                id="amount"
+                                type="number"
+                                value={transaction.amount}
+                                onChange={(e) => setTransaction({ ...transaction, amount: Number(e.target.value) })}
+                                className="col-span-3"
+                              />
+                            </div>
+
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="date" className="text-right">
+                                Date
+                              </Label>
+                              <DatePicker
+                                selected={transaction.date}
+                                onChange={(date) => setTransaction({ ...transaction, date: date || new Date() })}
+                                className="col-span-3"
+                              />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="status" className="text-right">
+                                Status
+                              </Label>
+                              <Select
+                                value={transaction.status}
+                                onValueChange={(value) =>
+                                  setTransaction(prev => ({ ...prev, status: value }))
+                                }
+                              >
+                                <SelectTrigger className="col-span-3">
+                                  <SelectValue placeholder="Select status" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {transaction.type === 'subscription' ? (
+                                    <>
+                                      <SelectItem value="active">Active</SelectItem>
+                                      <SelectItem value="inactive">Inactive</SelectItem>
+                                    </>
+                                  ) : transaction.type === 'withdrawal' ? (
+                                    <>
+                                      <SelectItem value="pending">Pending</SelectItem>
+                                      <SelectItem value="approved">Completed</SelectItem>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <SelectItem value="pending">Pending</SelectItem>
+                                      <SelectItem value="completed">Completed</SelectItem>
+                                      <SelectItem value="failed">Failed</SelectItem>
+                                    </>
+                                  )}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+                          <DialogFooter>
+                            <Button type="submit" onClick={handleCreateTransaction}>
+                              Create Transaction
+                            </Button>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
                     </TableCell>
                   </TableRow>
                 ))
