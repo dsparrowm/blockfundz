@@ -17,7 +17,11 @@ const clientBaseUrl = process.env.CLIENT_URL || "http://localhost:5173";
 
 app.use(helmet())
 app.use(cors({
-    origin: clientBaseUrl, // Replace with your frontend's origin
+    origin: [
+        'https://www.nexgencrypto.live',
+        'https://nexgencrypto.live',
+        'http://localhost:5173',
+    ], // Replace with your frontend's origin
     credentials: true // required for cookies
 }));
 app.use(morgan('dev'))

@@ -7,10 +7,12 @@ import { useStore } from "../store/useStore"
 export function ProfileComponent() {
     const [activeTab, setActiveTab] = useState<"profile" | "security">("profile")
     const [userData, setUserData] = useState({
-        name: "Davies Anieflok",
-        email: "davies@example.com",
-        phone: "+1234567890",
+        name: "",
+        email: "",
+        phone: "",
     })
+    const user = useStore((state) => state.user)
+
     const [securityData, setSecurityData] = useState({
         currentPassword: "",
         newPassword: "",
@@ -71,7 +73,7 @@ export function ProfileComponent() {
                             <label className="block text-sm font-medium mb-1">Full Name</label>
                             <input
                                 type="text"
-                                value={userData.name}
+                                value={user.name}
                                 onChange={(e) => setUserData({ ...userData, name: e.target.value })}
                                 className="w-full p-2 border rounded-md"
                                 required
@@ -82,7 +84,7 @@ export function ProfileComponent() {
                             <label className="block text-sm font-medium mb-1">Email Address</label>
                             <input
                                 type="email"
-                                value={userData.email}
+                                value={user.email}
                                 onChange={(e) => setUserData({ ...userData, email: e.target.value })}
                                 className="w-full p-2 border rounded-md"
                                 required
@@ -93,7 +95,7 @@ export function ProfileComponent() {
                             <label className="block text-sm font-medium mb-1">Phone Number</label>
                             <input
                                 type="tel"
-                                value={userData.phone}
+                                value={user.phone}
                                 onChange={(e) => setUserData({ ...userData, phone: e.target.value })}
                                 className="w-full p-2 border rounded-md"
                                 required
