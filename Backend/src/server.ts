@@ -13,54 +13,24 @@ import authMiddleware from './middleware/authMiddleware';
 
 const app = express();
 
-const allowedOrigins = [
-    'https://www.nexgencrypto.live',
-    'https://nexgencrypto.live',
-    'http://localhost:5173'
-];
+const clientBaseUrl = process.env.CLIENT_URL || "http://localhost:5173";
 
-// Critical middleware order fix
-app.use(helmet());
-app.use(cookieParser()); // Should come before CORS
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Enhanced CORS configuration
 app.use(cors({
-    origin: (origin, callback) => {
-        // Allow requests with no origin (mobile apps, curl, etc)
-        if (!origin) return callback(null, true);
-
-        if (allowedOrigins.some(allowedOrigin =>
-            origin === allowedOrigin ||
-            origin.startsWith(allowedOrigin)
-        )) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-    credentials: true,
-    preflightContinue: false,
-    optionsSuccessStatus: 204
+    origin: clientBaseUrl, // Replace with your frontend's origin
+    credentials: true // required for cookies
 }));
+app.use(helmet())
+app.use(morgan('dev'))
+app.use(express.json())
+app.use(cookieParser())
+app.use(express.urlencoded({ extended: true }))
 
-// Handle OPTIONS requests explicitly
-app.options('*', cors());
+//  Routers
+app.use("/api/auth", authenticationRoute)
+app.use("/api", authMiddleware, routes) // Protect routes with authMiddleware
+app.use('/token', tokenValidationRouter)
 
-app.use(helmet({
-    crossOriginResourcePolicy: { policy: "cross-origin" }
-}));
+app.get('/status', healthCheck)
 
-// Rest of middleware
-app.use(morgan('dev'));
-
-// Routes
-app.use("/api/auth", authenticationRoute);
-app.use("/api", authMiddleware, routes);
-app.use('/token', tokenValidationRouter);
-app.get('/status', healthCheck);
 
 export default app;
