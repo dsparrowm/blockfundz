@@ -81,7 +81,7 @@ const Features = () => {
   return (
     <div className='max-container mx-auto grid grid-cols-2 gap-8'>
       <div className="text-center mb-16">
-        <motion.h2 
+        <motion.h2
           className="text-4xl font-bold mb-6 bg-gradient-to-r from-orange-500 to-blue-500 text-gradient"
           initial="hidden"
           animate="visible"
@@ -89,9 +89,9 @@ const Features = () => {
         >
           Why choose us?
         </motion.h2>
-        <motion.img 
-          src={blogo} 
-          alt="NexGen Logo" 
+        <motion.img
+          src={blogo}
+          alt="NexGen Logo"
           className='mx-auto'
           initial="hidden"
           animate="visible"
@@ -100,32 +100,32 @@ const Features = () => {
         />
       </div>
 
-      <motion.div 
+      <motion.div
         className="grid grid-flow-row gap-3 mb-12"
         initial="hidden"
         animate="visible"
         variants={containerVariants}
       >
         {features.map((feature, index) => (
-          <motion.div 
-            key={index} 
+          <motion.div
+            key={index}
             className="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10"
             variants={getFeatureVariants(index)}
             whileHover="hover"
           >
-            <motion.div 
+            <motion.div
               className="mb-4"
               whileHover={{ scale: 1.1, rotate: 5 }}
               transition={{ duration: 0.2 }}
             >
               {feature.icon}
             </motion.div>
-            <motion.h3 
+            <motion.h3
               className="text-xl font-semibold mb-3 text-white-400"
             >
               {feature.title}
             </motion.h3>
-            <motion.p 
+            <motion.p
               className="text-gray-400"
             >
               {feature.description}

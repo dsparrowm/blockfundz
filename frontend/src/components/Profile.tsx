@@ -12,6 +12,7 @@ export function ProfileComponent() {
         phone: "",
     })
     const user = useStore((state) => state.user)
+    console.log('the current user as shown on profile page', user)
 
     const [securityData, setSecurityData] = useState({
         currentPassword: "",

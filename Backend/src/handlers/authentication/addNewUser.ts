@@ -31,7 +31,6 @@ const addNewUser = async (req: Request, res: Response) => {
                     password: hashedPassword,
                     name,
                     phone,
-                    isVerified: true,
                     verificationToken: null,
                     verificationTokenExpiresAt: null // 1 hour
                 }
