@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Bitcoin, Wallet, Copy, RefreshCcw } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Barcode from 'react-barcode';
+import QRCode from "react-qr-code";
 
 const Deposits = () => {
   const [selectedAsset, setSelectedAsset] = useState(null);
@@ -78,12 +78,20 @@ const Deposits = () => {
 
         {network && (
           <>
-            <Tabs defaultValue="barcode" className="w-full text-bold">
-              <TabsList className="grid w-full grid-cols-2 bg-slate-800">
-                {/* <TabsTrigger value="qr">QR Code</TabsTrigger> */}
-                <TabsTrigger value="address">Address</TabsTrigger>
-                <TabsTrigger value="barcode">Barcode</TabsTrigger>
+            <Tabs defaultValue="address" className="w-full text-bold">
+              <TabsList className="grid w-full grid-cols-2 bg-slate-800 color-red-500">
+                <TabsTrigger value="address" className="text-white">Address</TabsTrigger>
+                <TabsTrigger value="qr" className="text-white">QR Code</TabsTrigger>
+                {/* <TabsTrigger value="barcode">Barcode</TabsTrigger> */}
               </TabsList>
+              <TabsContent value="qr" className="mt-4">
+                <div className="bg-white p-6 rounded-lg flex flex-col items-center">
+                  <QRCode value={selectedAsset.address} />
+                  <p className="text-center mt-4 text-sm text-black">
+                    Scan QR code to get deposit address
+                  </p>
+                </div>
+              </TabsContent>
               {/* <TabsContent value="qr" className="mt-4">
                 <div className="bg-zinc-800 p-6 rounded-lg">
                   {generateQRCode(selectedAsset.address)}
@@ -111,14 +119,14 @@ const Deposits = () => {
                   </div>
                 </div>
               </TabsContent>
-              <TabsContent value="barcode" className="mt-4">
+              {/* <TabsContent value="barcode" className="mt-4">
                 <div className="bg-slate-500 p-6 rounded-lg">
                   <Barcode value={selectedAsset.address} />
                   <p className="text-center mt-4 text-md text-slate-100">
                     Scan barcode to get deposit address
                   </p>
                 </div>
-              </TabsContent>
+              </TabsContent> */}
             </Tabs>
 
             {/* Important Notes */}
