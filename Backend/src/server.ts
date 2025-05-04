@@ -16,7 +16,7 @@ const app = express();
 const clientBaseUrl = process.env.CLIENT_URL || "http://localhost:5173";
 
 app.use(cors({
-    origin: clientBaseUrl, // Replace with your frontend's origin
+    origin: [clientBaseUrl, 'http://localhost:5173'], // Replace with your frontend's origin
     credentials: true // required for cookies
 }));
 app.use(helmet())

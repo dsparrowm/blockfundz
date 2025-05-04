@@ -3,7 +3,18 @@ import axios from 'axios';
 import { Table, TableHeader, TableRow, TableCell, TableBody } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import Spinner from '../spinners/Spinner';
+import Toast from '../../utils/Toast';
 
 interface Transaction {
   id: number;
@@ -26,59 +37,102 @@ const TransactionManagement = () => {
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
+  const [editLoading, setEditLoading] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState({ type: '', message: '' });
   const itemsPerPage = 6;
 
   useEffect(() => {
-    const fetchTransactions = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(`${apiBaseUrl}/api/transactions`, {
-          headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
-          }
-        }); // Adjust the API endpoint as necessary
-        setTransactions(response.data.transactions);
-      } catch (error) {
-        console.error('Error fetching transactions:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchTransactions();
   }, []);
 
+  const fetchTransactions = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${apiBaseUrl}/api/transactions`, {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
+        }
+      });
+      setTransactions(response.data.transactions);
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+      showToastMessage('error', 'Failed to fetch transactions');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEditTransaction = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedTransaction) return;
+
+    setEditLoading(true);
+    try {
+      const response = await axios.put(
+        `${apiBaseUrl}/api/transactions/${selectedTransaction.id}`,
+        selectedTransaction,
+        {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
+          }
+        }
+      );
+
+      setTransactions(prev => prev.map(tx =>
+        tx.id === selectedTransaction.id ? response.data.transaction : tx
+      ));
+      showToastMessage('success', 'Transaction updated successfully');
+    } catch (error) {
+      console.error('Error updating transaction:', error);
+      showToastMessage('error', 'Failed to update transaction');
+    } finally {
+      setEditLoading(false);
+    }
+  };
+
+  const showToastMessage = (type: 'success' | 'error', message: string) => {
+    setToastMessage({ type, message });
+    setShowToast(true);
+  };
+
   const filteredTransactions = useMemo(() => {
     return transactions.filter(transaction =>
-      transaction.type.toLowerCase().includes(searchText.toLowerCase()) ||
-      transaction.asset.toLowerCase().includes(searchText.toLowerCase()) ||
-      transaction.status.toLowerCase().includes(searchText.toLowerCase()) ||
-      transaction.name.toLowerCase().includes(searchText.toLowerCase()) ||
-      transaction.phone.toLowerCase().includes(searchText.toLowerCase())
+      Object.values(transaction).some(value =>
+        value?.toString().toLowerCase().includes(searchText.toLowerCase())
+      )
     );
   }, [transactions, searchText]);
+
   const paginatedTransactions = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return filteredTransactions.slice(startIndex, endIndex);
-  }, [filteredTransactions, currentPage, itemsPerPage]);
+    return filteredTransactions.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredTransactions, currentPage]);
 
   const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage);
 
   return (
-    <div>
-      <input
-        type="text"
+    <div className="space-y-4">
+      {showToast && (
+        <Toast
+          type={toastMessage.type as 'success' | 'error'}
+          message={toastMessage.message}
+          onClose={() => setShowToast(false)}
+        />
+      )}
+
+      <Input
         placeholder="Search transactions..."
         value={searchText}
         onChange={(e) => setSearchText(e.target.value)}
-        className="rounded-md border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:ring-slate-400"
       />
+
       {loading ? (
         <Spinner />
       ) : (
         <>
-          <Table className="text-slate-800">
+          <Table>
             <TableHeader>
               <TableRow>
                 <TableCell>ID</TableCell>
@@ -90,42 +144,126 @@ const TransactionManagement = () => {
                 <TableCell>Name</TableCell>
                 <TableCell>Plan Name</TableCell>
                 <TableCell>Phone</TableCell>
+                <TableCell>Actions</TableCell>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {paginatedTransactions.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={9} className='text-center'>No transactions found.</TableCell>
+              {paginatedTransactions.map(transaction => (
+                <TableRow key={transaction.id}>
+                  <TableCell>{transaction.id}</TableCell>
+                  <TableCell>{transaction.type}</TableCell>
+                  <TableCell>{transaction.asset}</TableCell>
+                  <TableCell>{transaction.amount}</TableCell>
+                  <TableCell>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium
+                      ${transaction.status === 'COMPLETED' || transaction.status === 'ACTIVE'
+                        ? 'bg-green-500/20 text-green-500'
+                        : transaction.status === 'PENDING'
+                          ? 'bg-yellow-500/20 text-yellow-500'
+                          : 'bg-red-500/20 text-red-500'
+                      }`}>
+                      {transaction.status}
+                    </span>
+                  </TableCell>
+                  <TableCell>{new Date(transaction.date).toLocaleString()}</TableCell>
+                  <TableCell>{transaction.name}</TableCell>
+                  <TableCell>{transaction.planName || 'N/A'}</TableCell>
+                  <TableCell>{transaction.phone}</TableCell>
+                  <TableCell>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setSelectedTransaction(transaction)}
+                        >
+                          Edit
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Edit Transaction</DialogTitle>
+                          <DialogDescription>
+                            Update the transaction details below.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <form onSubmit={handleEditTransaction} className="space-y-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="type">Type</Label>
+                            <Input
+                              id="type"
+                              value={selectedTransaction?.type || ''}
+                              onChange={(e) => selectedTransaction && setSelectedTransaction({
+                                ...selectedTransaction,
+                                type: e.target.value
+                              })}
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="asset">Asset</Label>
+                            <Input
+                              id="asset"
+                              value={selectedTransaction?.asset || ''}
+                              onChange={(e) => selectedTransaction && setSelectedTransaction({
+                                ...selectedTransaction,
+                                asset: e.target.value
+                              })}
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="amount">Amount</Label>
+                            <Input
+                              id="amount"
+                              type="number"
+                              value={selectedTransaction?.amount || 0}
+                              onChange={(e) => selectedTransaction && setSelectedTransaction({
+                                ...selectedTransaction,
+                                amount: Number(e.target.value)
+                              })}
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="status">Status</Label>
+                            <Select
+                              value={selectedTransaction?.status || ''}
+                              onValueChange={(value) => selectedTransaction && setSelectedTransaction({
+                                ...selectedTransaction,
+                                status: value
+                              })}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select status" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="COMPLETED">Completed</SelectItem>
+                                <SelectItem value="PENDING">Pending</SelectItem>
+                                <SelectItem value="FAILED">Failed</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="planName">Plan Name</Label>
+                            <Input
+                              id="planName"
+                              value={selectedTransaction?.planName || ''}
+                              onChange={(e) => selectedTransaction && setSelectedTransaction({
+                                ...selectedTransaction,
+                                planName: e.target.value
+                              })}
+                            />
+                          </div>
+                          <Button type="submit" disabled={editLoading}>
+                            {editLoading ? <Spinner size="sm" /> : 'Save Changes'}
+                          </Button>
+                        </form>
+                      </DialogContent>
+                    </Dialog>
+                  </TableCell>
                 </TableRow>
-              ) : (
-                <>
-                  {paginatedTransactions.map(transaction => (
-                    <TableRow key={transaction.id}>
-                      <TableCell>{transaction.id}</TableCell>
-                      <TableCell>{transaction.type}</TableCell>
-                      <TableCell>{transaction.asset}</TableCell>
-                      <TableCell>{transaction.amount}</TableCell>
-                      <TableCell>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium
-                          ${transaction.status === 'COMPLETED' || transaction.status === 'ACTIVE'
-                            ? 'bg-green-500/20 text-green-500'
-                            : transaction.status === 'PENDING'
-                              ? 'bg-yellow-500/20 text-yellow-500'
-                              : 'bg-red-500/20 text-red-500'
-                          }`}>
-                          {transaction.status}
-                        </span>
-                      </TableCell>
-                      <TableCell>{new Date(transaction.date).toLocaleString()}</TableCell>
-                      <TableCell>{transaction.name}</TableCell>
-                      <TableCell>{transaction.planName || 'N/A'}</TableCell>
-                      <TableCell>{transaction.phone}</TableCell>
-                    </TableRow>
-                  ))}
-                </>
-              )}
+              ))}
             </TableBody>
           </Table>
+
           <div className="flex justify-between items-center mt-4">
             <Button
               onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
@@ -133,7 +271,7 @@ const TransactionManagement = () => {
             >
               Previous
             </Button>
-            {totalPages !== 0 && <span className='text-white-400'>Page {currentPage} of {totalPages}</span>}
+            {totalPages !== 0 && <span>Page {currentPage} of {totalPages}</span>}
             <Button
               onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
               disabled={currentPage === totalPages || totalPages === 0}

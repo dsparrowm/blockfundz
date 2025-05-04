@@ -80,11 +80,11 @@ export default function Page() {
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-4 bg-slate-100 z-0">
           {!isAdmin ?
-            <div>
 
-              {renderUserDashboardComponent()}
 
-            </div> : renderAdminDashboardComponent()}
+            renderUserDashboardComponent()
+
+            : renderAdminDashboardComponent()}
         </div>
 
       </SidebarInset>
