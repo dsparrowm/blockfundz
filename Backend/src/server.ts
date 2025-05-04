@@ -22,6 +22,12 @@ const allowedOrigins = [
     'https://nexgencrypto.live',
 ]
 
+app.use((req, res, next) => {
+    console.log('Incoming request from origin:', req.headers.origin);
+    console.log('Request to:', req.url);
+    next();
+});
+
 app.use(cors({
     origin: allowedOrigins, // Replace with your frontend's origin
     credentials: true // required for cookies
