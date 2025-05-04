@@ -15,21 +15,8 @@ const app = express();
 
 const clientBaseUrl = process.env.CLIENT_URL || "http://localhost:5173";
 
-const allowedOrigins = [
-    'https://blockfundz.onrender.com',
-    'https://blockfundz.com',
-    'https://www.nexgencrypto.live',
-    'https://nexgencrypto.live',
-]
-
-app.use((req, res, next) => {
-    console.log('Incoming request from origin:', req.headers.origin);
-    console.log('Request to:', req.url);
-    next();
-});
-
 app.use(cors({
-    origin: '/*', // Replace with your frontend's origin
+    origin: clientBaseUrl, // Replace with your frontend's origin
     credentials: true // required for cookies
 }));
 app.use(helmet())
