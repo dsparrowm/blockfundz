@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 });
 
 app.use(cors({
-    origin: allowedOrigins, // Replace with your frontend's origin
+    origin: '/*', // Replace with your frontend's origin
     credentials: true // required for cookies
 }));
 app.use(helmet())
