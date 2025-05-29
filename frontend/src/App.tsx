@@ -12,6 +12,7 @@ import VerifiedEmailSuccessPage from './pages/VerifiedEmailSuccessPage';
 import { Toaster } from "@/components/ui/sonner"
 import LiveChat from './components/chat/liveChat';
 import MaintenancePage from './components/MaintenancePage';
+import ResetPassword from './pages/ResetPassword';
 
 const App = () => {
   const maintenanceMode = false
@@ -65,6 +66,9 @@ const App = () => {
           <Route path="/contact" element={<MainLayout><Contact /></MainLayout>} />
           <Route path="/verify-email" element={<EmailVerificationPage />} />
           <Route path="/email-verified" element={<VerifiedEmailSuccessPage />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
+
+          {/* Protected Routes */}
 
           {/* Test Page */}
 

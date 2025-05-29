@@ -9,6 +9,14 @@ import axiosInstance from "../api/axiosInstance";
 import Spinner from "../components/spinners/Spinner";
 import Toast from "../utils/Toast";
 import React from "react";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 interface ZodErrorResponse {
   message: string;
@@ -37,6 +45,11 @@ const Login = () => {
   const [globalError, setGlobalError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState<{ type: 'success' | 'error', message: string } | null>(null);
+  const [forgotDialogOpen, setForgotDialogOpen] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [forgotMessage, setForgotMessage] = useState<string | null>(null);
 
   const setUser = useStore(state => state.setUser);
   const navigate = useNavigate();
@@ -47,6 +60,14 @@ const Login = () => {
       return () => clearTimeout(timer);
     }
   }, [globalError]);
+
+  // Auto-close Toast after 3 seconds
+  useEffect(() => {
+    if (showToast) {
+      const timer = setTimeout(() => setShowToast(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showToast]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -122,21 +143,81 @@ const Login = () => {
     }
   };
 
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setForgotLoading(true);
+    setForgotMessage(null);
+    try {
+      await axios.post(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:3001"}/api/auth/forgot-password`, {
+        email: forgotEmail,
+      });
+      setToastMessage({ type: 'success', message: "If this email exists, a reset link has been sent." });
+      setShowToast(true);
+      setForgotDialogOpen(false);
+      setForgotEmail('');
+    } catch (err) {
+      setToastMessage({ type: 'error', message: "Failed to send reset link. Please try again." });
+      setShowToast(true);
+      setForgotDialogOpen(false);
+    } finally {
+      setForgotLoading(false);
+    }
+  };
+
   return (
     <main className="relative text-white flex justify-center items-center min-h-screen p-4 flex-col">
       {/* Toast Container */}
-      {showToast && globalError && (
+      {showToast && toastMessage && (
         <Toast
-          type="error"
-          message={globalError}
+          type={toastMessage.type}
+          message={toastMessage.message}
           onClose={() => setShowToast(false)}
         />
       )}
 
-      {/* Accessibility Announcements */}
-      <div aria-live="assertive" className="sr-only">
-        {globalError && <p>{globalError}</p>}
-      </div>
+      {/* Forgot Password Dialog */}
+      <Dialog open={forgotDialogOpen} onOpenChange={setForgotDialogOpen}>
+        <DialogContent className="max-w-md bg-gradient-to-br from-orange-500/90 to-orange-700/90 border-0 shadow-2xl rounded-2xl p-0">
+          <div className="flex flex-col items-center py-8 px-6">
+            <div className="bg-white/10 rounded-full p-3 mb-4">
+              <FaLock className="text-3xl text-white" />
+            </div>
+            <DialogHeader className="w-full text-center">
+              <DialogTitle className="text-2xl font-bold text-white mb-1">Forgot Password?</DialogTitle>
+              <DialogDescription className="text-white/80 mb-4">
+                Enter your email address and we'll send you a password reset link.
+              </DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handleForgotPassword} className="w-full space-y-4">
+              <input
+                type="email"
+                required
+                placeholder="Enter your email"
+                className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-orange-400/40 transition"
+                value={forgotEmail}
+                onChange={e => setForgotEmail(e.target.value)}
+                disabled={forgotLoading}
+                autoFocus
+              />
+              <button
+                type="submit"
+                disabled={forgotLoading}
+                className="w-full bg-white/20 text-white font-semibold rounded-lg py-3 hover:bg-white/30 transition-all duration-200 border border-white/10 disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {forgotLoading ? <Spinner size="sm" /> : "Send Reset Link"}
+              </button>
+            </form>
+            <button
+              type="button"
+              className="mt-6 text-white/70 hover:text-white text-xs underline"
+              onClick={() => setForgotDialogOpen(false)}
+              tabIndex={0}
+            >
+              Back to Login
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Logo */}
       <div className="mb-2 flex items-center cursor-pointer" onClick={() => navigate('/')}>
@@ -218,6 +299,7 @@ const Login = () => {
               type="button"
               className="text-white/80 hover:text-white"
               disabled={loading}
+              onClick={() => setForgotDialogOpen(true)}
             >
               Forgot password?
             </button>
