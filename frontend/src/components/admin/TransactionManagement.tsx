@@ -41,6 +41,7 @@ const TransactionManagement = () => {
   const [editLoading, setEditLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState({ type: '', message: '' });
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
   const itemsPerPage = 6;
 
   useEffect(() => {
@@ -84,8 +85,14 @@ const TransactionManagement = () => {
         tx.id === selectedTransaction.id ? response.data.transaction : tx
       ));
       showToastMessage('success', 'Transaction updated successfully');
-    } catch (error) {
-      console.error('Error updating transaction:', error);
+      setEditDialogOpen(false); // Close dialog on success
+    } catch (error: any) {
+      // Log the backend error response for debugging
+      if (error.response) {
+        console.error('Backend error:', error.response.data);
+      } else {
+        console.error('Error updating transaction:', error);
+      }
       showToastMessage('error', 'Failed to update transaction');
     } finally {
       setEditLoading(false);
@@ -96,6 +103,14 @@ const TransactionManagement = () => {
     setToastMessage({ type, message });
     setShowToast(true);
   };
+
+  // Auto-close Toast after 3 seconds
+  React.useEffect(() => {
+    if (showToast) {
+      const timer = setTimeout(() => setShowToast(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showToast]);
 
   const filteredTransactions = useMemo(() => {
     return transactions.filter(transaction =>
@@ -170,12 +185,15 @@ const TransactionManagement = () => {
                   <TableCell>{transaction.planName || 'N/A'}</TableCell>
                   <TableCell>{transaction.phone}</TableCell>
                   <TableCell>
-                    <Dialog>
+                    <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
                       <DialogTrigger asChild>
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => setSelectedTransaction(transaction)}
+                          onClick={() => {
+                            setSelectedTransaction(transaction);
+                            setEditDialogOpen(true);
+                          }}
                         >
                           Edit
                         </Button>
@@ -240,6 +258,25 @@ const TransactionManagement = () => {
                                 <SelectItem value="FAILED">Failed</SelectItem>
                               </SelectContent>
                             </Select>
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="date">Date</Label>
+                            <Input
+                              id="date"
+                              type="datetime-local"
+                              value={
+                                selectedTransaction?.date
+                                  ? new Date(selectedTransaction.date).toISOString().slice(0, 16)
+                                  : ''
+                              }
+                              onChange={(e) =>
+                                selectedTransaction &&
+                                setSelectedTransaction({
+                                  ...selectedTransaction,
+                                  date: new Date(e.target.value).toISOString(),
+                                })
+                              }
+                            />
                           </div>
                           <div className="space-y-2">
                             <Label htmlFor="planName">Plan Name</Label>
