@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const NEWS_API_KEY = "b54a6459de1c4498944fd058a02d4bb3"; // Replace with your NewsAPI key
+const NEWS_API_KEY = import.meta.env.VITE_NEWS_API_KEY as string; // Replace with your NewsAPI key
 
 const CryptoNewsSection = () => {
     const [news, setNews] = useState<any[]>([]);
