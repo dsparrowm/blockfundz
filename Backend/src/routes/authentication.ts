@@ -7,7 +7,8 @@ import logout from '../handlers/authentication/logout';
 import forgotPassword from '../handlers/authentication/forgotPassword';
 import resetPassword from '../handlers/authentication/resetPassword';
 import addNewUser from '../handlers/authentication/addNewUser';
-
+import setWithdrawalPin from '../handlers/authentication/setWithdrawalPin';
+import getWithdrawalPinStatus from '../handlers/authentication/getWithdrawalPinStatus';
 
 const router = new Router();
 
@@ -19,5 +20,7 @@ router.post('/admin/login', adminLogin);
 router.post('/logout', logout);
 router.post('/forgot-password', forgotPassword);
 router.post('/reset-password', resetPassword);
+router.post('/user/set-withdrawal-pin', setWithdrawalPin);
+router.get('/user/withdrawal-pin-status', getWithdrawalPinStatus);
 
 export default router;

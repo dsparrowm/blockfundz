@@ -39,7 +39,6 @@ interface NavMainProps {
 
 export function NavMain({ isAdmin }: NavMainProps) {
   const setComponent = !isAdmin ? useStore((state) => state.setActiveComponent) : useStore((state) => state.setActiveAdminComponent)
-  console.log("testing if this components is being called")
   const items = isAdmin ? data.adminNavMain : data.userNavMain
   const currentDate = new Date().toLocaleDateString('en-US', {
     month: 'short',

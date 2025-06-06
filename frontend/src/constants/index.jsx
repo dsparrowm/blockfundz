@@ -240,8 +240,8 @@ export const data = {
       onclick: () => { }
     },
     {
-      title: "Profile",
-      url: "/dashboard/profile",
+      title: "Settings",
+      url: "/dashboard/settings",
       icon: User,
       onclick: () => { }
     }

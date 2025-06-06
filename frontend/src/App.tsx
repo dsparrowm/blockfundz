@@ -13,6 +13,9 @@ import { Toaster } from "@/components/ui/sonner"
 import LiveChat from './components/chat/liveChat';
 import MaintenancePage from './components/MaintenancePage';
 import ResetPassword from './pages/ResetPassword';
+import CryptoNewsSection from './sections/RelatedNewsSection';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const App = () => {
   const maintenanceMode = false
@@ -47,6 +50,9 @@ const App = () => {
               </section>
               <section className="padding-x py-1 pb-12 bg-coral-black mb-20">
                 <TestimonialSection />
+              </section>
+              <section id='crypto-news' className="padding-x py-1 bg-coral-black mb-20">
+                <CryptoNewsSection />
               </section>
             </HomeLayout>
           } />

@@ -8,6 +8,7 @@ import Deposits from '../components/Deposits';
 import AcountSettings from '../components/AccountSettings';
 import Profile from '../components/Profile';
 import KYCVerification from '../components/Kyc';
+import Settings from '../components/Settings';
 
 const renderUserDashboardComponent = () => {
   const activeComponent = useStore((state) => state.activeComponent);
@@ -21,14 +22,14 @@ const renderUserDashboardComponent = () => {
       return <Deposits />;
     case 'DepositHistory':
       return <DepositHistory />;
+    case 'Settings':
+      return <Settings />
     case 'Withdrawals':
       return <Withdrawal />;
     case 'WithdrawalHistory':
       return <WithdrawalHistory />;
     case 'AccountSettings':
       return <AcountSettings />;
-    case 'Profile':
-      return <Profile />;
     case 'verify':
       return <KYCVerification />;
     default:

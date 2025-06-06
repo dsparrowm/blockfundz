@@ -18,6 +18,7 @@ model User {
   verificationToken  String?
   verificationTokenExpiresAt  DateTime?
   isVerified         Boolean? @default(false)
+  withdrawalPin      Int?
   resetPasswordToken String?
   resetPasswordTokenExpiresAt DateTime?
   bitcoinBalance     Float     @default(0.0)
