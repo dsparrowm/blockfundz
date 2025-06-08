@@ -91,6 +91,8 @@ const Login = () => {
     e.preventDefault();
     setError({});
     setGlobalError(null);
+    setToastMessage(null);
+    setShowToast(false);
     setLoading(true);
 
     try {
@@ -112,14 +114,19 @@ const Login = () => {
       });
       localStorage.setItem("isLoggedIn", "yes");
 
-      navigate('/dashboard');
+      setToastMessage({ type: 'success', message: "Login successful!" });
+      setShowToast(true);
+
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 1000);
     } catch (error) {
       let errorMessage = "Login failed";
 
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError<ZodErrorResponse>;
 
-        if ([400, 401, 404].includes(axiosError.response?.status || 0)) {
+        if ([400, 401, 404, 403].includes(axiosError.response?.status || 0)) {
           if (axiosError.response?.data?.errors) {
             const formErrors = axiosError.response.data.errors.reduce((acc: FormErrors, err) => {
               if (err.path in formData) {
@@ -137,6 +144,7 @@ const Login = () => {
       }
 
       setGlobalError(errorMessage);
+      setToastMessage({ type: 'error', message: errorMessage });
       setShowToast(true);
     } finally {
       setLoading(false);
