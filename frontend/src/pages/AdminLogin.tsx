@@ -115,11 +115,17 @@ const Login = () => {
 
   return (
     <main className="relative text-white flex justify-center items-center min-h-screen p-4 flex-col">
-      <div className="mb-2 flex items-center">
-        <a href="">
-          <img src={logo} alt="logo" width={50} height={10} />
-        </a>
-        <p className='text-[30px] text-orange-500 leading-8'>NexGen</p>
+      <div className="flex items-center justify-center space-x-3 mb-5 cursor-pointer" onClick={() => navigate('/')}>
+        <div className="w-8 h-8 bg-crypto-gradient rounded-lg flex items-center justify-center">
+          {logo ? (
+            <img src={logo} alt="NexGen Logo" className="w-6 h-6 " />
+          ) : (
+            <Bitcoin className="w-6 h-6 text-white" />
+          )}
+        </div>
+        <span className="text-3xl text-white font-bold">
+          Nex<span className="text-crypto-blue">Gen</span>
+        </span>
       </div>
       <div className="relative backdrop-blur-lg bg-white/5 p-8 rounded-2xl shadow-xl border border-white/10 w-full max-w-md">
         <form action="" className="space-y-6" onSubmit={handleSubmit}>
@@ -174,7 +180,7 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full bg-white/10 text-white rounded-lg py-3 font-medium hover:bg-white/20 transition-all duration-300 border border-white/10"
+            className="w-full crypto-button text-white rounded-lg py-3 font-medium hover:bg-white/20 transition-all duration-300 border border-white/10"
           >
             {loading ? (<Spinner />) : "Sign In"}
           </button>

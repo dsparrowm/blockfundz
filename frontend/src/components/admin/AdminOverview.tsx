@@ -83,7 +83,7 @@ const AdminOverview = () => {
       ) : (
         <div>
           <h2 className="text-2xl font-bold mb-4 text-slate-800 mt-2">Dashboard Overview</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 text-primary">
             <div className="bg-white p-4 rounded-lg shadow-md">
               <h3 className="text-lg font-semibold">Total Users</h3>
               <p className="text-2xl">{totalUsers}</p>

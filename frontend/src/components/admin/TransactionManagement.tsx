@@ -128,7 +128,7 @@ const TransactionManagement = () => {
   const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 text-primary">
       {showToast && (
         <Toast
           type={toastMessage.type as 'success' | 'error'}
@@ -148,7 +148,7 @@ const TransactionManagement = () => {
       ) : (
         <>
           <Table>
-            <TableHeader>
+            <TableHeader className="bg-gray-100">
               <TableRow>
                 <TableCell>ID</TableCell>
                 <TableCell>Type</TableCell>

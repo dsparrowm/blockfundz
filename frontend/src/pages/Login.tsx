@@ -231,7 +231,7 @@ const Login = () => {
       <div className="flex items-center justify-center space-x-3 mb-5 cursor-pointer" onClick={() => navigate('/')}>
         <div className="w-8 h-8 bg-crypto-gradient rounded-lg flex items-center justify-center">
           {logo ? (
-            <img src={logo} alt="NexGen Logo" className="w-6 h-6 logo" />
+            <img src={logo} alt="NexGen Logo" className="w-6 h-6 " />
           ) : (
             <Bitcoin className="w-6 h-6 text-white" />
           )}
