@@ -238,13 +238,13 @@ const Overview = () => {
 
       <div className="flex justify-between items-center mb-3 px-8 pt-8">
         <h2 className="md:text-[20px] font-bold text-slate-800">Recent Activity</h2>
-        <button className="text-blue-600 hover:text-blue-800 font-medium">
+        <button className="text-primary hover:text-blue-800 font-medium">
           See History
         </button>
       </div>
       <div className="md:col-span-2 bg-white px-6 py-3 rounded shadow mx-8">
         <Table>
-          <TableHeader>
+          <TableHeader className="text-primary">
             <TableRow>
               <TableCell>Type</TableCell>
               <TableCell>Asset</TableCell>
@@ -255,7 +255,7 @@ const Overview = () => {
           </TableHeader>
           <TableBody>
             {paginatedTransactions.map((transaction, index) => (
-              <TableRow key={index}>
+              <TableRow key={index} className="hover:bg-gray-50 transition-colors text-slate-800">
                 <TableCell className="flex items-center gap-2">
                   {getTransactionIcon(transaction.type)}
                   {transaction.type}
@@ -299,7 +299,7 @@ const Overview = () => {
       </div>
       <div className="pt-6 border-t mt-6 mx-8 bg-white p-4 rounded shadow">
         <div className='flex justify-between'>
-          <h3 className="font-semibold mb-4 text-lg">Refer Us & Earn</h3>
+          <h3 className="font-semibold mb-4 text-lg text-primary">Refer Us & Earn</h3>
           <span className='text-slate-400'>Coming Soon</span>
         </div>
         <p className="text-md text-gray-600 mb-4">
@@ -307,7 +307,7 @@ const Overview = () => {
         </p>
         <div className="flex items-center gap-2">
           <div className="border rounded p-3 rounded flex-1">
-            <span className="text-sm">teamapexllc.com/ref?ref=disparrown</span>
+            <span className="text-sm text-gray-400">teamapexllc.com/ref?ref=disparrown</span>
           </div>
           <button className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700 text-sm">
             Copy Link

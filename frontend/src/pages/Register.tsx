@@ -120,7 +120,7 @@ const Register = () => {
   };
 
   return (
-    <main className="relative text-white flex justify-center items-center min-h-screen p-4 flex-col">
+    <main className="relative text-white flex justify-center items-center min-h-screen p-4 flex-col bg-crypto-dark">
       {showToast && globalError && (
         <Toast
           type="error"
@@ -133,14 +133,20 @@ const Register = () => {
         {globalError && <p>{globalError}</p>}
       </div>
 
-      <div className="mb-2 flex items-center cursor-pointer" onClick={() => navigate('/')}>
-        <img src={logo} alt="logo" width={50} height={10} />
-        <p className='text-[30px] text-white leading-8 ml-2'>
-          Nex<span className="text-orange-500">Gen</span>
-        </p>
+      <div className="flex items-center justify-center space-x-3 mb-5 cursor-pointer" onClick={() => navigate('/')}>
+        <div className="w-8 h-8 bg-crypto-gradient rounded-lg flex items-center justify-center">
+          {logo ? (
+            <img src={logo} alt="NexGen Logo" className="w-6 h-6" />
+          ) : (
+            <Bitcoin className="w-6 h-6 text-white" />
+          )}
+        </div>
+        <span className="text-3xl text-white font-bold">
+          Nex<span className="text-crypto-blue">Gen</span>
+        </span>
       </div>
 
-      <div className="relative backdrop-blur-lg bg-white/5 p-8 rounded-2xl shadow-xl border border-white/10 w-full max-w-md">
+      <div className="relative backdrop-blur-lg bg-crypto-card-dark/80 p-8 rounded-2xl shadow-xl border border-white/10 w-full max-w-md">
         <form onSubmit={handleSubmit} className="space-y-6" disabled={loading}>
           <div className="space-y-8">
             <div className="text-center">
@@ -274,7 +280,7 @@ const Register = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-white/10 text-white rounded-lg py-3 font-medium hover:bg-white/20 transition-all duration-300 border border-white/10 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="crypto-button text-white w-full py-3 rounded-lg font-semibold mt-4"
           >
             {loading ? <Spinner /> : 'Sign Up'}
           </button>

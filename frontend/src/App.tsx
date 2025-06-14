@@ -16,6 +16,7 @@ import ResetPassword from './pages/ResetPassword';
 import CryptoNewsSection from './sections/RelatedNewsSection';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Landing from './components/Landing2/Landing';
 
 const App = () => {
   const maintenanceMode = false
@@ -29,32 +30,33 @@ const App = () => {
         <Routes>
           {/* Home Page with all sections */}
           <Route path="/" element={
-            <HomeLayout>
-              <section className="xl:padding-l padding-b bg-coral-black">
-                <Hero />
-              </section>
-              {/* <section className="padding bg-coral-black text-white mb-20">
-                <AboutUs />
-              </section> */}
-              <section id="service" className="padding-x py-1 bg-coral-black mb-20">
-                <Features />
-              </section>
-              <section id='howitworks' className="padding bg-coral-black py-10 relative overflow-hidden mb-20">
-                <HowItWorks />
-              </section>
-              <section id='about' className="padding-x py-10 mb-40">
-                <OurTeam />
-              </section>
-              <section id='pricing' className="padding-x py-10 bg-coral-black mb-20">
-                <Pricing />
-              </section>
-              <section className="padding-x py-1 pb-12 bg-coral-black mb-20">
-                <TestimonialSection />
-              </section>
-              <section id='crypto-news' className="padding-x py-1 bg-coral-black mb-20">
-                <CryptoNewsSection />
-              </section>
-            </HomeLayout>
+            // <HomeLayout>
+            //   <section className="xl:padding-l padding-b bg-coral-black">
+            //     <Hero />
+            //   </section>
+            //   {/* <section className="padding bg-coral-black text-white mb-20">
+            //     <AboutUs />
+            //   </section> */}
+            //   <section id="service" className="padding-x py-1 bg-coral-black mb-20">
+            //     <Features />
+            //   </section>
+            //   <section id='howitworks' className="padding bg-coral-black py-10 relative overflow-hidden mb-20">
+            //     <HowItWorks />
+            //   </section>
+            //   <section id='about' className="padding-x py-10 mb-40">
+            //     <OurTeam />
+            //   </section>
+            //   <section id='pricing' className="padding-x py-10 bg-coral-black mb-20">
+            //     <Pricing />
+            //   </section>
+            //   <section className="padding-x py-1 pb-12 bg-coral-black mb-20">
+            //     <TestimonialSection />
+            //   </section>
+            //   <section id='crypto-news' className="padding-x py-1 bg-coral-black mb-20">
+            //     <CryptoNewsSection />
+            //   </section>
+            // </HomeLayout>
+            <Landing />
           } />
 
           {/* Auth Routes */}

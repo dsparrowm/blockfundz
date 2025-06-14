@@ -173,7 +173,7 @@ const Login = () => {
   };
 
   return (
-    <main className="relative text-white flex justify-center items-center min-h-screen p-4 flex-col">
+    <main className="relative text-white flex justify-center items-center min-h-screen p-4 flex-col bg-crypto-dark">
       {/* Toast Container */}
       {showToast && toastMessage && (
         <Toast
@@ -227,16 +227,22 @@ const Login = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Logo */}
-      <div className="mb-2 flex items-center cursor-pointer" onClick={() => navigate('/')}>
-        <span className='text-3xl text-orange-500 mr-1 pt-2'>
-          <img src={logo} alt="logo" width={50} height={10} />
+      {/* Logo and NexGen on the same line */}
+      <div className="flex items-center justify-center space-x-3 mb-5 cursor-pointer" onClick={() => navigate('/')}>
+        <div className="w-8 h-8 bg-crypto-gradient rounded-lg flex items-center justify-center">
+          {logo ? (
+            <img src={logo} alt="NexGen Logo" className="w-6 h-6 logo" />
+          ) : (
+            <Bitcoin className="w-6 h-6 text-white" />
+          )}
+        </div>
+        <span className="text-3xl text-white font-bold">
+          Nex<span className="text-crypto-blue">Gen</span>
         </span>
-        <p className='text-[30px] text-white leading-8'>Nex<span className="text-orange-500">Gen</span></p>
       </div>
 
       {/* Login Form */}
-      <div className="relative backdrop-blur-lg bg-white/5 p-8 rounded-2xl shadow-xl border border-white/10 w-full max-w-md">
+      <div className="relative backdrop-blur-lg bg-crypto-card-dark/80 p-8 rounded-2xl shadow-xl border border-white/10 w-full max-w-md">
         <form
           onSubmit={handleSubmit}
           className="space-y-6"
@@ -317,7 +323,7 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-white/10 text-white rounded-lg py-3 font-medium hover:bg-white/20 transition-all duration-300 border border-white/10 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="crypto-button text-white w-full py-3 rounded-lg font-semibold mt-4"
           >
             {loading ? <Spinner /> : "Sign In"}
           </button>
@@ -327,7 +333,7 @@ const Login = () => {
             Don't have an account?{' '}
             <Link
               to="/signup"
-              className="hover:underline text-orange-500"
+              className="hover:underline text-blue-400 hover:text-blue-500 transition-colors duration-200"
               aria-disabled={loading}
             >
               Sign up
