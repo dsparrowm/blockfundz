@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Plus } from "lucide-react"
-import { logo } from "../assets/icons"
+import { crypto_logo } from "../assets/icons"
 
 import {
   DropdownMenu,
@@ -45,9 +45,9 @@ export function TeamSwitcher({
               <activeTeam.logo className="size-4" />
               <img src={logo} alt="logo" height={40} width={40} className="bg-transparent" />
             </div> */}
-            <img src={logo} alt="logo" height={30} width={40} className="bg-transparent" />
+            <img src={crypto_logo} alt="logo" height={30} width={40} className="bg-transparent" />
             <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-semibold text-lg bg-gradient-to-r from-orange-500 to-blue-500 text-gradient">
+              <span className="text-xl font-semibold text-gradient text-crypto-red">
                 NexGen
               </span>
             </div>

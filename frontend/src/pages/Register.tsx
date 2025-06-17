@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaUser, FaLock, FaTimes } from "react-icons/fa";
-import { logo } from "../assets/icons";
+import { crypto_logo } from "../assets/icons";
 import { Link, useNavigate } from 'react-router-dom';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
@@ -134,13 +134,12 @@ const Register = () => {
       </div>
 
       <div className="flex items-center justify-center space-x-3 mb-5 cursor-pointer" onClick={() => navigate('/')}>
-        <div className="w-8 h-8 bg-crypto-gradient rounded-lg flex items-center justify-center">
-          {logo ? (
-            <img src={logo} alt="NexGen Logo" className="w-6 h-6" />
-          ) : (
-            <Bitcoin className="w-6 h-6 text-white" />
-          )}
-        </div>
+
+        {crypto_logo ? (
+          <img src={crypto_logo} alt="NexGen Logo" className="w-8 h-8 " />
+        ) : (
+          <Bitcoin className="w-6 h-6 text-white" />
+        )}
         <span className="text-3xl text-white font-bold">
           Nex<span className="text-crypto-blue">Gen</span>
         </span>
@@ -289,7 +288,7 @@ const Register = () => {
             Already have an account?{' '}
             <Link
               to="/login"
-              className="hover:underline text-orange-500"
+              className="hover:underline text-crypto-blue"
               aria-disabled={loading}
             >
               Sign in

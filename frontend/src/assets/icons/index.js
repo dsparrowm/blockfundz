@@ -11,6 +11,8 @@ import star from './star.svg'
 import truckFast from './truck-fast.svg'
 import twitter from './twitter.svg'
 import logo from './logo.png'
+import nexgen_logo from './nexgen_logo.jpg'
+import crypto_logo from './crypto_logo.svg'
 
 export {
     arrowRight,
@@ -25,5 +27,7 @@ export {
     star,
     truckFast,
     twitter,
-    logo
+    logo,
+    nexgen_logo,
+    crypto_logo
 }

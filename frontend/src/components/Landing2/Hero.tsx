@@ -3,7 +3,8 @@ import { TrendingUp, Shield, Users } from 'lucide-react';
 
 const Hero = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 sm:pt-0">
+      {/* The pt-24 ensures space for the header on mobile. Adjust as needed. */}
       <div className="absolute inset-0 bg-gradient-to-br from-crypto-dark via-crypto-dark-secondary to-crypto-card-dark">
         <div className="absolute inset-0 bg-gradient-to-r from-crypto-blue/5 via-transparent to-crypto-green/5"></div>
         <div className="absolute top-20 left-10 w-2 h-2 bg-crypto-blue rounded-full animate-float"></div>
@@ -19,7 +20,7 @@ const Hero = () => {
           </h1>
 
           <p className="text-xl md:text-2xl text-gray-300 mb-8 animate-slide-up animation-delay-200">
-            Join 10k+ investors who trust our platform to grow their funds with
+            Join 2.1M+ investors who trust our platform to grow their funds with
             AI-powered investment strategies and bank-level security.
           </p>
 

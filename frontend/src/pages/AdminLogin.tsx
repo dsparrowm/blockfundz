@@ -1,7 +1,7 @@
 import React from "react";
 import { FaUser } from "react-icons/fa";
 import { FaLock } from "react-icons/fa";
-import { logo } from "../assets/icons";
+import { crypto_logo } from "../assets/icons";
 import { useState } from 'react';
 import { useStore } from "../store/useStore";
 import axios, { AxiosError } from "axios";
@@ -116,13 +116,12 @@ const Login = () => {
   return (
     <main className="relative text-white flex justify-center items-center min-h-screen p-4 flex-col">
       <div className="flex items-center justify-center space-x-3 mb-5 cursor-pointer" onClick={() => navigate('/')}>
-        <div className="w-8 h-8 bg-crypto-gradient rounded-lg flex items-center justify-center">
-          {logo ? (
-            <img src={logo} alt="NexGen Logo" className="w-6 h-6 " />
-          ) : (
-            <Bitcoin className="w-6 h-6 text-white" />
-          )}
-        </div>
+
+        {crypto_logo ? (
+          <img src={crypto_logo} alt="NexGen Logo" className="w-8 h-8 " />
+        ) : (
+          <Bitcoin className="w-6 h-6 text-white" />
+        )}
         <span className="text-3xl text-white font-bold">
           Nex<span className="text-crypto-blue">Gen</span>
         </span>

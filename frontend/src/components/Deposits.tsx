@@ -19,27 +19,27 @@ const Deposits = () => {
       name: 'Bitcoin',
       icon: Bitcoin,
       networks: ['Bitcoin Network'],
-      address: 'bc1qjyrwte503a0vc7mwn3h52rz383wgh480pz9y63'
+      address: 'bc1qxtewurxx8qn03grrydewxaaf7ywch9v8q4k5e3'
     },
     {
       id: 'ETH',
       name: 'Ethereum',
       icon: Wallet,
       networks: ['Ethereum Network'],
-      address: '0x5C3250dC676c22E9BE847fc8e358F2E10073dfED'
+      address: '0x10f08239Bd10bF4B88aD65905C451bC7AA042dE9'
     },
     {
       id: 'USDT',
       name: 'USDT',
       icon: Wallet,
       networks: ['Tron Network'],
-      address: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e'
+      address: 'TMjQ1v1NLsN3agAstFZcFVA8xQEyFAysQq'
     },
     {
-      id: 'USDC',
-      name: 'USDC',
+      id: 'BNB',
+      name: 'Smart Chain(BNB)',
       icon: Wallet,
-      networks: ['Ethereum Network', 'Tron Network'],
+      networks: ['BNB Network'],
       address: '0x5C3250dC676c22E9BE847fc8e358F2E10073dfED'
     }
   ];

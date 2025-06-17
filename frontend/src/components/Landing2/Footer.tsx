@@ -1,6 +1,6 @@
 
 import { Bitcoin, Youtube, Shield, FileText } from 'lucide-react';
-import { logo } from "../../assets/icons"
+import { crypto_logo } from "../../assets/icons"
 
 const Footer = () => {
   return (
@@ -9,13 +9,12 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 mb-12">
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-2 mb-6">
-              <div className="w-8 h-8 bg-crypto-gradient rounded-lg flex items-center justify-center">
-                {logo ? (
-                  <img src={logo} alt="NexGen Logo" className="w-6 h-6" />
-                ) : (
-                  <Bitcoin className="w-6 h-6 text-white" />
-                )}
-              </div>
+
+              {crypto_logo ? (
+                <img src={crypto_logo} alt="NexGen Logo" className="w-9 h-9 " />
+              ) : (
+                <Bitcoin className="w-6 h-6 text-white" />
+              )}
               <span className="text-xl font-bold text-gradient">NexGen</span>
             </div>
 

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Menu, X, Bitcoin, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { logo } from "../../assets/icons";
+import { crypto_logo } from "../../assets/icons";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -22,13 +22,11 @@ const Header = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-crypto-gradient rounded-lg flex items-center justify-center">
-              {logo ? (
-                <img src={logo} alt="NexGen Logo" className="w-6 h-6 " />
-              ) : (
-                <Bitcoin className="w-6 h-6 text-white" />
-              )}
-            </div>
+            {crypto_logo ? (
+              <img src={crypto_logo} alt="NexGen Logo" className="w-6 h-6 " />
+            ) : (
+              <Bitcoin className="w-6 h-6 text-white" />
+            )}
             <span className="text-xl font-bold text-gradient">NexGen</span>
           </div>
           {/* <div className="flex items-center justify-center space-x-3 mb-5 cursor-pointer" onClick={() => navigate('/')}>

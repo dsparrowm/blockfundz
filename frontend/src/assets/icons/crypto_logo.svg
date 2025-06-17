@@ -1,0 +1,139 @@
+<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Metallic gradient - bronze to gold -->
+    <linearGradient id="metallicGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff9500;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#ffb347;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ffd700;stop-opacity:1" />
+      <stop offset="75%" style="stop-color:#ff8c00;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#cc7000;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Dark depth gradient -->
+    <linearGradient id="depthGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2d1810;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1a0f08;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0d0603;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Blue accent gradient -->
+    <linearGradient id="blueAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0066cc;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Shadow filter -->
+    <filter id="dropShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+      <feOffset dx="2" dy="2" result="offset"/>
+      <feFlood flood-color="#000000" flood-opacity="0.3"/>
+      <feComposite in2="offset" operator="in"/>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Inner shadow -->
+    <filter id="innerShadow">
+      <feGaussianBlur stdDeviation="1" result="blur"/>
+      <feOffset dx="1" dy="1" result="offset"/>
+      <feMerge> 
+        <feMergeNode in="offset"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Main logo container -->
+  <g transform="translate(40, 40)">
+    
+    <!-- Layer 10 (deepest/back) - darkest -->
+    <g transform="translate(5, 5)" opacity="0.3">
+      <path d="M-18,-20 L-12,-20 L-12,-8 L8,20 L14,20 L14,16 L-8,-16 L-8,-20 L-18,-20 Z" fill="url(#depthGradient)"/>
+      <path d="M-18,20 L-12,20 L-12,8 L8,-20 L14,-20 L14,-16 L-8,16 L-8,20 L-18,20 Z" fill="url(#depthGradient)"/>
+    </g>
+    
+    <!-- Layer 9 -->
+    <g transform="translate(4.5, 4.5)" opacity="0.4">
+      <path d="M-18,-20 L-12,-20 L-12,-8 L8,20 L14,20 L14,16 L-8,-16 L-8,-20 L-18,-20 Z" fill="url(#depthGradient)"/>
+      <path d="M-18,20 L-12,20 L-12,8 L8,-20 L14,-20 L14,-16 L-8,16 L-8,20 L-18,20 Z" fill="url(#depthGradient)"/>
+    </g>
+    
+    <!-- Layer 8 -->
+    <g transform="translate(4, 4)" opacity="0.5">
+      <path d="M-18,-20 L-12,-20 L-12,-8 L8,20 L14,20 L14,16 L-8,-16 L-8,-20 L-18,-20 Z" fill="url(#depthGradient)"/>
+      <path d="M-18,20 L-12,20 L-12,8 L8,-20 L14,-20 L14,-16 L-8,16 L-8,20 L-18,20 Z" fill="url(#depthGradient)"/>
+    </g>
+    
+    <!-- Layer 7 -->
+    <g transform="translate(3.5, 3.5)" opacity="0.6">
+      <path d="M-18,-20 L-12,-20 L-12,-8 L8,20 L14,20 L14,16 L-8,-16 L-8,-20 L-18,-20 Z" fill="#8b4513"/>
+      <path d="M-18,20 L-12,20 L-12,8 L8,-20 L14,-20 L14,-16 L-8,16 L-8,20 L-18,20 Z" fill="#8b4513"/>
+    </g>
+    
+    <!-- Layer 6 -->
+    <g transform="translate(3, 3)" opacity="0.7">
+      <path d="M-18,-20 L-12,-20 L-12,-8 L8,20 L14,20 L14,16 L-8,-16 L-8,-20 L-18,-20 Z" fill="#a0522d"/>
+      <path d="M-18,20 L-12,20 L-12,8 L8,-20 L14,-20 L14,-16 L-8,16 L-8,20 L-18,20 Z" fill="#a0522d"/>
+    </g>
+    
+    <!-- Layer 5 -->
+    <g transform="translate(2.5, 2.5)" opacity="0.8">
+      <path d="M-18,-20 L-12,-20 L-12,-8 L8,20 L14,20 L14,16 L-8,-16 L-8,-20 L-18,-20 Z" fill="#cd853f"/>
+      <path d="M-18,20 L-12,20 L-12,8 L8,-20 L14,-20 L14,-16 L-8,16 L-8,20 L-18,20 Z" fill="#cd853f"/>
+    </g>
+    
+    <!-- Layer 4 -->
+    <g transform="translate(2, 2)" opacity="0.85">
+      <path d="M-18,-20 L-12,-20 L-12,-8 L8,20 L14,20 L14,16 L-8,-16 L-8,-20 L-18,-20 Z" fill="#daa520"/>
+      <path d="M-18,20 L-12,20 L-12,8 L8,-20 L14,-20 L14,-16 L-8,16 L-8,20 L-18,20 Z" fill="#daa520"/>
+    </g>
+    
+    <!-- Layer 3 -->
+    <g transform="translate(1.5, 1.5)" opacity="0.9">
+      <path d="M-18,-20 L-12,-20 L-12,-8 L8,20 L14,20 L14,16 L-8,-16 L-8,-20 L-18,-20 Z" fill="#ff8c00"/>
+      <path d="M-18,20 L-12,20 L-12,8 L8,-20 L14,-20 L14,-16 L-8,16 L-8,20 L-18,20 Z" fill="#ff8c00"/>
+    </g>
+    
+    <!-- Layer 2 -->
+    <g transform="translate(1, 1)" opacity="0.95">
+      <path d="M-18,-20 L-12,-20 L-12,-8 L8,20 L14,20 L14,16 L-8,-16 L-8,-20 L-18,-20 Z" fill="#ff9500"/>
+      <path d="M-18,20 L-12,20 L-12,8 L8,-20 L14,-20 L14,-16 L-8,16 L-8,20 L-18,20 Z" fill="#ff9500"/>
+    </g>
+    
+    <!-- Layer 1 -->
+    <g transform="translate(0.5, 0.5)">
+      <path d="M-18,-20 L-12,-20 L-12,-8 L8,20 L14,20 L14,16 L-8,-16 L-8,-20 L-18,-20 Z" fill="#ffb347"/>
+      <path d="M-18,20 L-12,20 L-12,8 L8,-20 L14,-20 L14,-16 L-8,16 L-8,20 L-18,20 Z" fill="#ffb347"/>
+    </g>
+    
+    <!-- Top layer (front) - brightest with gradient -->
+    <g filter="url(#dropShadow)">
+      <path d="M-18,-20 L-12,-20 L-12,-8 L8,20 L14,20 L14,16 L-8,-16 L-8,-20 L-18,-20 Z" fill="url(#metallicGradient)"/>
+      <path d="M-18,20 L-12,20 L-12,8 L8,-20 L14,-20 L14,-16 L-8,16 L-8,20 L-18,20 Z" fill="url(#metallicGradient)"/>
+    </g>
+    
+    <!-- Highlight edges for 3D effect -->
+    <g opacity="0.8">
+      <line x1="-18" y1="-20" x2="-12" y2="-20" stroke="#ffd700" stroke-width="1"/>
+      <line x1="-18" y1="-20" x2="-18" y2="20" stroke="#ffd700" stroke-width="1"/>
+      <line x1="14" y1="-20" x2="14" y2="20" stroke="#ffd700" stroke-width="1"/>
+      <line x1="8" y1="20" x2="14" y2="20" stroke="#ffd700" stroke-width="1"/>
+    </g>
+    
+    <!-- Blue accent highlights -->
+    <g opacity="0.6">
+      <line x1="-12" y1="-16" x2="-8" y2="-16" stroke="url(#blueAccent)" stroke-width="1.5"/>
+      <line x1="8" y1="16" x2="12" y2="16" stroke="url(#blueAccent)" stroke-width="1.5"/>
+    </g>
+    
+    <!-- Corner accent dots -->
+    <circle cx="-20" cy="-22" r="1.5" fill="#00d4ff" opacity="0.8"/>
+    <circle cx="16" cy="-22" r="1.5" fill="#ffd700" opacity="0.8"/>
+    <circle cx="16" cy="22" r="1.5" fill="#00d4ff" opacity="0.8"/>
+    <circle cx="-20" cy="22" r="1.5" fill="#ffd700" opacity="0.8"/>
+    
+  </g>
+  
+</svg>
