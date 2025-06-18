@@ -85,7 +85,7 @@
   }
 }
 
-@layer base {
+/* @layer base {
   * {
     @apply border-border;
   }
@@ -93,23 +93,24 @@
   body {
     @apply bg-crypto-dark text-white font-sans antialiased;
   }
-}
+} */
 
 @layer components {
-  .glass-effect {
-    @apply bg-white/10 backdrop-blur-md border border-white/20;
-  }
-
   .glass-card {
-    @apply bg-crypto-card-dark/80 backdrop-blur-md border border-white/10 rounded-xl;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 32px 0 rgba(0, 0, 0, 0.12);
   }
 
   .crypto-button {
-    @apply bg-crypto-gradient hover:shadow-lg hover:shadow-crypto-blue/25 transition-all duration-300;
+    @apply bg-crypto-gradient hover:shadow-lg transition-all duration-300;
   }
 
   .text-gradient {
-    @apply bg-gradient-to-r from-crypto-blue to-crypto-green bg-clip-text text-transparent;
+    @apply bg-gradient-to-r bg-clip-text text-transparent;
   }
 }
 

@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { DollarSign, Users, BarChart, Shield } from 'lucide-react';
 
@@ -48,37 +47,37 @@ const Stats = () => {
       value: counters.users.toLocaleString(),
       suffix: '+',
       label: 'Active Investors',
-      color: 'crypto-blue'
+      color: 'Emerald Green'
     },
     {
       icon: DollarSign,
       value: `$${(counters.volume / 1000000000).toFixed(1)}B`,
       suffix: '+',
       label: 'Assets Under Management',
-      color: 'crypto-green'
+      color: 'orange'
     },
     {
       icon: BarChart,
       value: counters.countries.toString(),
       suffix: '+',
       label: 'Countries',
-      color: 'crypto-gold'
+      color: 'dark-blue'
     },
     {
       icon: Shield,
       value: counters.growth.toFixed(1),
       suffix: '%',
       label: 'Avg Annual Growth',
-      color: 'crypto-blue'
+      color: 'orange'
     }
   ];
 
   return (
-    <section className="py-20 bg-crypto-card-dark/50">
+    <section className="py-20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-            Trusted by <span className="text-gradient">Millions</span>
+          <h2 className="text-4xl md:text-5xl font-bold font-inter mb-6 text-white">
+            Trusted by <span className="bg-[#3B82F6] bg-clip-text text-transparent">Millions</span>
           </h2>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
             Join the fastest-growing crypto investment platform with proven results
@@ -93,9 +92,9 @@ const Stats = () => {
               className="text-center group"
               style={{ animationDelay: `${index * 200}ms` }}
             >
-              <div className="glass-card p-8 hover:scale-105 transition-all duration-300">
-                <div className={`w-16 h-16 bg-${stat.color}/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:animate-pulse-glow`}>
-                  <stat.icon className={`w-8 h-8 text-${stat.color}`} />
+              <div className="glass-card p-8 hover:scale-105 transition-all duration-300 rounded-xl">
+                <div className={`w-16 h-16 ${stat.color === 'orange' ? 'bg-orange/20' : 'bg-dark-blue/20'} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:animate-pulse-glow`}>
+                  <stat.icon className={`w-8 h-8 ${stat.color === 'orange' ? 'text-orange' : 'text-dark-blue'}`} />
                 </div>
 
                 <div className="text-3xl md:text-4xl font-bold text-white mb-2">

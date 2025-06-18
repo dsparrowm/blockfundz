@@ -1,4 +1,3 @@
-
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle } from 'lucide-react';
@@ -17,7 +16,7 @@ const Pricing = () => {
         'Mobile app access'
       ],
       popular: false,
-      color: 'crypto-blue'
+      color: 'dark-blue'
     },
     {
       name: 'Growth',
@@ -33,7 +32,7 @@ const Pricing = () => {
         'Custom alerts'
       ],
       popular: true,
-      color: 'crypto-green'
+      color: 'orange'
     },
     {
       name: 'Pro',
@@ -50,7 +49,7 @@ const Pricing = () => {
         'API access'
       ],
       popular: false,
-      color: 'crypto-gold'
+      color: 'dark-blue'
     },
     {
       name: 'Enterprise',
@@ -66,16 +65,16 @@ const Pricing = () => {
         'SLA guarantees'
       ],
       popular: false,
-      color: 'crypto-blue'
+      color: 'orange'
     }
   ];
 
   return (
-    <section id="pricing" className="py-20 bg-gradient-to-b from-crypto-dark to-crypto-dark-secondary">
+    <section id="pricing" className="py-20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-            Choose Your <span className="text-gradient">Investment Plan</span>
+          <h2 className="text-4xl md:text-5xl font-bold font-inter mb-6 text-white">
+            Choose Your <span className="bg-gradient-to-r from-dark-blue to-orange bg-clip-text text-transparent">Investment Plan</span>
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
             Select the perfect plan for your investment goals. All plans include our core features
@@ -85,10 +84,10 @@ const Pricing = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {pricingPlans.map((plan, index) => (
-            <Card key={plan.name} className={`glass-card border-white/10 hover:scale-105 transition-all duration-300 relative ${plan.popular ? 'ring-2 ring-crypto-green' : ''}`}>
+            <Card key={plan.name} className={`glass-card border-white/10 hover:scale-105 transition-all duration-300 relative ${plan.popular ? 'ring-2 ring-orange' : ''}`}>
               {plan.popular && (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-crypto-green text-white px-4 py-1 rounded-full text-sm font-semibold">
+                  <span className="bg-orange text-white px-4 py-1 rounded-full text-sm font-semibold">
                     Most Popular
                   </span>
                 </div>
@@ -107,13 +106,13 @@ const Pricing = () => {
                 <ul className="space-y-3 mb-6">
                   {plan.features.map((feature, idx) => (
                     <li key={idx} className="flex items-center space-x-3">
-                      <CheckCircle className="w-5 h-5 text-crypto-green flex-shrink-0" />
+                      <CheckCircle className={`w-5 h-5 ${plan.color === 'orange' ? 'text-orange' : 'text-dark-blue'} flex-shrink-0`} />
                       <span className="text-gray-300">{feature}</span>
                     </li>
                   ))}
                 </ul>
 
-                <Button className={`w-full ${plan.popular ? 'crypto-button' : 'border border-crypto-blue text-crypto-blue hover:bg-crypto-blue/10'} font-semibold`}>
+                <Button className={`w-full ${plan.popular ? 'bg-orange text-white hover:bg-orange-dark' : 'border border-dark-blue text-dark-blue hover:bg-dark-blue/10'} font-semibold`}>
                   {plan.price === 'Custom' ? 'Contact Sales' : 'Get Started'}
                 </Button>
               </CardContent>

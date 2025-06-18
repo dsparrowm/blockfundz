@@ -4,19 +4,11 @@ import { TrendingUp, Shield, Users } from 'lucide-react';
 const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 sm:pt-0">
-      {/* The pt-24 ensures space for the header on mobile. Adjust as needed. */}
-      <div className="absolute inset-0 bg-gradient-to-br from-crypto-dark via-crypto-dark-secondary to-crypto-card-dark">
-        <div className="absolute inset-0 bg-gradient-to-r from-crypto-blue/5 via-transparent to-crypto-green/5"></div>
-        <div className="absolute top-20 left-10 w-2 h-2 bg-crypto-blue rounded-full animate-float"></div>
-        <div className="absolute top-40 right-20 w-3 h-3 bg-crypto-green rounded-full animate-float animation-delay-200"></div>
-        <div className="absolute bottom-40 left-20 w-2 h-2 bg-crypto-gold rounded-full animate-float animation-delay-400"></div>
-      </div>
-
       <div className="relative z-10 container mx-auto px-4 text-center">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-slide-up">
+          <h1 className="text-5xl md:text-7xl font-extrabold font-inter mb-6 animate-slide-up">
             Grow Your Wealth with{' '}
-            <span className="text-gradient">Smart Crypto Investing</span>
+            <span className="bg-gradient-to-r from-[#1E3A8A] to-orange-500 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">Smart Crypto Investing</span>
           </h1>
 
           <p className="text-xl md:text-2xl text-gray-300 mb-8 animate-slide-up animation-delay-200">
@@ -26,12 +18,12 @@ const Hero = () => {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12 animate-slide-up animation-delay-400">
             <a href="/register">
-              <Button className="crypto-button text-white px-8 py-4 text-lg font-semibold rounded-lg hover:scale-105 transition-transform duration-300">
+              <Button className="bg-orange-500 text-white px-8 py-4 text-lg font-semibold rounded-lg hover:bg-orange-dark hover:scale-105 transition-transform duration-300">
                 Start Investing Now
               </Button>
             </a>
             <a href="#how-it-works">
-              <Button variant="outline" className="border-crypto-blue text-white bg-transparent hover:bg-crypto-blue/10 px-8 hover:text-white py-4 text-lg font-semibold rounded-lg">
+              <Button variant="outline" className="border-gray-400 text-white bg-transparent hover:bg-dark-blue/10 px-8 hover:text-white py-4 text-lg font-semibold rounded-lg">
                 See How It Works
               </Button>
             </a>
@@ -39,8 +31,8 @@ const Hero = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 animate-slide-up animation-delay-600">
             <div className="flex items-center justify-center space-x-3">
-              <div className="w-12 h-12 bg-crypto-blue/20 rounded-full flex items-center justify-center">
-                <Users className="w-6 h-6 text-crypto-blue" />
+              <div className="glass-card w-12 h-12 rounded-full flex items-center justify-center">
+                <Users className="w-6 h-6 text-[#0077b6]" />
               </div>
               <div className="text-left">
                 <div className="text-2xl font-bold text-white">2,100,000+</div>
@@ -49,8 +41,8 @@ const Hero = () => {
             </div>
 
             <div className="flex items-center justify-center space-x-3">
-              <div className="w-12 h-12 bg-crypto-green/20 rounded-full flex items-center justify-center">
-                <TrendingUp className="w-6 h-6 text-crypto-green" />
+              <div className="glass-card w-12 h-12 rounded-full flex items-center justify-center">
+                <TrendingUp className="w-6 h-6 text-[#0077b6]" />
               </div>
               <div className="text-left">
                 <div className="text-2xl font-bold text-white">24.5%</div>
@@ -59,8 +51,8 @@ const Hero = () => {
             </div>
 
             <div className="flex items-center justify-center space-x-3">
-              <div className="w-12 h-12 bg-crypto-gold/20 rounded-full flex items-center justify-center">
-                <Shield className="w-6 h-6 text-crypto-gold" />
+              <div className="glass-card w-12 h-12 rounded-full flex items-center justify-center">
+                <Shield className="w-6 h-6 text-[#0077b6]" />
               </div>
               <div className="text-left">
                 <div className="text-2xl font-bold text-white">$2.5B+</div>
@@ -72,8 +64,8 @@ const Hero = () => {
       </div>
 
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 border-2 border-crypto-blue rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-crypto-blue rounded-full mt-2 animate-pulse"></div>
+        <div className="w-6 h-10 border-2 border-dark-blue rounded-full flex justify-center">
+          <div className="w-1 h-3 bg-[#0077b6] rounded-full mt-2 animate-pulse"></div>
         </div>
       </div>
     </section>

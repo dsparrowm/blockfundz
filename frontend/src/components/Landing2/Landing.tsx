@@ -11,7 +11,7 @@ import Footer from './Footer';
 
 const Landing = () => {
     return (
-        <div className="min-h-screen bg-crypto-dark text-white">
+        <div className="min-h-screen bg-black text-white font-inter font-normal">
             <Header />
             <Hero />
             <div className="container mx-auto px-4 py-8">

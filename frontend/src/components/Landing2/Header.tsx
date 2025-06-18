@@ -18,52 +18,40 @@ const Header = () => {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 glass-effect">
+    <header className="fixed top-0 left-0 right-0 z-50 glass-card bg-[#1b263b] backdrop-blur-md bg-opacity-80">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             {crypto_logo ? (
-              <img src={crypto_logo} alt="NexGen Logo" className="w-6 h-6 " />
+              <img src={crypto_logo} alt="NexGen Logo" className="w-6 h-6" />
             ) : (
-              <Bitcoin className="w-6 h-6 text-white" />
+              <Bitcoin className="w-6 h-6 text-orange" />
             )}
-            <span className="text-xl font-bold text-gradient">NexGen</span>
+            <span className="text-xl font-bold text-orange">NexGen</span>
           </div>
-          {/* <div className="flex items-center justify-center space-x-3 mb-5 cursor-pointer" onClick={() => navigate('/')}>
-            <div className="w-8 h-8 bg-crypto-gradient rounded-lg flex items-center justify-center">
-              {logo ? (
-                <img src={logo} alt="NexGen Logo" className="w-6 h-6 " />
-              ) : (
-                <Bitcoin className="w-6 h-6 text-white" />
-              )}
-            </div>
-            <span className="text-3xl text-white font-bold">
-              Nex<span className="text-crypto-blue">Gen</span>
-            </span>
-          </div> */}
 
           <nav className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
               <a
                 key={item.name}
                 href={item.href}
-                className="text-gray-300 hover:text-crypto-blue transition-colors duration-300 relative group"
+                className="text-gray-300 hover:text-orange transition-colors duration-300 relative group"
               >
                 {item.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-crypto-blue transition-all duration-300 group-hover:w-full"></span>
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-orange transition-all duration-300 group-hover:w-full"></span>
               </a>
             ))}
           </nav>
 
           <div className="hidden md:flex items-center space-x-4">
             <a href="/login">
-              <Button variant="ghost" className="text-gray-300 hover:text-white hover:bg-white/10 flex items-center">
+              <Button variant="ghost" className="text-gray-300 hover:text-white hover:bg-dark-blue/80 flex items-center">
                 <User className="w-4 h-4 mr-2" />
                 Login
               </Button>
             </a>
             <Button
-              className="crypto-button text-white px-6 py-2 rounded-lg font-semibold"
+              className="bg-[#3B82F6] text-white px-6 py-2 rounded-lg font-semibold hover:bg-[#1E3A8A]"
               onClick={() => navigate("/signup")}
             >
               Start Investing
@@ -81,13 +69,13 @@ const Header = () => {
         </div>
 
         {isMenuOpen && (
-          <div className="md:hidden mt-4 glass-card p-4 rounded-lg">
+          <div className="md:hidden mt-4 glass-card bg-[#495057] backdrop-blur-md bg-opacity-80 p-4 rounded-lg">
             <nav className="flex flex-col space-y-4">
               {navItems.map((item) => (
                 <a
                   key={item.name}
                   href={item.href}
-                  className="text-gray-300 hover:text-crypto-blue transition-colors duration-300 py-2"
+                  className="text-gray-300 hover:text-orange transition-colors duration-300 py-2"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.name}
@@ -101,7 +89,7 @@ const Header = () => {
                   </Button>
                 </a>
                 <Button
-                  className="crypto-button text-white rounded-lg font-semibold"
+                  className="bg-orange text-white rounded-lg font-semibold hover:bg-orange-dark"
                   onClick={() => {
                     setIsMenuOpen(false);
                     navigate("/signup");

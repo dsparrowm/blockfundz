@@ -120,7 +120,7 @@ const Register = () => {
   };
 
   return (
-    <main className="relative text-white flex justify-center items-center min-h-screen p-4 flex-col bg-crypto-dark">
+    <main className="relative flex justify-center items-center min-h-screen p-4 flex-col bg-black">
       {showToast && globalError && (
         <Toast
           type="error"
@@ -141,11 +141,11 @@ const Register = () => {
           <Bitcoin className="w-6 h-6 text-white" />
         )}
         <span className="text-3xl text-white font-bold">
-          Nex<span className="text-crypto-blue">Gen</span>
+          Nex<span className="text-[#3B82F6]">Gen</span>
         </span>
       </div>
 
-      <div className="relative backdrop-blur-lg bg-crypto-card-dark/80 p-8 rounded-2xl shadow-xl border border-white/10 w-full max-w-md">
+      <div className="relative backdrop-blur-lg bg-dark-blue/80 p-8 rounded-2xl shadow-xl border border-white/10 w-full max-w-md">
         <form onSubmit={handleSubmit} className="space-y-6" disabled={loading}>
           <div className="space-y-8">
             <div className="text-center">
@@ -279,7 +279,8 @@ const Register = () => {
           <button
             type="submit"
             disabled={loading}
-            className="crypto-button text-white w-full py-3 rounded-lg font-semibold mt-4"
+            className="bg-orange-500 hover:bg-orange-600
+             text-white w-full py-3 rounded-lg font-semibold mt-4"
           >
             {loading ? <Spinner /> : 'Sign Up'}
           </button>
@@ -288,7 +289,7 @@ const Register = () => {
             Already have an account?{' '}
             <Link
               to="/login"
-              className="hover:underline text-crypto-blue"
+              className="hover:underline text-orange-500 hover:text-orange-600 transition-colors duration-200"
               aria-disabled={loading}
             >
               Sign in

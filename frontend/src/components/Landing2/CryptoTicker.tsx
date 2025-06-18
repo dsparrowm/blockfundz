@@ -16,6 +16,7 @@ const CryptoTicker = () => {
     { symbol: 'ADA', name: 'Cardano', price: 0.4523, change: 0.0234, changePercent: 5.46 },
     { symbol: 'SOL', name: 'Solana', price: 89.45, change: 3.21, changePercent: 3.72 },
     { symbol: 'DOT', name: 'Polkadot', price: 7.23, change: -0.15, changePercent: -2.03 },
+    { symbol: 'XRP', name: 'Ripple', price: 0.5678, change: 0.0123, changePercent: 2.21 }
   ]);
 
   useEffect(() => {
@@ -32,12 +33,12 @@ const CryptoTicker = () => {
   }, []);
 
   return (
-    <div className="glass-card p-6 mb-8">
+    <div className="glass-card p-6 mb-8 bg-gray-800 rounded-xl">
       <h3 className="text-xl font-semibold mb-4 text-white">Live Market</h3>
       <div className="overflow-x-auto">
         <div className="flex space-x-6 min-w-max">
           {cryptoData.map((crypto) => (
-            <div key={crypto.symbol} className="flex items-center space-x-3 p-4 glass-effect rounded-lg min-w-48">
+            <div key={crypto.symbol} className="flex bg-gray-700 items-center space-x-3 p-4 glass-card rounded-lg min-w-48">
               <div className="flex-1">
                 <div className="flex items-center space-x-2">
                   <span className="font-bold text-white">{crypto.symbol}</span>
@@ -46,11 +47,10 @@ const CryptoTicker = () => {
                 <div className="text-lg font-semibold text-white">
                   ${crypto.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </div>
-                <div className={`flex items-center space-x-1 text-sm ${crypto.changePercent >= 0 ? 'text-crypto-green' : 'text-crypto-red'
-                  }`}>
+                <div className={`flex items-center space-x-1 text-sm ${crypto.changePercent >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                   {crypto.changePercent >= 0 ?
-                    <TrendingUp className="w-4 h-4" /> :
-                    <TrendingDown className="w-4 h-4" />
+                    <TrendingUp className="w-4 h-4 text-green-500" /> :
+                    <TrendingDown className="w-4 h-4 text-red-500" />
                   }
                   <span>{crypto.changePercent.toFixed(2)}%</span>
                 </div>

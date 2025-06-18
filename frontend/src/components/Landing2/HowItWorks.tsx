@@ -1,4 +1,3 @@
-
 import { User, Target, Wallet, TrendingUp } from 'lucide-react';
 
 const HowItWorks = () => {
@@ -30,11 +29,11 @@ const HowItWorks = () => {
   ];
 
   return (
-    <section id="how-it-works" className="py-20 bg-crypto-dark-secondary/50">
+    <section id="how-it-works" className="py-20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-            How It <span className="text-gradient">Works</span>
+          <h2 className="text-4xl md:text-5xl font-bold font-inter mb-6 text-white">
+            <span className="bg-gradient-to-r from-[#3B82F6] to-orange bg-clip-text text-transparent">How It Works</span>
           </h2>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
             Start your crypto investment journey in just four simple steps.
@@ -46,14 +45,14 @@ const HowItWorks = () => {
           {howItWorksSteps.map((step, index) => (
             <div key={step.step} className="text-center">
               <div className="relative mb-8">
-                <div className="w-20 h-20 bg-crypto-gradient rounded-full flex items-center justify-center mx-auto mb-4 relative z-10">
-                  <step.icon className="w-8 h-8 text-white" />
+                <div className="w-20 h-20 bg-dark-blue rounded-full flex items-center justify-center mx-auto mb-4 relative z-10">
+                  <step.icon className="w-8 h-8 text-white " />
                 </div>
-                <div className="absolute top-10 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-crypto-blue/20 rounded-full flex items-center justify-center">
+                <div className="absolute top-10 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-dark-blue/20 rounded-full flex items-center justify-center">
                   <span className="text-white font-bold text-sm">{step.step}</span>
                 </div>
                 {index < howItWorksSteps.length - 1 && (
-                  <div className="hidden lg:block absolute top-10 left-full w-full h-0.5 bg-gradient-to-r from-crypto-blue to-transparent"></div>
+                  <div className="hidden lg:block absolute top-10 left-full w-full h-0.5 bg-[#3B82F6]"></div>
                 )}
               </div>
 

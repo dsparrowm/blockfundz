@@ -173,7 +173,7 @@ const Login = () => {
   };
 
   return (
-    <main className="relative text-white flex justify-center items-center min-h-screen p-4 flex-col bg-crypto-dark">
+    <main className="relative text-white flex justify-center items-center min-h-screen p-4 flex-col bg-black">
       {/* Toast Container */}
       {showToast && toastMessage && (
         <Toast
@@ -236,12 +236,12 @@ const Login = () => {
           <Bitcoin className="w-6 h-6 text-white" />
         )}
         <span className="text-3xl text-white font-bold">
-          Nex<span className="text-crypto-blue">Gen</span>
+          Nex<span className="text-[#3B82F6]">Gen</span>
         </span>
       </div>
 
       {/* Login Form */}
-      <div className="relative backdrop-blur-lg bg-crypto-card-dark/80 p-8 rounded-2xl shadow-xl border border-white/10 w-full max-w-md">
+      <div className="relative backdrop-blur-lg bg-dark-blue/80 p-8 rounded-2xl shadow-xl border border-white/10 w-full max-w-md">
         <form
           onSubmit={handleSubmit}
           className="space-y-6"
@@ -322,7 +322,7 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className="crypto-button text-white w-full py-3 rounded-lg font-semibold mt-4"
+            className="bg-orange-500 text-white w-full py-3 rounded-lg font-semibold mt-4"
           >
             {loading ? <Spinner /> : "Sign In"}
           </button>
@@ -332,7 +332,7 @@ const Login = () => {
             Don't have an account?{' '}
             <Link
               to="/signup"
-              className="hover:underline text-blue-400 hover:text-blue-500 transition-colors duration-200"
+              className="hover:underline text-orange-500 hover:text-blue-500 transition-colors duration-200"
               aria-disabled={loading}
             >
               Sign up

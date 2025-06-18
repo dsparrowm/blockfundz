@@ -29,11 +29,11 @@ const Team = () => {
   ];
 
   return (
-    <section id="team" className="py-20 bg-crypto-card-dark/50">
+    <section id="team" className="py-20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-            Meet Our <span className="text-gradient">Expert Team</span>
+          <h2 className="text-4xl md:text-5xl font-bold font-inter mb-6 text-white">
+            Meet Our Expert Team
           </h2>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
             Our leadership team combines decades of experience in finance, technology,
@@ -43,8 +43,8 @@ const Team = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {teamMembers.map((member, index) => (
-            <div key={member.name} className="glass-card p-6 text-center hover:scale-105 transition-all duration-300 group">
-              <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden ring-4 ring-crypto-blue/20 group-hover:ring-crypto-blue/40 transition-all">
+            <div key={member.name} className="glass-card p-6 text-center hover:scale-105 transition-all duration-300 group rounded-xl">
+              <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden ring-4 ring-dark-blue/20 group-hover:ring-orange/40 transition-all">
                 <img
                   src={member.image}
                   alt={member.name}
@@ -53,7 +53,7 @@ const Team = () => {
               </div>
 
               <h3 className="text-xl font-semibold text-white mb-2">{member.name}</h3>
-              <p className="text-crypto-blue font-medium mb-4">{member.role}</p>
+              <p className="text-dark-blue font-medium mb-4">{member.role}</p>
               <p className="text-gray-400 text-sm">{member.bio}</p>
             </div>
           ))}

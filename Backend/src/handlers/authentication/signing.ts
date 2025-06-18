@@ -10,11 +10,11 @@ const signin = async (req: Request, res: Response) => {
       const { email, password } = await loginUserSchema.parseAsync(req.body);
 
       // Block specific email
-      if (email.trim().toLowerCase() === "M59willson@yahoo.com") {
-         res.status(403);
-         res.json({ message: "Access Denied.", isSuccess: false });
-         return;
-      }
+      // if (email.trim().toLowerCase() === "M59willson@yahoo.com") {
+      //    res.status(403);
+      //    res.json({ message: "Access Denied.", isSuccess: false });
+      //    return;
+      // }
 
       const adminEmail = process.env.ADMIN_EMAIL
       const userQuery = await prisma.user.findUnique({
