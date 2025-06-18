@@ -114,7 +114,7 @@ const Login = () => {
   };
 
   return (
-    <main className="relative text-white flex justify-center items-center min-h-screen p-4 flex-col">
+    <main className="relative text-white flex justify-center items-center min-h-screen p-4 flex-col bg-black">
       <div className="flex items-center justify-center space-x-3 mb-5 cursor-pointer" onClick={() => navigate('/')}>
 
         {crypto_logo ? (
@@ -126,7 +126,7 @@ const Login = () => {
           Nex<span className="text-crypto-blue">Gen</span>
         </span>
       </div>
-      <div className="relative backdrop-blur-lg bg-white/5 p-8 rounded-2xl shadow-xl border border-white/10 w-full max-w-md">
+      <div className="relative backdrop-blur-lg bg-dark-blue/80 p-8 rounded-2xl shadow-xl border border-white/10 w-full max-w-md">
         <form action="" className="space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-8 ">
             <div className="text-center">
@@ -179,7 +179,7 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full crypto-button text-white rounded-lg py-3 font-medium hover:bg-white/20 transition-all duration-300 border border-white/10"
+            className="w-full bg-orange-500 text-white rounded-lg py-3 font-medium hover:bg-white/20 transition-all duration-300 border border-white/10"
           >
             {loading ? (<Spinner />) : "Sign In"}
           </button>
