@@ -153,8 +153,8 @@ const Overview = () => {
     <>
       <div className="px-8 flex justify-between items-center">
         <div className="mb-4 text-white space-y-2 mt-4">
-          <p className="text-xl text-coral-black">Welcome</p>
-          <p className="text-[40px] font-bolder text-coral-black">{user?.name}</p>
+          <p className="text-xl text-black">Welcome</p>
+          <p className="text-[40px] font-bolder text-black">{user?.name}</p>
           <p className="text-[17px] text-gray-600">Here's a summary of your account.</p>
         </div>
         <div className="flex space-x-4">

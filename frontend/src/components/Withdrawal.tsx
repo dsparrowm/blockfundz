@@ -86,16 +86,16 @@ const Withdraw = () => {
     setLoading(true);
     setError('');
     setSuccess('');
-    if (!hasPin) {
-      setError('You must set a withdrawal pin before making withdrawals.');
-      setLoading(false);
-      return;
-    }
-    if (!/^\d{4}$/.test(pin)) {
-      setError('Invalid withdrawal pin.');
-      setLoading(false);
-      return;
-    }
+    // if (!hasPin) {
+    //   setError('You must set a withdrawal pin before making withdrawals.');
+    //   setLoading(false);
+    //   return;
+    // }
+    // if (!/^\d{4}$/.test(pin)) {
+    //   setError('Invalid withdrawal pin.');
+    //   setLoading(false);
+    //   return;
+    // }
     try {
       const response = await axiosInstance.post(`/api/withdrawals`, {
         userId: localStorage.getItem('userId'),
@@ -213,7 +213,8 @@ const Withdraw = () => {
               </SelectContent>
             </Select>
           </div>
-          <div>
+
+          {/* <div>
             <label className="block text-sm font-medium">Withdrawal Pin</label>
             <Input
               type="password"
@@ -225,8 +226,8 @@ const Withdraw = () => {
               required
               disabled={!hasPin}
             />
-          </div>
-          <Button type="submit" className="w-full bg-green-500 hover:bg-orange-700" disabled={loading || !hasPin}>
+          </div> */}
+          <Button type="submit" className="w-full bg-green-500 hover:bg-green-600">
             {loading ? <Spinner /> : 'Submit'}
           </Button>
         </form>
