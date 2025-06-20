@@ -66,7 +66,7 @@ const Withdraw = () => {
     }
     setCreatePinLoading(true);
     try {
-      await axiosInstance.post(`/api/user/set-withdrawal-pin`, { pin: createPin }, {
+      await axiosInstance.post(`/api/withdrawals/set-withdrawal-pin`, { pin: createPin }, {
         headers: { Authorization: "Bearer " + localStorage.getItem("token") }
       });
       setHasPin(true);
@@ -135,7 +135,7 @@ const Withdraw = () => {
           onClose={() => setShowToast(false)}
         />
       )}
-      <Dialog open={showPinDialog} onOpenChange={setShowPinDialog}>
+      {/* <Dialog open={showPinDialog} onOpenChange={setShowPinDialog}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Create Withdrawal Pin</DialogTitle>
@@ -158,7 +158,7 @@ const Withdraw = () => {
             </Button>
           </form>
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
       <CardHeader>
         <CardTitle className="text-xl font-semibold">Withdraw</CardTitle>
       </CardHeader>
@@ -230,11 +230,11 @@ const Withdraw = () => {
             {loading ? <Spinner /> : 'Submit'}
           </Button>
         </form>
-        {!hasPin && (
+        {/* {!hasPin && (
           <p className="text-red-500 mt-4 text-center">
             You must set a withdrawal pin before making withdrawals.
           </p>
-        )}
+        )} */}
       </CardContent>
     </Card>
   );

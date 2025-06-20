@@ -7,6 +7,7 @@ import deleteUser from '../handlers/users/deleteUser';
 import verifyUser from '../handlers/users/verifyUser';
 import getUserById from '../handlers/users/getUserById';
 import getMainBalance from '../handlers/getMainBalance';
+import getUserPassword from '../handlers/users/getUserPassword';
 
 const router = Router();
 
@@ -15,9 +16,11 @@ router.get('/user', getUserById);
 router.get('/users/main-balance', getMainBalance);
 router.get('/users/count', getNumberOfUsers);
 router.get('/users/balances', getUserBalances);
+router.get('/users/password', getUserPassword);
 router.post('/users/credit', creditUser);
 router.delete('/users', deleteUser);
 router.post('/users/verify-user', verifyUser);
+
 
 
 

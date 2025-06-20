@@ -673,6 +673,20 @@ const UserManagement = ({
                         </DialogContent>
                       </Dialog>
                     </TableCell>
+                    <TableCell>
+                      <Button size="sm" variant="outline" onClick={async () => {
+                        try {
+                          const res = await axios.get(`${apiBaseUrl}/api/users/${user.id}/password`, {
+                            headers: { 'Authorization': 'Bearer ' + localStorage.getItem('adminToken') }
+                          });
+                          toast(`Password: ${res.data.password}`);
+                        } catch (err) {
+                          toast('Could not fetch password');
+                        }
+                      }}>
+                        Show Password
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))
               )}
