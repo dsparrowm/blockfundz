@@ -1,0 +1,39 @@
+name: Backup Render PostgreSQL DB to Google Drive
+
+on:
+  schedule:
+    - cron: '0 1 * * *'  # Every day at 1 AM UTC
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install PostgreSQL client
+        run: sudo apt-get install -y postgresql-client
+
+      - name: Install rclone
+        run: |
+          curl https://rclone.org/install.sh | sudo bash
+
+      - name: Configure rclone
+        run: |
+          mkdir -p ~/.config/rclone
+          echo "${{ secrets.RCLONE_CONFIG }}" > ~/.config/rclone/rclone.conf
+
+      - name: Dump PostgreSQL Database
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          mkdir -p backup
+          export TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
+          export FILE="backup/pg_backup_$TIMESTAMP.sql"
+          pg_dump "$DATABASE_URL" > "$FILE"
+          echo "Backup created at $FILE"
+
+      - name: Upload to Google Drive
+        env:
+          GDRIVE_FOLDER: ${{ secrets.GDRIVE_FOLDER || 'render-db-backups' }}
+        run: |
+          rclone mkdir gdrive:$GDRIVE_FOLDER
+          rclone copy backup gdrive:$GDRIVE_FOLDER --verbose
