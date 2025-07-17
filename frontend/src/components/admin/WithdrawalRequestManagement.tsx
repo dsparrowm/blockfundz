@@ -13,6 +13,8 @@ interface WithdrawalRequest {
     email: string;
   };
   amount: number;
+  asset: string;
+  network: string;
   address: string;
   status: string;
   createdAt: string;
@@ -99,9 +101,10 @@ const WithdrawalRequestManagement = () => {
       );
 
       setSuccessMessage(`Withdrawal request ${id} approved successfully`);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error approving withdrawal request:', error);
-      setErrorMessage('Failed to approve withdrawal request. Please try again.');
+      const errorMessage = error.response?.data?.message || 'Failed to approve withdrawal request. Please try again.';
+      setErrorMessage(errorMessage);
     } finally {
       setActionLoading(null);
     }
@@ -129,9 +132,10 @@ const WithdrawalRequestManagement = () => {
       );
 
       setSuccessMessage(`Withdrawal request ${id} rejected successfully`);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error rejecting withdrawal request:', error);
-      setErrorMessage('Failed to reject withdrawal request. Please try again.');
+      const errorMessage = error.response?.data?.message || 'Failed to reject withdrawal request. Please try again.';
+      setErrorMessage(errorMessage);
     } finally {
       setActionLoading(null);
     }
@@ -143,9 +147,29 @@ const WithdrawalRequestManagement = () => {
         <TableCell>{request.id}</TableCell>
         <TableCell>{request.user.name}</TableCell>
         <TableCell>{request.user.email}</TableCell>
-        <TableCell>{request.amount}</TableCell>
-        <TableCell>{request.address}</TableCell>
-        <TableCell>{request.status}</TableCell>
+        <TableCell>${request.amount.toFixed(2)}</TableCell>
+        <TableCell>
+          <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+            {request.asset}
+          </span>
+        </TableCell>
+        <TableCell>{request.network}</TableCell>
+        <TableCell>
+          <span className="text-xs font-mono bg-gray-100 px-2 py-1 rounded">
+            {request.address ? `${request.address.substring(0, 10)}...` : 'N/A'}
+          </span>
+        </TableCell>
+        <TableCell>
+          <span className={`px-2 py-1 rounded-full text-xs font-medium
+            ${request.status === 'APPROVED'
+              ? 'bg-green-500/20 text-green-500'
+              : request.status === 'PENDING'
+                ? 'bg-yellow-500/20 text-yellow-500'
+                : 'bg-red-500/20 text-red-500'
+            }`}>
+            {request.status}
+          </span>
+        </TableCell>
         <TableCell>{new Date(request.createdAt).toLocaleString()}</TableCell>
         <TableCell>
           <div className="flex gap-2">
@@ -203,6 +227,8 @@ const WithdrawalRequestManagement = () => {
                 <TableCell>User Name</TableCell>
                 <TableCell>User Email</TableCell>
                 <TableCell>Amount</TableCell>
+                <TableCell>Asset</TableCell>
+                <TableCell>Network</TableCell>
                 <TableCell>Address</TableCell>
                 <TableCell>Status</TableCell>
                 <TableCell>Created At</TableCell>
@@ -212,7 +238,7 @@ const WithdrawalRequestManagement = () => {
             <TableBody>
               {withdrawalRequests.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={8} className='text-center'>No withdrawal requests found</TableCell>
+                  <TableCell colSpan={10} className='text-center'>No withdrawal requests found</TableCell>
                 </TableRow>
               ) : (
                 renderTableRows()
