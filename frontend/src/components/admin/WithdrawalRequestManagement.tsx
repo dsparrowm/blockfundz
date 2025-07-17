@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
 import { Table, TableHeader, TableRow, TableCell, TableBody } from "@/components/ui/table"; // Adjust the import paths as necessary
 import { Button } from "@/components/ui/button"; // Adjust the import paths as necessary
-import { Input } from "@/components/ui/input"; // Adjust the import paths as necessary
 import Spinner from '../spinners/Spinner';
 
 interface WithdrawalRequest {
@@ -26,6 +25,9 @@ const WithdrawalRequestManagement = () => {
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [actionLoading, setActionLoading] = useState<number | null>(null);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const itemsPerPage = 10;
 
   useEffect(() => {
@@ -48,6 +50,17 @@ const WithdrawalRequestManagement = () => {
     fetchWithdrawalRequests();
   }, []);
 
+  // Auto-hide messages after 5 seconds
+  useEffect(() => {
+    if (successMessage || errorMessage) {
+      const timer = setTimeout(() => {
+        setSuccessMessage('');
+        setErrorMessage('');
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [successMessage, errorMessage]);
+
   const filteredWithdrawalRequests = useMemo(() => {
     return withdrawalRequests.filter(request =>
       request.user.name.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -64,6 +77,66 @@ const WithdrawalRequestManagement = () => {
 
   const totalPages = Math.ceil(filteredWithdrawalRequests.length / itemsPerPage);
 
+  const handleApprove = async (id: number) => {
+    setActionLoading(id);
+    setErrorMessage('');
+    setSuccessMessage('');
+
+    try {
+      await axios.post(`${apiBaseUrl}/api/withdrawals/approve?id=${id}`, {}, {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
+        }
+      });
+
+      // Update the local state to reflect the change
+      setWithdrawalRequests(prev =>
+        prev.map(request =>
+          request.id === id
+            ? { ...request, status: 'APPROVED' }
+            : request
+        )
+      );
+
+      setSuccessMessage(`Withdrawal request ${id} approved successfully`);
+    } catch (error) {
+      console.error('Error approving withdrawal request:', error);
+      setErrorMessage('Failed to approve withdrawal request. Please try again.');
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handleReject = async (id: number) => {
+    setActionLoading(id);
+    setErrorMessage('');
+    setSuccessMessage('');
+
+    try {
+      await axios.post(`${apiBaseUrl}/api/withdrawals/reject?id=${id}`, {}, {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
+        }
+      });
+
+      // Update the local state to reflect the change
+      setWithdrawalRequests(prev =>
+        prev.map(request =>
+          request.id === id
+            ? { ...request, status: 'REJECTED' }
+            : request
+        )
+      );
+
+      setSuccessMessage(`Withdrawal request ${id} rejected successfully`);
+    } catch (error) {
+      console.error('Error rejecting withdrawal request:', error);
+      setErrorMessage('Failed to reject withdrawal request. Please try again.');
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
   const renderTableRows = () => {
     return paginatedWithdrawalRequests.map(request => (
       <TableRow key={request.id}>
@@ -76,8 +149,23 @@ const WithdrawalRequestManagement = () => {
         <TableCell>{new Date(request.createdAt).toLocaleString()}</TableCell>
         <TableCell>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" className='bg-green-500 text-white' onClick={() => handleApprove(request.id)}>Approve</Button>
-            <Button variant="destructive" size="sm" onClick={() => handleReject(request.id)}>Reject</Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className='bg-green-500 text-white hover:bg-green-600'
+              onClick={() => handleApprove(request.id)}
+              disabled={actionLoading === request.id || request.status !== 'PENDING'}
+            >
+              {actionLoading === request.id ? <Spinner /> : 'Approve'}
+            </Button>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => handleReject(request.id)}
+              disabled={actionLoading === request.id || request.status !== 'PENDING'}
+            >
+              {actionLoading === request.id ? <Spinner /> : 'Reject'}
+            </Button>
           </div>
         </TableCell>
       </TableRow>
@@ -86,6 +174,17 @@ const WithdrawalRequestManagement = () => {
 
   return (
     <div>
+      {successMessage && (
+        <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+          {successMessage}
+        </div>
+      )}
+      {errorMessage && (
+        <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+          {errorMessage}
+        </div>
+      )}
+
       <input
         type="text"
         placeholder="Search withdrawal requests..."
@@ -139,16 +238,6 @@ const WithdrawalRequestManagement = () => {
       )}
     </div>
   );
-
-  function handleApprove(id: number) {
-    // Implement the logic to approve the withdrawal request
-    console.log(`Approve request with ID: ${id}`);
-  }
-
-  function handleReject(id: number) {
-    // Implement the logic to reject the withdrawal request
-    console.log(`Reject request with ID: ${id}`);
-  }
 };
 
 export default WithdrawalRequestManagement;

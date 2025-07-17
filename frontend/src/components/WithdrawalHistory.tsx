@@ -162,7 +162,7 @@ const WithdrawalHistory = () => {
                   <TableCell>{withdrawal.network}</TableCell>
                   <TableCell>
                     <span className={`px-2 py-1 rounded-full text-xs font-medium
-                      ${withdrawal.status === 'COMPLETED'
+                      ${withdrawal.status === 'COMPLETED' || withdrawal.status === 'APPROVED'
                         ? 'bg-green-500/20 text-green-500'
                         : withdrawal.status === 'PENDING'
                           ? 'bg-yellow-500/20 text-yellow-500'

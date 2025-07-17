@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogClose } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button'; // Adjust the import paths as necessary
 import { Input } from '@/components/ui/input'; // Adjust the import paths as necessary
-import { Label } from '@/components/ui/label'; 
+import { Label } from '@/components/ui/label';
 
 interface AddInvestmentPlanDialogProps {
   onAddPlan: (plan: { plan: string; minimumAmount: number; maximumAmount: number; interestRate: number; totalReturns: number }) => void;
