@@ -1,17 +1,19 @@
 import { Router } from 'express';
-import transactions, { getUserTransactions } from '../handlers/transactions/getTransactions';
+import { getUserTransactions } from '../handlers/transactions/getTransactions';
 import getNumberOfTransactions from '../handlers/transactions/getNumberOfTransactions';
 import getAllTransactions from '../handlers/transactions/getAllTransactions';
 import createTransaction from '../handlers/transactions/createTransactions';
 import editTransaction from '../handlers/transactions/editTransactions';
+import authMiddleware from '../middleware/authMiddleware';
 
 const router = Router();
 
+// User-specific routes (require authentication)
+router.get('/users/transactions', authMiddleware, getUserTransactions);
 
-router.get('/users/transactions', transactions);
+// Admin routes (return all data)
 router.get('/transactions/count', getNumberOfTransactions);
-router.get('/transactions', getAllTransactions);
-router.get('/transactions', getUserTransactions);
+router.get('/transactions', getAllTransactions); // Admin only - gets all transactions
 router.post('/transactions', createTransaction);
 router.put('/transactions/:id', editTransaction);
 

@@ -82,13 +82,13 @@ const Overview = () => {
 
 
         const [mainBalRes, transRes, balanceRes] = await Promise.all([
-          axiosInstance.get(`/api/users/main-balance?userId=${userId}`, {
+          axiosInstance.get(`/api/users/main-balance`, {
             signal: controller.signal
           }),
-          axiosInstance.get(`/api/users/transactions?userId=${userId}`, {
+          axiosInstance.get(`/api/users/transactions`, {
             signal: controller.signal
           }),
-          axiosInstance.get(`/api/users/balances?userId=${userId}`, {
+          axiosInstance.get(`/api/users/balances`, {
             signal: controller.signal
           })
         ]);
