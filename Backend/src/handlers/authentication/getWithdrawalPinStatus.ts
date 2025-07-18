@@ -3,7 +3,11 @@ import prisma from '../../db';
 
 const getWithdrawalPinStatus = async (req: Request, res: Response) => {
     try {
-        const userId = req.user?.id || req.query.userId; // Adjust this line if you use JWT middleware
+        const userId = req.user?.id;
+
+        if (!userId) {
+            return res.status(401).json({ message: 'User not authenticated' });
+        }
 
         const user = await prisma.user.findUnique({
             where: { id: Number(userId) },

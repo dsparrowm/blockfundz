@@ -61,12 +61,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       },
     ],
     userNavMain: [
-      {
-        title: "Overview",
-        url: "#",
-        icon: SquareTerminal,
-        isActive: true,
-      },
+      // {
+      //   title: "Overview",
+      //   url: "#",
+      //   icon: SquareTerminal,
+      //   isActive: true,
+      // },
       {
         title: "Invest",
         url: "#",

@@ -48,6 +48,7 @@ model Transaction {
   planName    String?
   planId      Int?
   plan        InvestmentPlan? @relation(fields: [planId], references: [id], onDelete: SetNull)
+  lastInterestCalculation DateTime? @default(now())
 }
 
 model InvestmentPlan {

@@ -73,9 +73,10 @@ const Login = () => {
 
     try {
       const response = await axios.post(`${apiBaseUrl}/api/auth/admin/login`, formData)
+      console.log('Admin login response:', response.data) // Debug log
       localStorage.setItem("adminToken", response.data.token)
       toast("Login successful", { className: "text-[15px] px-4 py-2 bg-green" })
-      setAdminUser(response.data.user)
+      setAdminUser(response.data.userData || response.data.user)
       navigate('/admin/dashboard');
 
     } catch (error) {

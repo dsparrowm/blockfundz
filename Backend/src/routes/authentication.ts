@@ -9,6 +9,8 @@ import resetPassword from '../handlers/authentication/resetPassword';
 import addNewUser from '../handlers/authentication/addNewUser';
 import setWithdrawalPin from '../handlers/authentication/setWithdrawalPin';
 import getWithdrawalPinStatus from '../handlers/authentication/getWithdrawalPinStatus';
+import changePassword from '../handlers/authentication/changePassword';
+import authMiddleware from '../middleware/authMiddleware';
 
 const router = new Router();
 
@@ -20,7 +22,8 @@ router.post('/admin/login', adminLogin);
 router.post('/logout', logout);
 router.post('/forgot-password', forgotPassword);
 router.post('/reset-password', resetPassword);
-router.post('/user/set-withdrawal-pin', setWithdrawalPin);
-router.get('/user/withdrawal-pin-status', getWithdrawalPinStatus);
+router.post('/user/set-withdrawal-pin', authMiddleware, setWithdrawalPin);
+router.get('/user/withdrawal-pin-status', authMiddleware, getWithdrawalPinStatus);
+router.post('/change-password', authMiddleware, changePassword);
 
 export default router;

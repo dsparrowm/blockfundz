@@ -1,7 +1,9 @@
 import { useEffect, useState, useMemo } from 'react';
-import axios from 'axios';
-import { Table, TableHeader, TableRow, TableCell, TableBody } from "@/components/ui/table"; // Adjust the import paths as necessary
-import { Button } from "@/components/ui/button"; // Adjust the import paths as necessary
+import axiosInstance from '../../api/axiosInstance';
+import { Button } from "@/components/ui/button";
+import { Check, X, Clock, DollarSign } from 'lucide-react';
+import SlackTable from '../SlackTable';
+import SlackDashboardCard from '../SlackDashboardCard';
 import Spinner from '../spinners/Spinner';
 
 interface WithdrawalRequest {
@@ -20,8 +22,6 @@ interface WithdrawalRequest {
   createdAt: string;
 }
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
-
 const WithdrawalRequestManagement = () => {
   const [withdrawalRequests, setWithdrawalRequests] = useState<WithdrawalRequest[]>([]);
   const [loading, setLoading] = useState(true);
@@ -36,11 +36,7 @@ const WithdrawalRequestManagement = () => {
     const fetchWithdrawalRequests = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${apiBaseUrl}/api/withdrawals`, {
-          headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
-          }
-        }); // Adjust the API endpoint as necessary
+        const response = await axiosInstance.get('/api/withdrawals');
         setWithdrawalRequests(response.data.withdrawalRequests);
       } catch (error) {
         console.error('Error fetching withdrawal requests:', error);
@@ -85,11 +81,7 @@ const WithdrawalRequestManagement = () => {
     setSuccessMessage('');
 
     try {
-      await axios.post(`${apiBaseUrl}/api/withdrawals/approve?id=${id}`, {}, {
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
-        }
-      });
+      await axiosInstance.post(`/api/withdrawals/approve?id=${id}`, {});
 
       // Update the local state to reflect the change
       setWithdrawalRequests(prev =>
@@ -116,11 +108,7 @@ const WithdrawalRequestManagement = () => {
     setSuccessMessage('');
 
     try {
-      await axios.post(`${apiBaseUrl}/api/withdrawals/reject?id=${id}`, {}, {
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
-        }
-      });
+      await axiosInstance.post(`/api/withdrawals/reject?id=${id}`, {});
 
       // Update the local state to reflect the change
       setWithdrawalRequests(prev =>
@@ -142,126 +130,194 @@ const WithdrawalRequestManagement = () => {
   };
 
   const renderTableRows = () => {
-    return paginatedWithdrawalRequests.map(request => (
-      <TableRow key={request.id}>
-        <TableCell>{request.id}</TableCell>
-        <TableCell>{request.user.name}</TableCell>
-        <TableCell>{request.user.email}</TableCell>
-        <TableCell>${request.amount.toFixed(2)}</TableCell>
-        <TableCell>
-          <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
-            {request.asset}
-          </span>
-        </TableCell>
-        <TableCell>{request.network}</TableCell>
-        <TableCell>
-          <span className="text-xs font-mono bg-gray-100 px-2 py-1 rounded">
-            {request.address ? `${request.address.substring(0, 10)}...` : 'N/A'}
-          </span>
-        </TableCell>
-        <TableCell>
-          <span className={`px-2 py-1 rounded-full text-xs font-medium
-            ${request.status === 'APPROVED'
-              ? 'bg-green-500/20 text-green-500'
-              : request.status === 'PENDING'
-                ? 'bg-yellow-500/20 text-yellow-500'
-                : 'bg-red-500/20 text-red-500'
-            }`}>
-            {request.status}
-          </span>
-        </TableCell>
-        <TableCell>{new Date(request.createdAt).toLocaleString()}</TableCell>
-        <TableCell>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className='bg-green-500 text-white hover:bg-green-600'
-              onClick={() => handleApprove(request.id)}
-              disabled={actionLoading === request.id || request.status !== 'PENDING'}
-            >
-              {actionLoading === request.id ? <Spinner /> : 'Approve'}
-            </Button>
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={() => handleReject(request.id)}
-              disabled={actionLoading === request.id || request.status !== 'PENDING'}
-            >
-              {actionLoading === request.id ? <Spinner /> : 'Reject'}
-            </Button>
-          </div>
-        </TableCell>
-      </TableRow>
-    ));
+    return paginatedWithdrawalRequests;
   };
 
+  const columns = [
+    {
+      key: 'id',
+      title: 'ID',
+      sortable: true,
+      width: 'w-16'
+    },
+    {
+      key: 'user',
+      title: 'User',
+      render: (value: any) => (
+        <div className="flex flex-col">
+          <span className="font-medium text-gray-900">{value.name}</span>
+          <span className="text-xs text-gray-500">{value.email}</span>
+        </div>
+      )
+    },
+    {
+      key: 'amount',
+      title: 'Amount',
+      render: (value: number) => (
+        <span className="font-semibold text-gray-900">${value.toFixed(2)}</span>
+      )
+    },
+    {
+      key: 'asset',
+      title: 'Asset',
+      render: (value: string) => (
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+          {value}
+        </span>
+      )
+    },
+    {
+      key: 'network',
+      title: 'Network',
+    },
+    {
+      key: 'address',
+      title: 'Address',
+      render: (value: string) => (
+        <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded">
+          {value ? `${value.substring(0, 10)}...` : 'N/A'}
+        </span>
+      )
+    },
+    {
+      key: 'status',
+      title: 'Status',
+      render: (value: string) => {
+        const statusConfig = {
+          'APPROVED': {
+            bg: 'bg-green-100',
+            text: 'text-green-800',
+            icon: Check
+          },
+          'PENDING': {
+            bg: 'bg-yellow-100',
+            text: 'text-yellow-800',
+            icon: Clock
+          },
+          'REJECTED': {
+            bg: 'bg-red-100',
+            text: 'text-red-800',
+            icon: X
+          }
+        };
+
+        const config = statusConfig[value as keyof typeof statusConfig] || statusConfig.PENDING;
+        const Icon = config.icon;
+
+        return (
+          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.bg} ${config.text}`}>
+            <Icon className="w-3 h-3 mr-1" />
+            {value}
+          </span>
+        );
+      }
+    },
+    {
+      key: 'createdAt',
+      title: 'Created',
+      render: (value: string) => (
+        <span className="text-sm text-gray-600">
+          {new Date(value).toLocaleDateString()}
+        </span>
+      )
+    },
+    {
+      key: 'actions',
+      title: 'Actions',
+      render: (value: any, row: WithdrawalRequest) => (
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="bg-green-500 text-white hover:bg-green-600 border-0"
+            onClick={() => handleApprove(row.id)}
+            disabled={actionLoading === row.id || row.status !== 'PENDING'}
+          >
+            {actionLoading === row.id ? <Spinner /> : <Check className="w-3 h-3" />}
+          </Button>
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={() => handleReject(row.id)}
+            disabled={actionLoading === row.id || row.status !== 'PENDING'}
+          >
+            {actionLoading === row.id ? <Spinner /> : <X className="w-3 h-3" />}
+          </Button>
+        </div>
+      )
+    }
+  ];
+
+  const pendingCount = withdrawalRequests.filter(req => req.status === 'PENDING').length;
+  const approvedCount = withdrawalRequests.filter(req => req.status === 'APPROVED').length;
+  const rejectedCount = withdrawalRequests.filter(req => req.status === 'REJECTED').length;
+  const totalAmount = withdrawalRequests.reduce((sum, req) => sum + req.amount, 0);
+
   return (
-    <div>
+    <div className="space-y-6">
       {successMessage && (
-        <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
-          {successMessage}
+        <div className="p-4 bg-green-50 border border-green-200 text-green-700 rounded-lg">
+          <div className="flex items-center">
+            <Check className="w-4 h-4 mr-2" />
+            {successMessage}
+          </div>
         </div>
       )}
       {errorMessage && (
-        <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-          {errorMessage}
+        <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg">
+          <div className="flex items-center">
+            <X className="w-4 h-4 mr-2" />
+            {errorMessage}
+          </div>
         </div>
       )}
 
-      <input
-        type="text"
-        placeholder="Search withdrawal requests..."
-        value={searchText}
-        onChange={(e) => setSearchText(e.target.value)}
-        className="rounded-md border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:ring-slate-400"
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <SlackDashboardCard
+          title="Pending Requests"
+          value={pendingCount}
+          subtitle="Awaiting approval"
+          icon={Clock}
+          color="yellow"
+        />
+
+        <SlackDashboardCard
+          title="Approved"
+          value={approvedCount}
+          subtitle="Successfully processed"
+          icon={Check}
+          color="green"
+        />
+
+        <SlackDashboardCard
+          title="Rejected"
+          value={rejectedCount}
+          subtitle="Declined requests"
+          icon={X}
+          color="red"
+        />
+
+        <SlackDashboardCard
+          title="Total Amount"
+          value={`$${totalAmount.toFixed(2)}`}
+          subtitle="All withdrawal requests"
+          icon={DollarSign}
+          color="blue"
+        />
+      </div>
+
+      {/* Main Table */}
+      <SlackTable
+        title="Withdrawal Requests"
+        subtitle="Manage and review all withdrawal requests"
+        columns={columns}
+        data={paginatedWithdrawalRequests}
+        loading={loading}
+        searchValue={searchText}
+        onSearchChange={setSearchText}
+        onRefresh={() => window.location.reload()}
       />
-      {loading ? (
-        <Spinner />
-      ) : (
-        <>
-          <Table className="text-slate-800">
-            <TableHeader>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>User Name</TableCell>
-                <TableCell>User Email</TableCell>
-                <TableCell>Amount</TableCell>
-                <TableCell>Asset</TableCell>
-                <TableCell>Network</TableCell>
-                <TableCell>Address</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell>Created At</TableCell>
-                <TableCell>Actions</TableCell>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {withdrawalRequests.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={10} className='text-center'>No withdrawal requests found</TableCell>
-                </TableRow>
-              ) : (
-                renderTableRows()
-              )}
-            </TableBody>
-          </Table>
-          <div className="flex justify-between items-center mt-4">
-            <Button
-              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1 || totalPages === 0}
-            >
-              Previous
-            </Button>
-            {totalPages !== 0 && <span className='text-white-400'>Page {currentPage} of {totalPages}</span>}
-            <Button
-              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-              disabled={currentPage === totalPages || totalPages === 0}
-            >
-              Next
-            </Button>
-          </div>
-        </>
-      )}
     </div>
   );
 };

@@ -18,18 +18,28 @@ export const getUserTransactions = async (req: Request, res: Response) => {
     const limit = parseInt(req.query.limit as string) || 10
     const sortBy = req.query.sortBy || 'date'
     const sortOrder = req.query.sortOrder || 'desc'
+    const type = req.query.type as string // Optional type filter
 
     // Calculate offset
     const offset = (page - 1) * limit
 
+    // Build where clause with optional type filter
+    const whereClause: any = { userId }
+    if (type) {
+      whereClause.type = type
+    }
+
     // Fetch total count of transactions
     const totalTransactions = await prisma.transaction.count({
-      where: { userId }
+      where: whereClause
     })
 
-    // Fetch paginated transactions
+    // Fetch paginated transactions with investment plan details for subscriptions
     const transactions = await prisma.transaction.findMany({
-      where: { userId },
+      where: whereClause,
+      include: {
+        plan: type === 'SUBSCRIPTION' ? true : false // Include plan details for subscriptions
+      },
       orderBy: {
         [sortBy]: sortOrder
       },

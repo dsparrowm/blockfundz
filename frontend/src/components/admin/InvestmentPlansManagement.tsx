@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../../api/axiosInstance';
 import { Table, TableHeader, TableRow, TableCell, TableBody } from "@/components/ui/table"; // Adjust the import paths as necessary
 import { Button } from "@/components/ui/button"; // Adjust the import paths as necessary
 import AddInvestmentPlanDialog from './AddInvestmentPlanDialog'; // Adjust the import path as necessary
@@ -27,8 +27,6 @@ interface InvestmentPlan {
   totalReturns: number;
 }
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
-
 const InvestmentPlansManagement = () => {
   const [investmentPlans, setInvestmentPlans] = useState<InvestmentPlan[]>([]);
   const [loading, setLoading] = useState(true);
@@ -39,11 +37,7 @@ const InvestmentPlansManagement = () => {
     const fetchInvestmentPlans = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${apiBaseUrl}/api/investments`, {
-          headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
-          }
-        });
+        const response = await axiosInstance.get('/api/investments');
         setInvestmentPlans(response.data.investmentPlans);
       } catch (error) {
         console.error('Error fetching investment plans:', error);
@@ -57,11 +51,7 @@ const InvestmentPlansManagement = () => {
 
   const handleAddPlan = async (newPlan: { plan: string; minimumAmount: number; maximumAmount: number; interestRate: number; totalReturns: number }) => {
     try {
-      const response = await axios.post(`${apiBaseUrl}/api/investments/add`, newPlan, {
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
-        }
-      });
+      const response = await axiosInstance.post('/api/investments/add', newPlan);
       setInvestmentPlans([...investmentPlans, response.data.newPlan]);
     } catch (error) {
       console.error('Error adding investment plan:', error);
@@ -71,11 +61,7 @@ const InvestmentPlansManagement = () => {
   const handleEditPlan = async (updatedPlan: InvestmentPlan) => {
     if (!updatedPlan) return; // Ensure updatedPlan is not null or undefined
     try {
-      const response = await axios.put(`${apiBaseUrl}/api/investments/${updatedPlan.id}`, updatedPlan, {
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
-        }
-      });
+      const response = await axiosInstance.put(`/api/investments/${updatedPlan.id}`, updatedPlan);
       setInvestmentPlans(investmentPlans.map(plan => plan.id === updatedPlan.id ? response.data : plan));
       setEditPlan(null);
     } catch (error) {
@@ -85,11 +71,7 @@ const InvestmentPlansManagement = () => {
 
   const handleDeletePlan = async (planId: number) => {
     try {
-      await axios.delete(`${apiBaseUrl}/api/investments/${planId}`, {
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
-        }
-      });
+      await axiosInstance.delete(`/api/investments/${planId}`);
       setInvestmentPlans(investmentPlans.filter(plan => plan.id !== planId));
       setDeletePlan(null);
     } catch (error) {

@@ -5,6 +5,7 @@ import http from 'http';
 import { Server } from 'socket.io';
 import prisma from './db';
 import editTransaction from './handlers/transactions/editTransactions';
+import { InterestCalculationService } from './services/InterestCalculationService';
 
 
 const server = http.createServer(app);
@@ -41,6 +42,10 @@ function getSocketIdFromUserId(userId) {
 
 app.put('/api/transactions/:id', editTransaction);
 
+// Start the interest calculation scheduler
+InterestCalculationService.startInterestCalculationScheduler();
+
 server.listen(3001, () => {
     console.log('server running on http://localhost:3001');
+    console.log('Interest calculation scheduler started');
 })

@@ -274,15 +274,15 @@ const UserManagement = ({
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
 
   return (
-    <div className='text-slate-800 text-lg'>
+    <div className='text-slate-800 dark:text-white text-lg'>
       <input
         type="text"
         placeholder="Search users..."
         value={searchText}
         onChange={(e) => setSearchText(e.target.value)}
-        className="rounded-md border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:ring-slate-400"
+        className="rounded-md border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400 dark:border-[#3c3f4c] dark:bg-[#2c2d33] dark:text-white dark:focus:ring-[#4a154b]"
       />
-      <Button onClick={() => setIsAddUserDialogOpen(true)} className="ml-4 bg-slate-500 hover:bg-slate-800">
+      <Button onClick={() => setIsAddUserDialogOpen(true)} className="ml-4 bg-slate-500 hover:bg-slate-800 dark:bg-[#4a154b] dark:hover:bg-[#5a1f5a]">
         Add New User
       </Button>
       {loading ? (

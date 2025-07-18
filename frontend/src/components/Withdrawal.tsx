@@ -1,24 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import axiosInstance from '../api/axiosInstance';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { SlackDashboardCard } from './SlackDashboardCard';
+import { Input } from '../components/ui/input';
+import { Button } from '../components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import Spinner from './spinners/Spinner';
-import Toast from '../utils/Toast';
+import {
+  AlertCircle,
+  CheckCircle,
+  Wallet,
+  DollarSign,
+  ArrowUpRight,
+  Shield,
+  Banknote,
+  Coins
+} from 'lucide-react';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from '@/components/ui/dialog';
+} from '../components/ui/dialog';
 
 const Withdraw = () => {
   const [amount, setAmount] = useState('');
-  const [asset, setAsset] = useState('BTC');
-  const [network, setNetwork] = useState('Bitcoin');
+  const [asset, setAsset] = useState('BITCOIN');
+  const [network, setNetwork] = useState('Bitcoin Network');
   const [loading, setLoading] = useState(false);
   const [address, setAddress] = useState('');
   const [error, setError] = useState('');
@@ -28,216 +36,340 @@ const Withdraw = () => {
   const [showPinDialog, setShowPinDialog] = useState(false);
   const [createPin, setCreatePin] = useState('');
   const [createPinLoading, setCreatePinLoading] = useState(false);
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState<{ type: 'success' | 'error', message: string } | null>(null);
+  const [userBalance, setUserBalance] = useState<any>({});
+
+  const assetOptions = [
+    { value: 'BITCOIN', label: 'Bitcoin (BTC)', network: 'Bitcoin Network' },
+    { value: 'ETHEREUM', label: 'Ethereum (ETH)', network: 'Ethereum Network' },
+    { value: 'USDT', label: 'USDT', network: 'Tron Network' },
+    { value: 'USDC', label: 'USDC', network: 'Ethereum Network' }
+  ];
 
   useEffect(() => {
-    // Fetch pin status on mount
-    const fetchPinStatus = async () => {
-      try {
-        const res = await axiosInstance.get(`/api/user/withdrawal-pin-status`, {
-          headers: { Authorization: "Bearer " + localStorage.getItem("token") }
-        });
-        setHasPin(res.data.hasPin);
-        if (!res.data.hasPin) setShowPinDialog(true);
-      } catch {
-        setHasPin(false);
-        setShowPinDialog(true);
-      }
-    };
-    fetchPinStatus();
+    fetchUserBalance();
+    checkPinStatus();
   }, []);
 
-  // Auto-close Toast after 3 seconds
+  // Clear messages after 5 seconds
   useEffect(() => {
-    if (showToast) {
-      const timer = setTimeout(() => setShowToast(false), 3000);
+    if (error || success) {
+      const timer = setTimeout(() => {
+        setError('');
+        setSuccess('');
+      }, 5000);
       return () => clearTimeout(timer);
     }
-  }, [showToast]);
+  }, [error, success]);
+
+  const fetchUserBalance = async () => {
+    try {
+      const response = await axiosInstance.get('/api/users/balances');
+      setUserBalance(response.data.balances || {});
+    } catch (error) {
+      console.error('Error fetching user balance:', error);
+    }
+  };
+
+  const checkPinStatus = async () => {
+    try {
+      const response = await axiosInstance.get('/api/auth/user/withdrawal-pin-status');
+      setHasPin(response.data.hasPin);
+      if (!response.data.hasPin) {
+        setShowPinDialog(true);
+      }
+    } catch (error) {
+      setHasPin(false);
+      setShowPinDialog(true);
+    }
+  };
 
   // Create pin handler
   const handleCreatePin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!/^\d{4}$/.test(createPin)) {
-      setToastMessage({ type: "error", message: "Pin must be 4 digits" });
-      setShowToast(true);
+      setError('Pin must be 4 digits');
       return;
     }
     setCreatePinLoading(true);
     try {
-      await axiosInstance.post(`/api/withdrawals/set-withdrawal-pin`, { pin: createPin }, {
-        headers: { Authorization: "Bearer " + localStorage.getItem("token") }
-      });
+      await axiosInstance.post('/api/auth/user/set-withdrawal-pin',
+        { pin: createPin }
+      );
       setHasPin(true);
       setShowPinDialog(false);
-      setToastMessage({ type: "success", message: "Withdrawal pin set successfully" });
-      setShowToast(true);
-    } catch {
-      setToastMessage({ type: "error", message: "Failed to set pin" });
-      setShowToast(true);
+      setSuccess('Withdrawal pin set successfully');
+      setCreatePin('');
+    } catch (error: any) {
+      setError(error.response?.data?.message || 'Failed to set pin');
     } finally {
       setCreatePinLoading(false);
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
     setSuccess('');
-    // if (!hasPin) {
-    //   setError('You must set a withdrawal pin before making withdrawals.');
-    //   setLoading(false);
-    //   return;
-    // }
-    // if (!/^\d{4}$/.test(pin)) {
-    //   setError('Invalid withdrawal pin.');
-    //   setLoading(false);
-    //   return;
-    // }
+
+    if (!hasPin) {
+      setError('You must set a withdrawal pin before making withdrawals.');
+      setLoading(false);
+      return;
+    }
+
+    if (!/^\d{4}$/.test(pin)) {
+      setError('Invalid withdrawal pin.');
+      setLoading(false);
+      return;
+    }
+
+    const withdrawalAmount = parseFloat(amount);
+    const availableBalance = getBalanceForAsset(asset);
+
+    if (withdrawalAmount > availableBalance) {
+      setError(`Insufficient balance. Available: ${availableBalance} ${asset}`);
+      setLoading(false);
+      return;
+    }
+
     try {
-      const response = await axiosInstance.post(`/api/withdrawals`, {
-        userId: localStorage.getItem('userId'),
-        amount: parseFloat(amount),
+      const userId = localStorage.getItem('userId');
+      if (!userId) {
+        throw new Error('User not authenticated');
+      }
+
+      await axiosInstance.post('/api/withdrawals', {
+        userId: parseInt(userId),
+        amount: withdrawalAmount,
         asset,
         network,
         address,
         pin,
-      },
-        {
-          withCredentials: true
-        }
-      );
+      });
 
-      setSuccess('Withdrawal request created successfully');
+      setSuccess('Withdrawal request created successfully and is pending approval');
       setAmount('');
-      setAsset('BTC');
-      setNetwork('Bitcoin');
       setPin('');
-      setToastMessage({ type: "success", message: "Withdrawal request created successfully" });
-      setShowToast(true);
-    } catch (err) {
-      setError('Failed to create withdrawal request');
-      setToastMessage({ type: "error", message: "Failed to create withdrawal request" });
-      setShowToast(true);
+      setAddress('');
+      fetchUserBalance(); // Refresh balance
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || 'Failed to create withdrawal request';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
+  const getBalanceForAsset = (asset: string) => {
+    switch (asset) {
+      case 'BITCOIN': return userBalance.bitcoinBalance || 0;
+      case 'ETHEREUM': return userBalance.ethereumBalance || 0;
+      case 'USDT': return userBalance.usdtBalance || 0;
+      case 'USDC': return userBalance.usdcBalance || 0;
+      default: return 0;
+    }
+  };
+
+  const handleAssetChange = (value: string) => {
+    setAsset(value);
+    const selectedAsset = assetOptions.find(opt => opt.value === value);
+    if (selectedAsset) {
+      setNetwork(selectedAsset.network);
+    }
+  };
+
   return (
-    <Card className="w-full bg-slate-200 text-slate-800">
-      {showToast && toastMessage && (
-        <Toast
-          type={toastMessage.type}
-          message={toastMessage.message}
-          onClose={() => setShowToast(false)}
+    <div className="space-y-6">
+      {/* Balance Overview using SlackDashboardCard */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <SlackDashboardCard
+          title="Bitcoin (BTC)"
+          value={getBalanceForAsset('BITCOIN').toFixed(6)}
+          subtitle="Available Balance"
+          icon={Coins}
+          color="yellow"
+          trend={{ value: 5.2, direction: "up" }}
+          loading={false}
         />
-      )}
-      {/* <Dialog open={showPinDialog} onOpenChange={setShowPinDialog}>
-        <DialogContent>
+
+        <SlackDashboardCard
+          title="Ethereum (ETH)"
+          value={getBalanceForAsset('ETHEREUM').toFixed(6)}
+          subtitle="Available Balance"
+          icon={Banknote}
+          color="blue"
+          trend={{ value: 3.8, direction: "up" }}
+          loading={false}
+        />
+
+        <SlackDashboardCard
+          title="USDT"
+          value={getBalanceForAsset('USDT').toFixed(2)}
+          subtitle="Available Balance"
+          icon={DollarSign}
+          color="green"
+          trend={{ value: 1.2, direction: "up" }}
+          loading={false}
+        />
+
+        <SlackDashboardCard
+          title="USDC"
+          value={getBalanceForAsset('USDC').toFixed(2)}
+          subtitle="Available Balance"
+          icon={Wallet}
+          color="indigo"
+          trend={{ value: 2.5, direction: "up" }}
+          loading={false}
+        />
+      </div>
+
+      {/* Withdrawal Form */}
+      <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
+        <div className="px-6 py-4 border-b border-gray-200">
+          <div className="flex items-center space-x-2">
+            <ArrowUpRight className="w-5 h-5 text-purple-600" />
+            <h2 className="text-lg font-semibold text-gray-900">Withdraw Cryptocurrency</h2>
+          </div>
+        </div>
+
+        <div className="px-6 py-4">
+          {error && (
+            <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <div className="flex items-center space-x-2">
+                <AlertCircle className="w-5 h-5 text-red-600" />
+                <span className="text-red-700">{error}</span>
+              </div>
+            </div>
+          )}
+
+          {success && (
+            <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="w-5 h-5 text-green-600" />
+                <span className="text-green-700">{success}</span>
+              </div>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">Asset</label>
+                <Select value={asset} onValueChange={handleAssetChange}>
+                  <SelectTrigger className="border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    <SelectValue placeholder="Select asset" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {assetOptions.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-gray-500">
+                  Available: {getBalanceForAsset(asset).toFixed(6)} {asset}
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">Network</label>
+                <Input
+                  value={network}
+                  readOnly
+                  className="bg-gray-50 border-gray-300 text-gray-600"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">Amount</label>
+              <Input
+                type="number"
+                step="0.00000001"
+                value={amount}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAmount(e.target.value)}
+                placeholder="Enter amount"
+                className="border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">Wallet Address</label>
+              <Input
+                value={address}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAddress(e.target.value)}
+                placeholder="Enter wallet address"
+                className="border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                required
+              />
+            </div>
+
+            {hasPin && (
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">Withdrawal PIN</label>
+                <Input
+                  type="password"
+                  maxLength={4}
+                  value={pin}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPin(e.target.value)}
+                  placeholder="Enter 4-digit PIN"
+                  className="border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  required
+                />
+              </div>
+            )}
+
+            <Button
+              type="submit"
+              disabled={loading || !hasPin}
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2.5 rounded-lg transition-colors"
+            >
+              {loading ? <Spinner /> : 'Create Withdrawal Request'}
+            </Button>
+          </form>
+        </div>
+      </div>
+
+      {/* Create PIN Dialog */}
+      <Dialog open={showPinDialog} onOpenChange={setShowPinDialog}>
+        <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Create Withdrawal Pin</DialogTitle>
+            <DialogTitle className="flex items-center space-x-2">
+              <Shield className="w-5 h-5 text-purple-600" />
+              <span>Create Withdrawal PIN</span>
+            </DialogTitle>
             <DialogDescription>
-              Please set a 4-digit pin to enable withdrawals.
+              Please set a 4-digit PIN to enable withdrawals for security.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleCreatePin} className="space-y-4">
-            <Input
-              type="password"
-              maxLength={4}
-              pattern="\d{4}"
-              placeholder="Enter 4-digit pin"
-              value={createPin}
-              onChange={e => setCreatePin(e.target.value.replace(/\D/g, ""))}
-              required
-            />
-            <Button type="submit" disabled={createPinLoading}>
-              {createPinLoading ? <Spinner size="sm" /> : "Set Pin"}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">Create 4-digit PIN</label>
+              <Input
+                type="password"
+                maxLength={4}
+                pattern="\d{4}"
+                value={createPin}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCreatePin(e.target.value)}
+                placeholder="Enter 4-digit PIN"
+                className="border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                required
+              />
+            </div>
+            <Button
+              type="submit"
+              disabled={createPinLoading}
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2.5 rounded-lg transition-colors"
+            >
+              {createPinLoading ? <Spinner /> : 'Create PIN'}
             </Button>
           </form>
         </DialogContent>
-      </Dialog> */}
-      <CardHeader>
-        <CardTitle className="text-xl font-semibold">Withdraw</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {error && <div className="text-red-500">{error}</div>}
-          {success && <div className="text-green-500">{success}</div>}
-          <div>
-            <label className="block text-sm font-medium">Amount</label>
-            <Input
-              type="number"
-              onChange={(e) => setAmount(e.target.value)}
-              className="mt-1 block w-full bg-slate-300 border-slate-100 text-slate-800"
-              required
-              value={amount}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium ">Asset</label>
-            <Select value={asset} onValueChange={setAsset}>
-              <SelectTrigger className="w-full bg-slate-300 border-slate-100">
-                <SelectValue placeholder="Select asset" />
-              </SelectTrigger>
-              <SelectContent className="bg-white border-neutral-700">
-                <SelectItem value="BITCOIN">Bitcoin</SelectItem>
-                <SelectItem value="ETHEREUM">Ethereum</SelectItem>
-                <SelectItem value="USDT">USDT</SelectItem>
-                <SelectItem value="USDC">USDC</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium">Withdrawal Address</label>
-            <Input
-              type="text"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              className="mt-1 block w-full bg-slate-300 border-slate-100"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium">Network</label>
-            <Select value={network} onValueChange={setNetwork}>
-              <SelectTrigger className="w-full bg-slate-300 border-slate-100">
-                <SelectValue placeholder="Select network" />
-              </SelectTrigger>
-              <SelectContent className="bg-white border-slate-100">
-                <SelectItem value="Bitcoin">Bitcoin</SelectItem>
-                <SelectItem value="Ethereum">Ethereum</SelectItem>
-                <SelectItem value="Tron">Tron</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* <div>
-            <label className="block text-sm font-medium">Withdrawal Pin</label>
-            <Input
-              type="password"
-              maxLength={4}
-              pattern="\d{4}"
-              placeholder="Enter 4-digit withdrawal pin"
-              value={pin}
-              onChange={e => setPin(e.target.value.replace(/\D/g, ""))}
-              required
-              disabled={!hasPin}
-            />
-          </div> */}
-          <Button type="submit" className="w-full bg-green-500 hover:bg-green-600">
-            {loading ? <Spinner /> : 'Submit'}
-          </Button>
-        </form>
-        {/* {!hasPin && (
-          <p className="text-red-500 mt-4 text-center">
-            You must set a withdrawal pin before making withdrawals.
-          </p>
-        )} */}
-      </CardContent>
-    </Card>
+      </Dialog>
+    </div>
   );
 };
 

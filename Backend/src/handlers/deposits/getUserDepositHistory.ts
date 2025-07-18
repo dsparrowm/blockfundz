@@ -2,17 +2,29 @@ import { Request, Response } from 'express';
 import prisma from '../../db';
 
 const getUserDepositHistory = async (req: Request, res: Response) => {
-  const { userId } = req.params;
+  const { userId } = req.query;
+
+  if (!userId) {
+    return res.status(400).json({ message: 'User ID is required' });
+  }
 
   try {
+    const userIdNumber = parseInt(userId as string, 10);
+
+    if (isNaN(userIdNumber)) {
+      return res.status(400).json({ message: 'Invalid user ID' });
+    }
+
     const deposits = await prisma.transaction.findMany({
       where: {
-        AND
-    : [
-        { userId: userId },
-        { type: 'DEPOSIT' }
-    ]
+        AND: [
+          { userId: userIdNumber },
+          { type: 'DEPOSIT' }
+        ]
       },
+      orderBy: {
+        date: 'desc' // Most recent first
+      }
     });
 
     // Format the data as expected by the client

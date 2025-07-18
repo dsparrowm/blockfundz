@@ -8,6 +8,9 @@ import verifyUser from '../handlers/users/verifyUser';
 import getUserById from '../handlers/users/getUserById';
 import getMainBalance from '../handlers/getMainBalance';
 import getUserPassword from '../handlers/users/getUserPassword';
+import updateUserProfile from '../handlers/users/updateUserProfile';
+import updateNotificationSettings from '../handlers/users/updateNotificationSettings';
+import updateUserPreferences from '../handlers/users/updateUserPreferences';
 import authMiddleware from '../middleware/authMiddleware';
 
 const router = Router();
@@ -24,5 +27,8 @@ router.post('/users/verify-user', verifyUser);
 // User-specific routes (require authentication)
 router.get('/users/main-balance', authMiddleware, getMainBalance);
 router.get('/users/balances', authMiddleware, getUserBalances);
+router.put('/users/profile', authMiddleware, updateUserProfile);
+router.put('/users/notifications', authMiddleware, updateNotificationSettings);
+router.put('/users/preferences', authMiddleware, updateUserPreferences);
 
 export default router;

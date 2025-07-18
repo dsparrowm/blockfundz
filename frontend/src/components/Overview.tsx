@@ -1,10 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent
-} from "@/components/ui/card";
+import { useEffect, useMemo, useState } from 'react';
+import { SlackDashboardCard } from './SlackDashboardCard';
 import {
   Table,
   TableBody,
@@ -12,25 +7,40 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "../components/ui/table";
 import { useStore } from '../store/useStore';
 import axiosInstance from '../api/axiosInstance';
-import Cookies from 'js-cookie';
 import Spinner from './spinners/Spinner';
-import { AlertCircle, Bold, ArrowUpRight, ArrowDownLeft, DollarSign, CreditCard } from 'lucide-react';
+import {
+  AlertCircle,
+  ArrowUpRight,
+  ArrowDownLeft,
+  DollarSign,
+  CreditCard,
+  TrendingUp,
+  Bitcoin,
+  Banknote,
+  Coins,
+  ChevronLeft,
+  ChevronRight,
+  Copy,
+  Clock
+} from 'lucide-react';
+
+interface UserBalances {
+  bitcoinBalance?: number;
+  ethereumBalance?: number;
+  usdtBalance?: number;
+  usdcBalance?: number;
+}
 
 const Overview = () => {
-  const [transactions, setTransactions] = useState([]);
-  const [balances, setBalances] = useState([]);
+  const [transactions, setTransactions] = useState<any[]>([]);
+  const [balances, setBalances] = useState<UserBalances>({});
   const [mainBalance, setMainBalance] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const activitiesPerPage = 3;
-
-
-
-  const indexOfLastActivity = currentPage * activitiesPerPage;
-  const indexOfFirstActivity = indexOfLastActivity - activitiesPerPage;
 
   const user = useStore(state => state.user);
   const setUser = useStore(state => state.setUser);
@@ -150,171 +160,241 @@ const Overview = () => {
   }
 
   return (
-    <>
-      <div className="px-8 flex justify-between items-center">
-        <div className="mb-4 text-white space-y-2 mt-4">
-          <p className="text-xl text-black">Welcome</p>
-          <p className="text-[40px] font-bolder text-black">{user?.name}</p>
-          <p className="text-[17px] text-gray-600">Here's a summary of your account.</p>
+    <div className="space-y-6">
+      {/* Welcome Header */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
+        <div className="space-y-2">
+          <p className="text-xl text-gray-600 dark:text-gray-400">Welcome back,</p>
+          <p className="text-3xl font-bold text-gray-900 dark:text-gray-100">{user?.name}</p>
+          <p className="text-gray-500 dark:text-gray-400">Here's a summary of your account.</p>
         </div>
-        <div className="flex space-x-4">
+        <div className="flex space-x-3">
           <button
             onClick={() => setActiveComponent('Invest')}
-            className="bg-slate-800 text-white px-4 py-2 rounded text-bold"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
           >
             Invest & Earn
           </button>
           <button
             onClick={() => setActiveComponent('Deposits')}
-            className="bg-red-500 text-white px-4 py-2 rounded font-bold"
+            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
           >
             Deposit Now
           </button>
         </div>
       </div>
+
+      {/* Verification Alert */}
       {!user?.isVerified && (
-        <div className="mt-4 pl-4 py-2 bg-slate-200 text-coral-black rounded flex items-center space-x-2 mx-8">
-          <AlertCircle className="w-6 h-6 text-yellow-600 font-bold" />
-          <span>
-            Caution: You need to verify your account to gain full functionality.{' '}
-            <span
-              className="text-yellow-600 cursor-pointer"
-              onClick={() => setActiveComponent('verify')}
-            >
-              Let's get started!
+        <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <div className="flex items-center space-x-2">
+            <AlertCircle className="w-5 h-5 text-yellow-600" />
+            <span className="text-yellow-800">
+              Caution: You need to verify your account to gain full functionality.{' '}
+              <span
+                className="text-yellow-600 cursor-pointer underline font-medium"
+                onClick={() => setActiveComponent('verify')}
+              >
+                Let's get started!
+              </span>
             </span>
-          </span>
+          </div>
         </div>
       )}
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 px-8">
-        {/* Available Balance Card */}
-        <div className="bg-white p-4 rounded shadow border-b-4 border-b-green-500">
-          <p className="text-lg font-bold text-gray-600">Main Balance</p>
 
-          <p className="text-2xl font-bold mt-2 text-red-500">${mainBalance.toLocaleString()}</p>
-          <div className='flex justify-between mt-4'>
-            <p className='text-slate-500'>Bitcoin Balance</p>
-            <p className="text-sm text-gray-600">{balances.bitcoinBalance} BTC</p>
-          </div>
-          <div className='flex justify-between mt-2'>
-            <p className='text-slate-500'>Ethereum Balance</p>
-            <p className="text-sm text-gray-600">{balances.ethereumBalance} ETH</p>
-          </div>
-          <div className='flex justify-between mt-2'>
-            <p className='text-slate-500'>Usdt Balance</p>
-            <p className="text-sm text-gray-600">{balances.usdtBalance} USDT</p>
-          </div>
-          <div className='flex justify-between mt-2'>
-            <p className='text-slate-500'>Usdc Balance</p>
-            <p className="text-sm text-gray-600">{balances.usdcBalance} USDC</p>
-          </div>
-        </div>
+      {/* Balance Overview Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <SlackDashboardCard
+          title="Main Balance"
+          value={`$${mainBalance.toLocaleString()}`}
+          subtitle="Total portfolio value"
+          icon={DollarSign}
+          color="green"
+          trend={{ value: 12.5, direction: "up" }}
+          loading={isLoading}
+        />
 
-        {/* Total Deposit Card */}
-        <div className="bg-white p-4 rounded shadow border-b-4 border-b-blue-500 flex flex-col justify-between">
-          <div>
-            <p className="text-lg font-bold text-gray-600">Total Deposit</p>
-            <p className="text-2xl font-bold mt-2 text-gray-400">--------</p>
-          </div>
-          <div>
-            <p className='text-slate-500'>Deposit count</p>
-            <p>0</p>
-          </div>
-        </div>
+        <SlackDashboardCard
+          title="Bitcoin"
+          value={`${balances.bitcoinBalance || 0} BTC`}
+          subtitle="Bitcoin balance"
+          icon={Bitcoin}
+          color="yellow"
+          trend={{ value: 5.2, direction: "up" }}
+          loading={isLoading}
+        />
 
-        {/* Total Withdrawals Card */}
-        <div className="bg-white p-4 rounded shadow border-b-4 border-b-orange-500 flex flex-col justify-between">
-          <div>
-            <p className="text-lg font-bold text-gray-600">Total Withdrawals</p>
-            <p className="text-2xl font-bold mt-2">-------</p>
+        <SlackDashboardCard
+          title="Ethereum"
+          value={`${balances.ethereumBalance || 0} ETH`}
+          subtitle="Ethereum balance"
+          icon={Banknote}
+          color="blue"
+          trend={{ value: 8.7, direction: "up" }}
+          loading={isLoading}
+        />
+
+        <SlackDashboardCard
+          title="Stablecoins"
+          value={`${(balances.usdtBalance || 0) + (balances.usdcBalance || 0)} USD`}
+          subtitle="USDT + USDC balance"
+          icon={Coins}
+          color="indigo"
+          trend={{ value: 2.1, direction: "up" }}
+          loading={isLoading}
+        />
+      </div>
+
+      {/* Interest Information Banner */}
+      <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-4">
+        <div className="flex items-center space-x-3">
+          <div className="flex-shrink-0">
+            <Clock className="w-6 h-6 text-green-600" />
           </div>
-          <div>
-            <p className='text-slate-500'>Withdrawal count</p>
-            <p>0</p>
+          <div className="flex-1">
+            <h3 className="text-sm font-medium text-green-800">
+              💰 Earning Interest Daily
+            </h3>
+            <p className="text-sm text-green-700 mt-1">
+              Your active investments are earning interest automatically every 24 hours.
+              Interest is calculated based on your investment plans and credited directly to your main balance.
+            </p>
+          </div>
+          <div className="flex-shrink-0">
+            <div className="text-right">
+              <p className="text-xs text-green-600 font-medium">Next Calculation</p>
+              <p className="text-xs text-green-500">Every day at 12:00 AM UTC</p>
+            </div>
           </div>
         </div>
       </div>
-      {/* Left Column - Activity */}
 
-      <div className="flex justify-between items-center mb-3 px-8 pt-8">
-        <h2 className="md:text-[20px] font-bold text-slate-800">Recent Activity</h2>
-        <button className="text-primary hover:text-blue-800 font-medium">
-          See History
-        </button>
-      </div>
-      <div className="md:col-span-2 bg-white px-6 py-3 rounded shadow mx-8">
-        <Table>
-          <TableHeader className="text-primary">
-            <TableRow>
-              <TableCell>Type</TableCell>
-              <TableCell>Asset</TableCell>
-              <TableCell>Date</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Amount</TableCell>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {paginatedTransactions.map((transaction, index) => (
-              <TableRow key={index} className="hover:bg-gray-50 transition-colors text-slate-800">
-                <TableCell className="flex items-center gap-2">
-                  {getTransactionIcon(transaction.type)}
-                  {transaction.type}
-                </TableCell>
-                <TableCell>{transaction.asset}</TableCell>
-                <TableCell>{new Date(transaction.date).toLocaleDateString()}</TableCell>
-                <TableCell>
-                  <span
-                    className={`px-2 py-1 rounded-full text-white ${transaction.status === 'COMPLETED' || transaction.status === 'ACTIVE'
-                      ? 'bg-green-500'
-                      : transaction.status === 'PENDING'
-                        ? 'bg-yellow-500'
-                        : 'bg-red-500'
-                      }`}
-                  >
-                    {transaction.status}
-                  </span>
-                </TableCell>
-                <TableCell>{transaction.amount}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        {/* Pagination controls */}
-        <div className="flex justify-between items-center mt-4">
-          <button
-            onClick={handlePreviousPage}
-            disabled={currentPage === 1}
-            className="text-blue-600 hover:text-blue-800 font-medium disabled:opacity-50"
-          >
-            Previous
-          </button>
-          <button
-            onClick={handleNextPage}
-            disabled={currentPage * activitiesPerPage >= transactions.length}
-            className="text-blue-600 hover:text-blue-800 font-medium disabled:opacity-50"
-          >
-            Next
-          </button>
-        </div>
-      </div>
-      <div className="pt-6 border-t mt-6 mx-8 bg-white p-4 rounded shadow">
-        <div className='flex justify-between'>
-          <h3 className="font-semibold mb-4 text-lg text-primary">Refer Us & Earn</h3>
-          <span className='text-slate-400'>Coming Soon</span>
-        </div>
-        <p className="text-md text-gray-600 mb-4">
-          Use the below link to invite your friends.
-        </p>
-        <div className="flex items-center gap-2">
-          <div className="border rounded p-3 rounded flex-1">
-            <span className="text-sm text-gray-400">teamapexllc.com/ref?ref=disparrown</span>
+      {/* Recent Activity */}
+      <div className="bg-white dark:bg-[#2c2d33] rounded-lg border border-gray-200 dark:border-[#3c3f4c] shadow-sm">
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-[#3c3f4c]">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <TrendingUp className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Activity</h2>
+            </div>
+            <button className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium text-sm">
+              See History
+            </button>
           </div>
-          <button className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700 text-sm">
-            Copy Link
-          </button>
+        </div>
+
+        <div className="px-6 py-4">
+          {isLoading ? (
+            <div className="flex items-center justify-center py-8">
+              <Spinner />
+            </div>
+          ) : paginatedTransactions.length === 0 ? (
+            <div className="text-center py-8">
+              <TrendingUp className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No transactions yet</h3>
+              <p className="text-gray-500 dark:text-gray-400">Your transaction history will appear here.</p>
+            </div>
+          ) : (
+            <>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Type</TableHead>
+                    <TableHead>Asset</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Amount</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {paginatedTransactions.map((transaction: any, index: number) => (
+                    <TableRow key={index} className="hover:bg-gray-50 dark:hover:bg-[#2c2d33]/50 transition-colors">
+                      <TableCell className="flex items-center gap-2">
+                        {getTransactionIcon(transaction.type)}
+                        <span className="font-medium">{transaction.type}</span>
+                      </TableCell>
+                      <TableCell className="text-gray-600 dark:text-gray-400">{transaction.asset}</TableCell>
+                      <TableCell className="text-gray-600 dark:text-gray-400">
+                        {new Date(transaction.date).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>
+                        <span
+                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${transaction.status === 'COMPLETED' || transaction.status === 'ACTIVE'
+                            ? 'bg-green-100 text-green-800'
+                            : transaction.status === 'PENDING'
+                              ? 'bg-yellow-100 text-yellow-800'
+                              : 'bg-red-100 text-red-800'
+                            }`}
+                        >
+                          {transaction.status}
+                        </span>
+                      </TableCell>
+                      <TableCell className="font-medium">{transaction.amount}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+
+              {/* Pagination */}
+              {Math.ceil(transactions.length / activitiesPerPage) > 1 && (
+                <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200 dark:border-[#3c3f4c]">
+                  <div className="text-sm text-gray-700 dark:text-gray-300">
+                    Showing {(currentPage - 1) * activitiesPerPage + 1} to{' '}
+                    {Math.min(currentPage * activitiesPerPage, transactions.length)} of{' '}
+                    {transactions.length} transactions
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <button
+                      onClick={handlePreviousPage}
+                      disabled={currentPage === 1}
+                      className="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-[#3c3f4c] rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-[#2c2d33] hover:bg-gray-50 dark:hover:bg-[#3c3f4c] disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                      Previous
+                    </button>
+                    <span className="text-sm text-gray-700 dark:text-gray-300">
+                      Page {currentPage} of {Math.ceil(transactions.length / activitiesPerPage)}
+                    </span>
+                    <button
+                      onClick={handleNextPage}
+                      disabled={currentPage * activitiesPerPage >= transactions.length}
+                      className="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-[#3c3f4c] rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-[#2c2d33] hover:bg-gray-50 dark:hover:bg-[#3c3f4c] disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Next
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </div>
-    </>
+
+      {/* Referral Section */}
+      <div className="bg-white dark:bg-[#2c2d33] rounded-lg border border-gray-200 dark:border-[#3c3f4c] shadow-sm">
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-[#3c3f4c]">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Refer Us & Earn</h3>
+            <span className="text-sm text-gray-400 bg-gray-100 dark:bg-[#3c3f4c] px-2 py-1 rounded">Coming Soon</span>
+          </div>
+        </div>
+        <div className="px-6 py-4">
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
+            Use the below link to invite your friends and earn rewards.
+          </p>
+          <div className="flex items-center space-x-2">
+            <div className="flex-1 bg-gray-50 dark:bg-[#1a1d29] border border-gray-200 dark:border-[#3c3f4c] rounded-lg px-3 py-2">
+              <span className="text-sm text-gray-600 dark:text-gray-400 font-mono">teamapexllc.com/ref?ref=disparrown</span>
+            </div>
+            <button className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+              <Copy className="w-4 h-4 mr-1" />
+              Copy
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

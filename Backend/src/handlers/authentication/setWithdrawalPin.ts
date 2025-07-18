@@ -3,8 +3,12 @@ import prisma from '../../db';
 
 const setWithdrawalPin = async (req: Request, res: Response) => {
     try {
-        const userId = req.user?.id || req.body.userId; // Adjust this line if you use JWT middleware
+        const userId = req.user?.id;
         const { pin } = req.body;
+
+        if (!userId) {
+            return res.status(401).json({ message: 'User not authenticated' });
+        }
 
         if (!/^\d{4}$/.test(pin)) {
             return res.status(400).json({ message: 'Pin must be a 4-digit number' });
@@ -12,7 +16,7 @@ const setWithdrawalPin = async (req: Request, res: Response) => {
 
         await prisma.user.update({
             where: { id: Number(userId) },
-            data: { withdrawalPin: pin },
+            data: { withdrawalPin: Number(pin) },
         });
 
         res.status(200).json({ message: 'Withdrawal pin set successfully' });

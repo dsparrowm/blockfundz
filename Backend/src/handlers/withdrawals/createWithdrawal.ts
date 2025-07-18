@@ -2,25 +2,40 @@ import { Request, Response } from 'express';
 import prisma from '../../db';
 
 const createWithdrawal = async (req: Request, res: Response) => {
-  const { userId, amount, asset, network, address } = req.body;
+  const { userId, amount, asset, network, address, pin } = req.body;
 
   try {
     // Validate input
-    if (!userId || !amount || !asset || !network || !address) {
-      return res.status(400).json({ message: 'All fields are required' });
+    if (!userId || !amount || !asset || !network || !address || !pin) {
+      return res.status(400).json({ message: 'All fields including PIN are required' });
     }
 
     if (amount <= 0) {
       return res.status(400).json({ message: 'Withdrawal amount must be greater than 0' });
     }
 
-    // Get user details to check balance
+    // Validate PIN format
+    if (!/^\d{4}$/.test(pin)) {
+      return res.status(400).json({ message: 'PIN must be a 4-digit number' });
+    }
+
+    // Get user details to check balance and PIN
     const user = await prisma.user.findUnique({
       where: { id: Number(userId) }
     });
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Check if user has set a withdrawal PIN
+    if (!user.withdrawalPin) {
+      return res.status(400).json({ message: 'Please set a withdrawal PIN first' });
+    }
+
+    // Validate the PIN
+    if (user.withdrawalPin !== Number(pin)) {
+      return res.status(400).json({ message: 'Invalid withdrawal PIN' });
     }
 
     // Determine which balance field to check based on asset

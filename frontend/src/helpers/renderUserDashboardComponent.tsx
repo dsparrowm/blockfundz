@@ -1,6 +1,7 @@
 import { useStore } from '../store/useStore';
 import Overview from '../components/Overview';
 import Invest from '../components/Invest';
+import Investments from '../components/Investments';
 import DepositHistory from '../components/DepositHistory';
 import Withdrawal from '../components/Withdrawal';
 import WithdrawalHistory from '../components/WithdrawalHistory';
@@ -9,6 +10,7 @@ import AcountSettings from '../components/AccountSettings';
 import Profile from '../components/Profile';
 import KYCVerification from '../components/Kyc';
 import Settings from '../components/Settings';
+import Analytics from '../components/Analytics';
 
 const renderUserDashboardComponent = () => {
   const activeComponent = useStore((state) => state.activeComponent);
@@ -18,6 +20,8 @@ const renderUserDashboardComponent = () => {
       return <Overview />;
     case 'Invest':
       return <Invest />;
+    case 'Investments':
+      return <Investments />;
     case 'Deposits':
       return <Deposits />;
     case 'DepositHistory':
@@ -32,6 +36,10 @@ const renderUserDashboardComponent = () => {
       return <AcountSettings />;
     case 'verify':
       return <KYCVerification />;
+    case 'Profile':
+      return <Profile />;
+    case 'Analytics':
+      return <Analytics />;
     default:
       return null;
   }

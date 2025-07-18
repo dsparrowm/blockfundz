@@ -5,6 +5,7 @@ import subscribeToInvestmentPlan from '../handlers/investments/subscribeToInvest
 import addInvestmentPlan from '../handlers/investments/addInvestmentPlan';
 import updateInvestmentPlan from '../handlers/investments/updateInvestmentPlan';
 import deleteInvestmentPlan from '../handlers/investments/deleteInvestmentPlan';
+import calculateInterest from '../handlers/investments/calculateInterest';
 
 const router = Router();
 
@@ -14,6 +15,7 @@ router.post('/investments/subscribe', subscribeToInvestmentPlan);
 router.post('/investments/add', addInvestmentPlan);
 router.put('/investments/:id', updateInvestmentPlan);
 router.delete('/investments/:id', deleteInvestmentPlan);
+router.post('/investments/calculate-interest', calculateInterest);
 
 
 export default router;

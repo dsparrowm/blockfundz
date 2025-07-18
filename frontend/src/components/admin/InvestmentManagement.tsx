@@ -1,8 +1,10 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import axios from 'axios';
-import { Table, TableHeader, TableRow, TableCell, TableBody } from "@/components/ui/table"; // Adjust the import paths as necessary
-import { Button } from "@/components/ui/button";
+import { useEffect, useState, useMemo } from 'react';
+import axiosInstance from '../../api/axiosInstance';
+import { Table, TableHeader, TableRow, TableCell, TableBody } from "../ui/table";
+import { Button } from "../ui/button";
 import Spinner from '../spinners/Spinner';
+import { toast } from 'sonner';
+import { Calculator } from 'lucide-react';
 
 interface Investment {
   id: number;
@@ -22,24 +24,19 @@ interface Investment {
   createdAt: string;
 }
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
-
 const InvestmentManagement = () => {
   const [investments, setInvestments] = useState<Investment[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [calculateInterestLoading, setCalculateInterestLoading] = useState(false);
   const itemsPerPage = 5;
 
   useEffect(() => {
     const fetchInvestments = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${apiBaseUrl}/api/investments`, {
-          headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
-          }
-        });
+        const response = await axiosInstance.get('/api/investments');
         setInvestments(response.data.investmentPlans);
       } catch (error) {
         console.error('Error fetching investments:', error);
@@ -50,6 +47,24 @@ const InvestmentManagement = () => {
 
     fetchInvestments();
   }, []);
+
+  const handleCalculateInterest = async () => {
+    setCalculateInterestLoading(true);
+    try {
+      const response = await axiosInstance.post('/api/investments/calculate-interest', {});
+
+      if (response.data.data) {
+        toast.success(`Interest calculated successfully! Processed ${response.data.data.processed} investments, credited $${response.data.data.totalCredited.toFixed(2)} total`);
+      } else {
+        toast.success('Interest calculation completed successfully');
+      }
+    } catch (error: any) {
+      console.error('Error calculating interest:', error);
+      toast.error(error.response?.data?.message || 'Failed to calculate interest');
+    } finally {
+      setCalculateInterestLoading(false);
+    }
+  };
 
   const filteredInvestments = useMemo(() => {
     return investments.filter(investment =>
@@ -69,13 +84,30 @@ const InvestmentManagement = () => {
 
   return (
     <div>
-      <input
-        type="text"
-        placeholder="Search investments..."
-        value={searchText}
-        onChange={(e) => setSearchText(e.target.value)}
-        className="rounded-md border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:ring-slate-400"
-      />
+      <div className="flex justify-between items-center mb-4">
+        <input
+          type="text"
+          placeholder="Search investments..."
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          className="rounded-md border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400 dark:border-[#3c3f4c] dark:bg-[#2c2d33] dark:text-white dark:focus:ring-[#4a154b]"
+        />
+
+        <Button
+          onClick={handleCalculateInterest}
+          disabled={calculateInterestLoading}
+          className="bg-green-600 hover:bg-green-700 text-white flex items-center space-x-2"
+        >
+          {calculateInterestLoading ? (
+            <Spinner />
+          ) : (
+            <>
+              <Calculator className="w-4 h-4" />
+              <span>Calculate Interest</span>
+            </>
+          )}
+        </Button>
+      </div>
       {loading ? (
         <Spinner />
       ) : (
