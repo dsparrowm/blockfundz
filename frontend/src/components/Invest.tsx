@@ -45,20 +45,20 @@ interface SelectedPlan {
 }
 
 interface Balances {
-  bitcoin: number;
-  ethereum: number;
-  usdt: number;
-  usdc: number;
+  bitcoinBalance: number;
+  ethereumBalance: number;
+  usdtBalance: number;
+  usdcBalance: number;
 }
 
 const InvestmentPlans = () => {
   const user = useStore(state => state.user);
   const setActiveComponent = useStore(state => state.setActiveComponent);
   const userBalances: Balances = {
-    bitcoin: user?.balances?.Bitcoin || 0,
-    ethereum: user?.balances?.Ethereum || 0,
-    usdt: user?.balances?.Usdt || 0,
-    usdc: user?.balances?.Usdc || 0,
+    bitcoinBalance: user?.balances?.Bitcoin || 0,
+    ethereumBalance: user?.balances?.Ethereum || 0,
+    usdtBalance: user?.balances?.Usdt || 0,
+    usdcBalance: user?.balances?.Usdc || 0,
   };
   const [investmentPlans, setInvestmentPlans] = useState<InvestmentPlan[]>([]);
   const [userSubscriptions, setUserSubscriptions] = useState<number[]>([]);
@@ -88,9 +88,6 @@ const InvestmentPlans = () => {
     const fetchBalances = async () => {
       try {
         const response = await axiosInstance.get(`/api/users/balances`, {
-          params: {
-            userId: localStorage.getItem('userId')
-          },
           withCredentials: true
         });
         setBalances(response.data.balances);
@@ -182,7 +179,7 @@ const InvestmentPlans = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <SlackDashboardCard
           title="Bitcoin Balance"
-          value={(balances?.bitcoin || 0).toFixed(6)}
+          value={(balances?.bitcoinBalance || 0).toFixed(6)}
           subtitle="BTC available"
           icon={Bitcoin}
           color="yellow"
@@ -192,7 +189,7 @@ const InvestmentPlans = () => {
 
         <SlackDashboardCard
           title="Ethereum Balance"
-          value={(balances?.ethereum || 0).toFixed(6)}
+          value={(balances?.ethereumBalance || 0).toFixed(6)}
           subtitle="ETH available"
           icon={Banknote}
           color="blue"
@@ -202,7 +199,7 @@ const InvestmentPlans = () => {
 
         <SlackDashboardCard
           title="USDT Balance"
-          value={(balances?.usdt || 0).toFixed(2)}
+          value={(balances?.usdtBalance || 0).toFixed(2)}
           subtitle="USDT available"
           icon={DollarSign}
           color="green"
@@ -212,7 +209,7 @@ const InvestmentPlans = () => {
 
         <SlackDashboardCard
           title="USDC Balance"
-          value={(balances?.usdc || 0).toFixed(2)}
+          value={(balances?.usdcBalance || 0).toFixed(2)}
           subtitle="USDC available"
           icon={Coins}
           color="indigo"

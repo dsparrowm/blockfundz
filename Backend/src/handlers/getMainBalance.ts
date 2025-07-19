@@ -1,5 +1,6 @@
 import prisma from "../db";
 import { Request, Response } from 'express';
+import priceService from '../services/priceService';
 
 const getMainBalance = async (req: Request, res: Response) => {
     try {
@@ -18,7 +19,12 @@ const getMainBalance = async (req: Request, res: Response) => {
                 id: userId
             },
             select: {
-                mainBalance: true
+                mainBalance: true,
+                useCalculatedBalance: true,
+                bitcoinBalance: true,
+                ethereumBalance: true,
+                usdtBalance: true,
+                usdcBalance: true
             }
         });
 
@@ -29,10 +35,42 @@ const getMainBalance = async (req: Request, res: Response) => {
             });
         }
 
+        let mainBalance: number;
+        let calculationDetails = null;
+
+        if (user.useCalculatedBalance) {
+            // Calculate balance from crypto holdings
+            try {
+                const calculation = await priceService.calculateMainBalance({
+                    bitcoinBalance: user.bitcoinBalance,
+                    ethereumBalance: user.ethereumBalance,
+                    usdtBalance: user.usdtBalance,
+                    usdcBalance: user.usdcBalance
+                });
+
+                mainBalance = calculation.totalBalance;
+                calculationDetails = {
+                    breakdown: calculation.breakdown,
+                    prices: calculation.prices,
+                    isCalculated: true
+                };
+            } catch (error) {
+                console.error('Error calculating balance, falling back to manual:', error);
+                mainBalance = user.mainBalance || 0;
+                calculationDetails = { isCalculated: false, fallback: true };
+            }
+        } else {
+            // Use manual balance
+            mainBalance = user.mainBalance || 0;
+            calculationDetails = { isCalculated: false };
+        }
+
         res.status(200).json({
             message: 'Main balance fetched successfully',
             isSuccess: true,
-            mainBalance: user.mainBalance
+            mainBalance,
+            useCalculatedBalance: user.useCalculatedBalance,
+            calculationDetails
         });
     } catch (err) {
         console.error('Error fetching main balance:', err);

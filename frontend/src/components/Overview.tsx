@@ -206,7 +206,7 @@ const Overview = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <SlackDashboardCard
           title="Main Balance"
-          value={`$${mainBalance.toLocaleString()}`}
+          value={`$${Number(mainBalance || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
           subtitle="Total portfolio value"
           icon={DollarSign}
           color="green"
@@ -216,7 +216,7 @@ const Overview = () => {
 
         <SlackDashboardCard
           title="Bitcoin"
-          value={`${balances.bitcoinBalance || 0} BTC`}
+          value={`${Number(balances.bitcoinBalance || 0).toFixed(8)} BTC`}
           subtitle="Bitcoin balance"
           icon={Bitcoin}
           color="yellow"
@@ -226,7 +226,7 @@ const Overview = () => {
 
         <SlackDashboardCard
           title="Ethereum"
-          value={`${balances.ethereumBalance || 0} ETH`}
+          value={`${Number(balances.ethereumBalance || 0).toFixed(6)} ETH`}
           subtitle="Ethereum balance"
           icon={Banknote}
           color="blue"
@@ -236,7 +236,7 @@ const Overview = () => {
 
         <SlackDashboardCard
           title="Stablecoins"
-          value={`${(balances.usdtBalance || 0) + (balances.usdcBalance || 0)} USD`}
+          value={`$${(Number(balances.usdtBalance || 0) + Number(balances.usdcBalance || 0)).toFixed(2)}`}
           subtitle="USDT + USDC balance"
           icon={Coins}
           color="indigo"

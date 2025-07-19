@@ -12,6 +12,7 @@ model User {
   email              String    @unique
   password           String
   mainBalance        Float?    @default(0.0)
+  useCalculatedBalance Boolean @default(true)  // Use calculated vs manual balance
   availableBalance   Float?
   name               String
   phone              String?
@@ -110,4 +111,12 @@ enum RequestStatus {
   PENDING
   APPROVED
   REJECTED
+}
+
+model CryptoPrice {
+  id        Int      @id @default(autoincrement())
+  symbol    String   @unique  // BTC, ETH, etc.
+  price     Float    // Price in USD
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
