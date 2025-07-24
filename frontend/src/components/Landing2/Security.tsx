@@ -29,68 +29,64 @@ const Security = () => {
   ];
 
   return (
-    <section id="security" className="py-20">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center space-x-2 text-[#10B981] px-4 py-2 rounded-full text-sm font-semibold mb-6">
-            <Shield className="w-4 h-4 text-[#10B981]" />
-            <span className='text-[#10B981]'>Enterprise Security</span>
-          </div>
-
-          <h2 className="text-4xl md:text-5xl font-bold font-inter mb-6">
-            {' '}
-            <span className="bg-gradient-to-r from-[#F59E0B] to-[#10B981] bg-clip-text text-transparent">Your Assets Are 100% Secure</span>
+    <section className="py-24 bg-gray-50">
+      <div className="container mx-auto px-6">
+        <div className="text-center mb-20">
+          <h2 className="text-5xl md:text-6xl font-bold mb-6 text-gray-900">
+            Security you can{' '}
+            <span className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
+              count on
+            </span>
           </h2>
-
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            We employ the highest security standards in the industry to protect your investments.
-            Your peace of mind is our top priority.
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            We use industry-leading security measures to protect your investments
+            and personal information with the highest standards.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
           {securityFeatures.map((feature, index) => (
             <div
               key={feature.title}
-              className="glass-card p-8 hover:scale-[1.02] transition-all duration-300 group rounded-xl"
-              style={{ animationDelay: `${index * 150}ms` }}
+              className="text-center bg-white p-8 rounded-2xl border border-gray-100 hover:border-green-200 hover:shadow-xl transition-all duration-300 group animate-fade-in"
+              style={{ animationDelay: `${index * 0.2}s` }}
             >
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-transparent rounded-lg flex items-center justify-center flex-shrink-0 group-hover:animate-pulse-glow">
-                  <feature.icon className="w-6 h-6 text-[#10B981]" />
-                </div>
-
-                <div className="flex-1">
-                  <div className="flex items-center space-x-3 mb-3">
-                    <h3 className="text-xl font-semibold text-white">{feature.title}</h3>
-                    <span className="bg-dark-blue/20 text-dark-blue px-2 py-1 rounded text-xs font-semibold">
-                      {feature.badge}
-                    </span>
-                  </div>
-
-                  <p className="text-gray-400">{feature.description}</p>
-                </div>
+              <div className="bg-green-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                <feature.icon className="w-8 h-8 text-green-600" />
               </div>
+
+              <div className="inline-flex items-center px-3 py-1 bg-green-50 rounded-full text-green-600 text-xs font-semibold mb-4">
+                {feature.badge}
+              </div>
+
+              <h3 className="text-xl font-bold mb-4 text-gray-900">
+                {feature.title}
+              </h3>
+
+              <p className="text-gray-600 leading-relaxed">
+                {feature.description}
+              </p>
             </div>
           ))}
         </div>
 
         {/* Security Stats */}
-        <div className="glass-card p-8 text-center rounded-xl">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <div className="text-3xl font-bold text-[#10B981] mb-2">$2.5B+</div>
-              <div className="text-gray-400">Assets Protected</div>
+        <div className="bg-white p-12 rounded-3xl border border-gray-100 shadow-sm">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div className="space-y-3">
+              <div className="text-4xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">99.9%</div>
+              <div className="text-lg font-semibold text-gray-900">Uptime Guarantee</div>
+              <div className="text-gray-600">Always available when you need us</div>
             </div>
-
-            <div>
-              <div className="text-3xl font-bold text-[#10B981] mb-2">0</div>
-              <div className="text-gray-400">Security Breaches</div>
+            <div className="space-y-3">
+              <div className="text-4xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">$250M</div>
+              <div className="text-lg font-semibold text-gray-900">Insurance Coverage</div>
+              <div className="text-gray-600">Your investments are fully protected</div>
             </div>
-
-            <div>
-              <div className="text-3xl font-bold text-[#10B981] mb-2">24/7</div>
-              <div className="text-gray-400">Security Monitoring</div>
+            <div className="space-y-3">
+              <div className="text-4xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">0</div>
+              <div className="text-lg font-semibold text-gray-900">Security Breaches</div>
+              <div className="text-gray-600">Perfect security track record</div>
             </div>
           </div>
         </div>

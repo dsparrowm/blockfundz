@@ -48,16 +48,7 @@ const WithdrawalHistory = () => {
     setLoading(true);
     setError('');
     try {
-      const userId = localStorage.getItem('userId');
-      if (!userId) {
-        throw new Error('User not authenticated');
-      }
-
-      const response = await axiosInstance.get('/api/withdrawals', {
-        params: {
-          userId: userId
-        }
-      });
+      const response = await axiosInstance.get('/api/withdrawals');
 
       setWithdrawals(response.data.withdrawalRequests || []);
     } catch (error: any) {

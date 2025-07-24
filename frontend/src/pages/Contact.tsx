@@ -40,12 +40,6 @@ const ContactUs = () => {
       description: "24/7 customer support"
     },
     {
-      icon: <MessageSquare className="w-6 h-6" />,
-      title: "Live Chat",
-      content: "Coming Soon",
-      description: "Instant response time"
-    },
-    {
       icon: <Phone className="w-6 h-6" />,
       title: "Call Us",
       content: "+1 (256) 291-2075",

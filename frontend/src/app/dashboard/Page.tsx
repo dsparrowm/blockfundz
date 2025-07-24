@@ -10,13 +10,19 @@ import CryptoTicker from "@/components/CryptoTicker";
 export default function Page() {
   const location = useLocation();
   const isAdmin = location.pathname.startsWith('/admin');
-  const activeComponent = !isAdmin
-    ? useStore((state) => state.activeComponent)
-    : useStore((state) => state.activeAdminComponent);
   const userData = useStore(state => state.user);
+  const activeComponent = useStore(state => state.activeComponent);
+  const activeAdminComponent = useStore(state => state.activeAdminComponent);
+
   const data = userData?.balances ? extractBalances(userData.balances) : {};
   const coin = Object.entries(data);
   const coins = coin.map(([key, value]) => ({ name: key, balance: value }));
+
+  // Components that should not show crypto ticker
+  const chatComponents = ['Support'];
+  const adminChatComponents = ['Direct Message'];
+
+  const shouldShowCryptoTicker = !isAdmin && !chatComponents.includes(activeComponent);
 
   const [cryptoData, setCryptoData] = useState([
     { symbol: 'BTC', price: 64823.45, change: 2.45 },
@@ -38,10 +44,12 @@ export default function Page() {
 
   return (
     <SlackLayout>
-      {/* Crypto Ticker - positioned at top of content area */}
-      <div className="mb-6 bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
-        <CryptoTicker />
-      </div>
+      {/* Crypto Ticker - Only for users and non-chat components */}
+      {shouldShowCryptoTicker && (
+        <div className="mb-6 bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
+          <CryptoTicker />
+        </div>
+      )}
 
       {/* Main Dashboard Content */}
       {!isAdmin ? renderUserDashboardComponent() : renderAdminDashboardComponent()}

@@ -8,8 +8,6 @@ export class InterestCalculationService {
      */
     static async calculateDailyInterest() {
         try {
-            console.log('Starting daily interest calculation...');
-
             // Get all active investment transactions
             const activeInvestments = await prisma.transaction.findMany({
                 where: {
@@ -36,8 +34,6 @@ export class InterestCalculationService {
                     console.error(`Error processing interest for investment ${investment.id}:`, error);
                 }
             }
-
-            console.log(`Daily interest calculation completed. Processed ${totalProcessed} investments, credited $${totalCredited.toFixed(2)} total`);
 
             return {
                 processed: totalProcessed,
@@ -110,7 +106,6 @@ export class InterestCalculationService {
             return interestEarned;
         });
 
-        console.log(`Credited $${interestEarned.toFixed(6)} interest to user ${investment.userId} from plan ${investment.plan.plan}`);
         return result;
     }
 
@@ -120,7 +115,6 @@ export class InterestCalculationService {
     static startInterestCalculationScheduler() {
         // Run every day at midnight (00:00)
         cron.schedule('0 0 * * *', async () => {
-            console.log('Running scheduled daily interest calculation...');
             try {
                 await this.calculateDailyInterest();
             } catch (error) {
@@ -129,15 +123,12 @@ export class InterestCalculationService {
         }, {
             timezone: "UTC"
         });
-
-        console.log('Daily interest calculation scheduler started (runs at 00:00 UTC)');
     }
 
     /**
      * Manual trigger for interest calculation (for testing)
      */
     static async manualInterestCalculation() {
-        console.log('Manual interest calculation triggered...');
         return await this.calculateDailyInterest();
     }
 }

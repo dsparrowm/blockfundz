@@ -1,112 +1,163 @@
-import { useEffect, useState } from 'react';
-import { DollarSign, Users, BarChart, Shield } from 'lucide-react';
+import { useEffect, useState, useRef } from 'react';
 
 const Stats = () => {
   const [counters, setCounters] = useState({
-    users: 0,
-    volume: 0,
-    countries: 0,
+    satisfaction: 0,
+    messages: 0,
+    companies: 0,
     growth: 0
   });
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   const finalValues = {
-    users: 2100000,
-    volume: 2500000000,
-    countries: 150,
-    growth: 24.5
+    satisfaction: 90,
+    messages: 700,
+    companies: 5000,
+    growth: 156
+  };
+
+  // Easing function for smooth animation
+  const easeOutCubic = (t: number): number => {
+    return 1 - Math.pow(1 - t, 3);
+  };
+
+  const animateCounters = () => {
+    if (hasAnimated) return;
+    setHasAnimated(true);
+
+    const duration = 2500; // 2.5 seconds
+    const startTime = Date.now();
+
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const easedProgress = easeOutCubic(progress);
+
+      setCounters({
+        satisfaction: Math.floor(finalValues.satisfaction * easedProgress),
+        messages: Math.floor(finalValues.messages * easedProgress),
+        companies: Math.floor(finalValues.companies * easedProgress),
+        growth: Math.floor(finalValues.growth * easedProgress)
+      });
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        // Ensure final values are exact
+        setCounters(finalValues);
+      }
+    };
+
+    requestAnimationFrame(animate);
   };
 
   useEffect(() => {
-    const duration = 2000; // 2 seconds
-    const steps = 60;
-    const interval = duration / steps;
-
-    let step = 0;
-    const timer = setInterval(() => {
-      step++;
-      const progress = step / steps;
-
-      setCounters({
-        users: Math.floor(finalValues.users * progress),
-        volume: Math.floor(finalValues.volume * progress),
-        countries: Math.floor(finalValues.countries * progress),
-        growth: Math.min(finalValues.growth, finalValues.growth * progress)
-      });
-
-      if (step >= steps) {
-        clearInterval(timer);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasAnimated) {
+            // Small delay for better visual effect
+            setTimeout(() => {
+              animateCounters();
+            }, 300);
+          }
+        });
+      },
+      {
+        threshold: 0.3, // Trigger when 30% of the section is visible
+        rootMargin: '0px 0px -50px 0px'
       }
-    }, interval);
+    );
 
-    return () => clearInterval(timer);
-  }, []);
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, [hasAnimated]);
 
   const stats = [
     {
-      icon: Users,
-      value: counters.users.toLocaleString(),
-      suffix: '+',
-      label: 'Active Investors',
-      color: 'Emerald Green'
+      value: `${counters.satisfaction}%`,
+      label: 'of customers feel more satisfied with work',
+      description: 'when they use NexGen to manage their portfolio'
     },
     {
-      icon: DollarSign,
-      value: `$${(counters.volume / 1000000000).toFixed(1)}B`,
-      suffix: '+',
-      label: 'Assets Under Management',
-      color: 'orange'
+      value: `${counters.messages}M`,
+      label: 'daily investment transactions',
+      description: 'are processed through our secure platform'
     },
     {
-      icon: BarChart,
-      value: counters.countries.toString(),
-      suffix: '+',
-      label: 'Countries',
-      color: 'dark-blue'
+      value: `${counters.companies.toLocaleString()}+`,
+      label: 'investment companies',
+      description: 'trust NexGen for their portfolio management'
     },
     {
-      icon: Shield,
-      value: counters.growth.toFixed(1),
-      suffix: '%',
-      label: 'Avg Annual Growth',
-      color: 'orange'
+      value: `${counters.growth}%`,
+      label: 'increase in portfolio performance',
+      description: 'when using AI-powered investment strategies'
     }
   ];
 
   return (
-    <section className="py-20">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold font-inter mb-6 text-white">
-            Trusted by <span className="bg-[#3B82F6] bg-clip-text text-transparent">Millions</span>
+    <section ref={sectionRef} className="py-24 bg-gray-50">
+      <div className="container mx-auto px-6">
+        <div className="text-center mb-20">
+          <h2 className="text-5xl md:text-6xl font-bold mb-6 text-gray-900">
+            Numbers that{' '}
+            <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              speak for themselves
+            </span>
           </h2>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            Join the fastest-growing crypto investment platform with proven results
-            and industry-leading security standards.
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            See why industry leaders choose NexGen for their investment strategies and portfolio growth.
           </p>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
           {stats.map((stat, index) => (
             <div
-              key={stat.label}
-              className="text-center group"
-              style={{ animationDelay: `${index * 200}ms` }}
+              key={index}
+              className="text-center md:text-left space-y-4 opacity-0 animate-fade-in-up"
+              style={{
+                animationDelay: `${index * 0.15 + 0.5}s`,
+                animationFillMode: 'forwards'
+              }}
             >
-              <div className="glass-card p-8 hover:scale-105 transition-all duration-300 rounded-xl">
-                <div className={`w-16 h-16 ${stat.color === 'orange' ? 'bg-orange/20' : 'bg-dark-blue/20'} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:animate-pulse-glow`}>
-                  <stat.icon className={`w-8 h-8 ${stat.color === 'orange' ? 'text-orange' : 'text-dark-blue'}`} />
-                </div>
+              <div className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent transition-all duration-200">
+                {stat.value}
+              </div>
 
-                <div className="text-3xl md:text-4xl font-bold text-white mb-2">
-                  {stat.value}{stat.suffix}
-                </div>
-
-                <div className="text-gray-400 text-lg">
+              <div className="space-y-2">
+                <h3 className="text-xl md:text-2xl font-semibold text-gray-900">
                   {stat.label}
-                </div>
+                </h3>
+                <p className="text-lg text-gray-600 leading-relaxed">
+                  {stat.description}
+                </p>
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Additional Trust Indicators */}
+        <div className="mt-20 pt-16 border-t border-gray-200">
+          <div className="text-center">
+            <p className="text-sm text-gray-500 mb-8 uppercase tracking-wide opacity-0 animate-fade-in" style={{ animationDelay: '1.5s', animationFillMode: 'forwards' }}>
+              FEATURED IN
+            </p>
+            <div className="flex justify-center items-center space-x-12 opacity-0 animate-fade-in" style={{ animationDelay: '1.8s', animationFillMode: 'forwards' }}>
+              <div className="text-2xl font-bold text-gray-400 hover:text-gray-600 transition-colors duration-200">TechCrunch</div>
+              <div className="text-2xl font-bold text-gray-400 hover:text-gray-600 transition-colors duration-200">Forbes</div>
+              <div className="text-2xl font-bold text-gray-400 hover:text-gray-600 transition-colors duration-200">Bloomberg</div>
+              <div className="text-2xl font-bold text-gray-400 hover:text-gray-600 transition-colors duration-200">CNBC</div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

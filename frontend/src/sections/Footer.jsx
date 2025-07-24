@@ -1,6 +1,6 @@
 import React from 'react';
 import { Facebook, Twitter, Instagram, Linkedin, Mail } from 'lucide-react';
-import { logo } from '../assets/icons';
+import NexGenLogo from '../components/ui/NexGenLogo';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -54,58 +54,57 @@ const Footer = () => {
 
   return (
     <footer className="bg-gray-900 text-gray-200 bg-transparent">
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
-          {footerSections.map((section) => (
-            <div key={section.title}>
-              <h3 className="font-semibold text-white mb-4 text-[2rem]">{section.title}</h3>
-              <ul className="space-y-2">
-                {section.links.map((link) => (
-                  <li key={link.label}>
-                    <a
-                      href={link.href}
-                      className="text-gray-400 hover:text-white transition-colors"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-
-        {/* Bottom Bar */}
-        <div className="border-t border-gray-800 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            {/* Logo and Copyright */}
-            <div className="flex flex-col items-center md:items-start space-y-2">
-              <div className='flex items-center gap-1'>
-                  <a href="/">
-                      <img src={logo} alt="Logo" width={40} height={10}/>
+      {/* Main Footer Content */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+        {footerSections.map((section) => (
+          <div key={section.title}>
+            <h3 className="font-semibold text-white mb-4 text-[2rem]">{section.title}</h3>
+            <ul className="space-y-2">
+              {section.links.map((link) => (
+                <li key={link.label}>
+                  <a
+                    href={link.href}
+                    className="text-gray-400 hover:text-white transition-colors"
+                  >
+                    {link.label}
                   </a>
-                  <p className='text-[15px] text-orange-500 leading-10'>NexGen</p>
-              </div>
-              <p className="text-sm text-gray-400">
-                © {currentYear} NexGen. All rights reserved.
-              </p>
-            </div>
-
-            {/* Social Links */}
-            <div className="flex space-x-4">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  className="text-gray-400 hover:text-white transition-colors"
-                  aria-label={social.label}
-                >
-                  {social.icon}
-                </a>
+                </li>
               ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      {/* Bottom Bar */}
+      <div className="border-t border-gray-800 pt-8">
+        <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+          {/* Logo and Copyright */}
+          <div className="flex flex-col items-center md:items-start space-y-2">
+            <div className='flex items-center gap-1'>
+              <a href="/">
+                <NexGenLogo variant="full" size="sm" />
+              </a>
             </div>
+            <p className="text-sm text-gray-400">
+              © {currentYear} NexGen. All rights reserved.
+            </p>
+          </div>
+
+          {/* Social Links */}
+          <div className="flex space-x-4">
+            {socialLinks.map((social) => (
+              <a
+                key={social.label}
+                href={social.href}
+                className="text-gray-400 hover:text-white transition-colors"
+                aria-label={social.label}
+              >
+                {social.icon}
+              </a>
+            ))}
           </div>
         </div>
+      </div>
     </footer>
   );
 };

@@ -1,0 +1,41 @@
+{
+  "folders": [
+    {
+      "name": "Frontend",
+      "path": "./frontend"
+    },
+    {
+      "name": "Backend", 
+      "path": "./Backend"
+    }
+  ],
+  "settings": {
+    // CRITICAL: Exclude the massive Backend node_modules
+    "files.watcherExclude": {
+      "**/node_modules/**": true,
+      "**/Backend/node_modules/**": true,
+      "**/frontend/node_modules/**": true,
+      "**/.git/**": true,
+      "**/dist/**": true,
+      "**/build/**": true,
+      "**/*.log": true
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/Backend/node_modules": true,
+      "**/frontend/node_modules": true,
+      "**/.git": true,
+      "**/dist": true,
+      "**/build": true
+    },
+    "typescript.preferences.includePackageJsonAutoImports": "off",
+    "editor.semanticHighlighting.enabled": false,
+    "git.autoRefresh": false
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-vscode.vscode-typescript-next",
+      "bradlc.vscode-tailwindcss"
+    ]
+  }
+}

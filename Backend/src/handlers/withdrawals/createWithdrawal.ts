@@ -2,11 +2,17 @@ import { Request, Response } from 'express';
 import prisma from '../../db';
 
 const createWithdrawal = async (req: Request, res: Response) => {
-  const { userId, amount, asset, network, address, pin } = req.body;
+  const authenticatedUserId = req.user?.id;
+  const { amount, asset, network, address, pin } = req.body;
 
   try {
+    // Check authentication
+    if (!authenticatedUserId) {
+      return res.status(401).json({ message: 'User not authenticated' });
+    }
+
     // Validate input
-    if (!userId || !amount || !asset || !network || !address || !pin) {
+    if (!amount || !asset || !network || !address || !pin) {
       return res.status(400).json({ message: 'All fields including PIN are required' });
     }
 
@@ -21,7 +27,7 @@ const createWithdrawal = async (req: Request, res: Response) => {
 
     // Get user details to check balance and PIN
     const user = await prisma.user.findUnique({
-      where: { id: Number(userId) }
+      where: { id: Number(authenticatedUserId) }
     });
 
     if (!user) {
@@ -69,7 +75,7 @@ const createWithdrawal = async (req: Request, res: Response) => {
     // Create withdrawal request
     const newWithdrawal = await prisma.withdrawalRequest.create({
       data: {
-        userId: Number(userId),
+        userId: Number(authenticatedUserId),
         amount: parseFloat(amount),
         asset,
         network,

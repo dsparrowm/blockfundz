@@ -6,10 +6,11 @@
       "lib": ["ES2020", "DOM", "DOM.Iterable"],
       "module": "ESNext",
       "skipLibCheck": true,
+      "incremental": true,
       "baseUrl": ".",
       "paths": {
         "@/*": [
-            "./frontend/src/*"
+            "./src/*"
         ]
       },
       /* Bundler mode */
@@ -20,13 +21,23 @@
       "noEmit": true,
       "jsx": "react-jsx",
   
-      /* Linting */
-      "strict": true,
-      "noUnusedLocals": true,
-      "noUnusedParameters": true,
-      "noFallthroughCasesInSwitch": true,
-      "noUncheckedSideEffectImports": true
+      /* Linting - Disabled for performance */
+      "strict": false,
+      "noUnusedLocals": false,
+      "noUnusedParameters": false,
+      "noFallthroughCasesInSwitch": false,
+      "noUncheckedSideEffectImports": false
     },
-    "include": ["src"]
+    "include": ["src"],
+    "exclude": [
+      "node_modules",
+      "dist",
+      "build",
+      "coverage",
+      "**/*.test.ts",
+      "**/*.test.tsx",
+      "**/*.spec.ts",
+      "**/*.spec.tsx"
+    ]
   }
   

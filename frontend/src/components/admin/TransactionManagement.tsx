@@ -94,8 +94,8 @@ const TransactionManagement = () => {
 
     setEditLoading(true);
     try {
-      const response = await axios.put(
-        `${apiBaseUrl}/api/transactions/${selectedTransaction.id}`,
+      const response = await axiosInstance.put(
+        `/api/transactions/${selectedTransaction.id}`,
         {
           type: selectedTransaction.type,
           asset: selectedTransaction.asset,
@@ -105,12 +105,6 @@ const TransactionManagement = () => {
           name: selectedTransaction.name,
           phone: selectedTransaction.phone,
           planName: selectedTransaction.planName
-        },
-        {
-          headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem('adminToken'),
-            'Content-Type': 'application/json'
-          }
         }
       );
 

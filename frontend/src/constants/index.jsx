@@ -15,6 +15,7 @@ import {
   Shield,
   Database,
   TrendingUp,
+  MessageCircle,
 } from "lucide-react"
 
 
@@ -156,13 +157,13 @@ export const payments = [
 export const data = {
   // User navigation items
   userNavMain: [
-    // {
-    //   title: "Overview",
-    //   url: "/dashboard",
-    //   icon: Home,
-    //   isActive: true,
-    //   onclick: () => { }
-    // },
+    {
+      title: "Overview",
+      url: "/dashboard",
+      icon: Home,
+      isActive: true,
+      onclick: () => { }
+    },
     {
       title: "Invest",
       url: "/dashboard/deposits",
@@ -218,7 +219,7 @@ export const data = {
       onclick: () => { }
     },
     {
-      title: "verify",
+      title: "kyc(New)",
       url: "/dashboard/kyc",
       icon: Shield,
       onclick: () => { }
@@ -227,6 +228,12 @@ export const data = {
       title: "Analytics",
       url: "/dashboard/analytics",
       icon: BarChart3,
+      onclick: () => { }
+    },
+    {
+      title: "Support",
+      url: "/dashboard/support",
+      icon: MessageCircle,
       onclick: () => { }
     }
   ],

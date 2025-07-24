@@ -6,7 +6,7 @@
 // const dashboard = async (req: Request, res: Response) => {
 //     const userId = req.user.id;
 //     try {
-//         console.log('Fetching dashboard data....');
+//         // Fetch dashboard data
 
 //     } catch (error) {
 //         console.error('Dashboard fetch error:', error);

@@ -12,7 +12,7 @@ const deleteInvestmentPlan = async (req: Request, res: Response) => {
     res.status(200);
     res.json({ message: "Investment plan deleted" });
   } catch (error) {
-    console.log(error);
+    console.error('Error deleting investment plan:', error);
     res.status(500).json({ error: "Something went wrong" });
   }
 };

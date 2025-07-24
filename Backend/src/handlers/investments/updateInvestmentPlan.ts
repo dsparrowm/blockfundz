@@ -20,9 +20,9 @@ const updateInvestmentPlan = async (req: Request, res: Response) => {
         res.status(200);
         res.json(updatedPlan);
     } catch (error) {
-        console.log(error);
+        console.error('Error updating investment plan:', error);
         res.status(500).json({ error: 'Something went wrong' });
-        
+
     }
 }
 

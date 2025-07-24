@@ -2,12 +2,18 @@ import { Request, Response } from 'express';
 import prisma from '../../db';
 
 const subscribeToInvestmentPlan = async (req: Request, res: Response) => {
-  const { userId, planId, asset, amount } = req.body;
+  const authenticatedUserId = req.user?.id;
+  const { planId, asset, amount } = req.body;
 
   try {
+    // Check authentication
+    if (!authenticatedUserId) {
+      return res.status(401).json({ message: 'User not authenticated' });
+    }
+
     // Check if the user exists
     const user = await prisma.user.findUnique({
-      where: { id: Number(userId) },
+      where: { id: Number(authenticatedUserId) },
       include: {
         transactions: {
           where: {
@@ -28,7 +34,7 @@ const subscribeToInvestmentPlan = async (req: Request, res: Response) => {
     );
 
     if (existingSubscription) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         message: 'User is already subscribed to this plan'
       });
     }
@@ -46,7 +52,7 @@ const subscribeToInvestmentPlan = async (req: Request, res: Response) => {
     if (user.transactions.length > 0) {
       await prisma.transaction.updateMany({
         where: {
-          userId: Number(userId),
+          userId: Number(authenticatedUserId),
           type: 'SUBSCRIPTION',
           status: 'ACTIVE'
         },
@@ -66,16 +72,16 @@ const subscribeToInvestmentPlan = async (req: Request, res: Response) => {
         name: user.name,
         phone: user.phone,
         status: 'ACTIVE',
-        userId: Number(userId),
+        userId: Number(authenticatedUserId),
         planId: Number(planId),
         planName: investmentPlan.plan,
         details: `Subscribed to ${investmentPlan.plan} plan`,
       },
     });
 
-    res.status(200).json({ 
-      message: 'Subscribed to investment plan successfully', 
-      transaction 
+    res.status(200).json({
+      message: 'Subscribed to investment plan successfully',
+      transaction
     });
   } catch (err) {
     console.error('Error subscribing to investment plan:', err);

@@ -2,14 +2,14 @@ import { Request, Response } from 'express';
 import prisma from '../../db';
 
 const getUserDepositHistory = async (req: Request, res: Response) => {
-  const { userId } = req.query;
+  const userId = req.user?.id;
 
   if (!userId) {
-    return res.status(400).json({ message: 'User ID is required' });
+    return res.status(401).json({ message: 'User not authenticated' });
   }
 
   try {
-    const userIdNumber = parseInt(userId as string, 10);
+    const userIdNumber = Number(userId);
 
     if (isNaN(userIdNumber)) {
       return res.status(400).json({ message: 'Invalid user ID' });

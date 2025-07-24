@@ -12,7 +12,6 @@ export function ProfileComponent() {
         phone: "",
     })
     const user = useStore((state) => state.user)
-    console.log('the current user as shown on profile page', user)
 
     const [securityData, setSecurityData] = useState({
         currentPassword: "",
@@ -24,7 +23,6 @@ export function ProfileComponent() {
     const handleProfileSubmit = (e: React.FormEvent) => {
         e.preventDefault()
         // Add profile update logic here
-        console.log('profile wwas updated')
     }
 
     const handleSecuritySubmit = (e: React.FormEvent) => {
@@ -34,7 +32,6 @@ export function ProfileComponent() {
             alert("Passwords don't match!")
             return
         }
-        console.log('security was updated')
     }
 
     return (

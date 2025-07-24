@@ -1,13 +1,15 @@
 import React from "react";
-import { FaUser } from "react-icons/fa";
-import { FaLock } from "react-icons/fa";
-import { crypto_logo } from "../assets/icons";
+import { FaUser, FaLock } from "react-icons/fa";
+import NexGenLogo from "../components/ui/NexGenLogo";
 import { useState } from 'react';
 import { useStore } from "../store/useStore";
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import Spinner from "../components/spinners/Spinner";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
 
 
 // Type for Zod error response
@@ -24,7 +26,7 @@ interface LoginFormData {
   password: string;
 }
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
+const apiBaseUrl = "http://localhost:3001";
 
 
 const Login = () => {
@@ -36,7 +38,6 @@ const Login = () => {
   const [error, setError] = useState<Record<string, string>>({});
   const [globalError, setGlobalError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
   const setAdminUser = useStore(state => state.setAdminUser)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,11 +70,9 @@ const Login = () => {
     setError({});
     setGlobalError(null);
     setLoading(true);
-    setSuccessMessage("");
 
     try {
       const response = await axios.post(`${apiBaseUrl}/api/auth/admin/login`, formData)
-      console.log('Admin login response:', response.data) // Debug log
       localStorage.setItem("adminToken", response.data.token)
       toast("Login successful", { className: "text-[15px] px-4 py-2 bg-green" })
       setAdminUser(response.data.userData || response.data.user)
@@ -95,6 +94,7 @@ const Login = () => {
               acc[err.path] = err.message;
               return acc;
             }, {} as Record<string, string>);
+            setError(formErrors);
           } else {
             setGlobalError(axiosError.response.data.message || 'Login failed');
           }
@@ -104,7 +104,6 @@ const Login = () => {
       } else {
         setGlobalError("Network error. Please check your connection.");
       }
-      console.log(error)
     } finally {
       setLoading(false);
       // setFormData({
@@ -115,88 +114,98 @@ const Login = () => {
   };
 
   return (
-    <main className="relative text-white flex justify-center items-center min-h-screen p-4 flex-col bg-black">
-      <div className="flex items-center justify-center space-x-3 mb-5 cursor-pointer" onClick={() => navigate('/')}>
-
-        {crypto_logo ? (
-          <img src={crypto_logo} alt="NexGen Logo" className="w-8 h-8 " />
-        ) : (
-          <Bitcoin className="w-6 h-6 text-white" />
-        )}
-        <span className="text-3xl text-white font-bold">
-          Nex<span className="text-crypto-blue">Gen</span>
-        </span>
-      </div>
-      <div className="relative backdrop-blur-lg bg-dark-blue/80 p-8 rounded-2xl shadow-xl border border-white/10 w-full max-w-md">
-        <form action="" className="space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-8 ">
-            <div className="text-center">
-              <h1 className="text-3xl font-bold text-white mb-2">Admin Login</h1>
-              <p className="text-white/60">Sign in to your account</p>
-            </div>
-          </div>
-          <div className="space-y-2">
-            <label className="text-white/80 text-sm font-medium pl-1">Email</label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-3 flex items-center">
-                <FaUser className="h-5 w-5 text-white/40" />
-              </div>
-              <input
-                onChange={handleChange}
-                value={formData.email}
-                type="email"
-                name="email"
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-11 py-3 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-white/20"
-                placeholder="Enter your email" />
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-white/80 text-sm font-medium pl-1">Password</label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-3 flex items-center">
-                <FaLock className="h-5 w-5 text-white/40 " />
-              </div>
-              <input
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                type="password"
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-11 py-3 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-white/20"
-                placeholder="Enter your password"
-              />
-            </div>
-          </div>
-
-          {/* <div className="flex items-center justify-between text-sm bg-transparent">
-            <label className="flex items-center space-x-2 text-white/80">
-              <input type="checkbox" className="rounded border-white/20 bg-white/5" />
-              <span className="bg-transparent">Remember me</span>
-            </label>
-            <button type="button" className="text-white/80 hover:text-white">
-              Forgot password?
-            </button>
-          </div> */}
-
-          <button
-            type="submit"
-            className="w-full bg-orange-500 text-white rounded-lg py-3 font-medium hover:bg-white/20 transition-all duration-300 border border-white/10"
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-md space-y-8">
+        {/* Logo Section */}
+        <div className="text-center">
+          <div
+            className="inline-block cursor-pointer"
+            onClick={() => navigate('/')}
           >
-            {loading ? (<Spinner />) : "Sign In"}
-          </button>
+            <NexGenLogo variant="full" size="lg" />
+          </div>
+        </div>
 
-          {/* Sign Up Link */}
-          {/* <p className="text-center text-white/60 bg-transparent">
-              Don't have an account?{' '}
-              <Link to="/signup">
-                <a href="#" className="hover:underline text-orange-500">
-                  Sign up
-                </a>
-              </Link>
-            </p> */}
-        </form>
+        {/* Main Admin Login Card */}
+        <Card className="shadow-lg border-0">
+          <CardHeader className="space-y-1 text-center">
+            <CardTitle className="text-2xl font-bold text-gray-900">
+              Admin Portal
+            </CardTitle>
+            <CardDescription className="text-gray-600">
+              Sign in to the admin dashboard
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Email Input */}
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                  Email address
+                </Label>
+                <div className="relative">
+                  <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="Enter your admin email"
+                    className="pl-10"
+                    disabled={loading}
+                    required
+                  />
+                </div>
+                {error.email && (
+                  <p className="text-red-500 text-sm">{error.email}</p>
+                )}
+              </div>
+
+              {/* Password Input */}
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+                  Password
+                </Label>
+                <div className="relative">
+                  <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder="Enter your password"
+                    className="pl-10"
+                    disabled={loading}
+                    required
+                  />
+                </div>
+                {error.password && (
+                  <p className="text-red-500 text-sm">{error.password}</p>
+                )}
+              </div>
+
+              {/* Admin Login Button */}
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
+              >
+                {loading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Signing in...
+                  </>
+                ) : (
+                  "Sign in to Admin Portal"
+                )}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
       </div>
-    </main>
+    </div>
   )
 }
 

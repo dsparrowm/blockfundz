@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { HowItWorks, Hero, OurTeam, TestimonialSection, Features, Pricing } from './sections';
-import { Login, Contact, Register, AdminLogin } from './pages';
+import { Login, Contact, Register, AdminLogin, AdminChatPage } from './pages';
 import Page from './app/dashboard/Page';
 import { HomeLayout, DashboardLayout, AuthLayout, MainLayout } from './components/layout';
 import TestToast from './pages/TestToast';
@@ -10,16 +10,15 @@ import PublicRoute from './helpers/protectRoutes'
 import EmailVerificationPage from './pages/EmailVerificationPage';
 import VerifiedEmailSuccessPage from './pages/VerifiedEmailSuccessPage';
 import { Toaster } from "@/components/ui/sonner"
-import LiveChat from './components/chat/liveChat';
 import MaintenancePage from './components/MaintenancePage';
 import ResetPassword from './pages/ResetPassword';
-import CryptoNewsSection from './sections/RelatedNewsSection';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Landing from './components/Landing2/Landing';
 
 const App = () => {
-  const maintenanceMode = false
+  const maintenanceMode = false;
+
   return (
     <>
       {maintenanceMode ? (
@@ -64,10 +63,28 @@ const App = () => {
           <Route path="/signup" element={<AuthLayout><Register /></AuthLayout>} />
           <Route path="/admin/login" element={<AuthLayout><AdminLogin /></AuthLayout>} />
 
-
           {/* Dashboard Routes */}
-          <Route path="/dashboard" element={<DashboardLayout><Page /></DashboardLayout>} />
-          <Route path="/admin/dashboard" element={<DashboardLayout><Page /></DashboardLayout>} />
+          <Route path="/dashboard" element={
+            <DashboardLayout>
+              <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div></div>}>
+                <Page />
+              </Suspense>
+            </DashboardLayout>
+          } />
+          <Route path="/admin/dashboard" element={
+            <DashboardLayout>
+              <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div></div>}>
+                <Page />
+              </Suspense>
+            </DashboardLayout>
+          } />
+          <Route path="/admin/chat" element={
+            <DashboardLayout>
+              <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div></div>}>
+                <AdminChatPage />
+              </Suspense>
+            </DashboardLayout>
+          } />
 
 
           {/* Regular Pages */}
@@ -79,15 +96,54 @@ const App = () => {
           {/* Protected Routes */}
 
           {/* Test Page */}
-
           <Route path="/test" element={<TestToast />} />
 
           {/* 404 Page */}
           <Route path="*" element={<NotFoundPage />} />
+
+
+          {/* Regular Pages */}
+          <Route path="/contact" element={
+            <MainLayout>
+              <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div></div>}>
+                <Contact />
+              </Suspense>
+            </MainLayout>
+          } />
+          <Route path="/verify-email" element={
+            <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div></div>}>
+              <EmailVerificationPage />
+            </Suspense>
+          } />
+          <Route path="/email-verified" element={
+            <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div></div>}>
+              <VerifiedEmailSuccessPage />
+            </Suspense>
+          } />
+          <Route path="/reset-password/:token" element={
+            <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div></div>}>
+              <ResetPassword />
+            </Suspense>
+          } />
+
+          {/* Protected Routes */}
+
+          {/* Test Page */}
+          <Route path="/test" element={
+            <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div></div>}>
+              <TestToast />
+            </Suspense>
+          } />
+
+          {/* 404 Page */}
+          <Route path="*" element={
+            <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div></div>}>
+              <NotFoundPage />
+            </Suspense>
+          } />
         </Routes>
       )}
-      <Toaster richColors position={"top-center"} />
-      <LiveChat />
+      <Toaster />
     </>
   );
 };

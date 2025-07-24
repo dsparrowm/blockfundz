@@ -42,8 +42,6 @@ const signin = async (req: Request, res: Response) => {
       }
       const token = createJWT(res, payload)
 
-      console.log("UserQuery from the backend: ", userQuery)
-
       const user = {
          id: userQuery.id,
          email: userQuery.email,

@@ -9,6 +9,7 @@ import resetPassword from '../handlers/authentication/resetPassword';
 import addNewUser from '../handlers/authentication/addNewUser';
 import setWithdrawalPin from '../handlers/authentication/setWithdrawalPin';
 import getWithdrawalPinStatus from '../handlers/authentication/getWithdrawalPinStatus';
+import changeWithdrawalPin from '../handlers/authentication/changeWithdrawalPin';
 import changePassword from '../handlers/authentication/changePassword';
 import authMiddleware from '../middleware/authMiddleware';
 
@@ -23,6 +24,7 @@ router.post('/logout', logout);
 router.post('/forgot-password', forgotPassword);
 router.post('/reset-password', resetPassword);
 router.post('/user/set-withdrawal-pin', authMiddleware, setWithdrawalPin);
+router.post('/user/change-withdrawal-pin', authMiddleware, changeWithdrawalPin);
 router.get('/user/withdrawal-pin-status', authMiddleware, getWithdrawalPinStatus);
 router.post('/change-password', authMiddleware, changePassword);
 

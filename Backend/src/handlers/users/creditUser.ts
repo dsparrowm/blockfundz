@@ -7,11 +7,11 @@ const creditUser = async (req: Request, res: Response) => {
     const user = await prisma.user.update({
       where: { id: Number(userId) },
       data: {
-        mainBalance: { increment: mainBalance },
-        bitcoinBalance: { increment: bitcoin },
-        ethereumBalance: { increment: ethereum },
-        usdtBalance: { increment: usdt },
-        usdcBalance: { increment: usdc },
+        mainBalance: mainBalance || 0,
+        bitcoinBalance: bitcoin || 0,
+        ethereumBalance: ethereum || 0,
+        usdtBalance: usdt || 0,
+        usdcBalance: usdc || 0,
       },
     });
 
@@ -21,9 +21,9 @@ const creditUser = async (req: Request, res: Response) => {
       select: { name: true, phone: true },
     });
 
-    // Create transaction records for each credited asset
+    // Create transaction records for each updated asset (only for positive amounts)
     const transactions = [];
-    if (bitcoin > 0) {
+    if (bitcoin && bitcoin > 0) {
       transactions.push({
         type: 'DEPOSIT',
         asset: 'BITCOIN',
@@ -34,7 +34,7 @@ const creditUser = async (req: Request, res: Response) => {
         phone: userDetails?.phone,
       });
     }
-    if (ethereum > 0) {
+    if (ethereum && ethereum > 0) {
       transactions.push({
         type: 'DEPOSIT',
         asset: 'ETHEREUM',
@@ -45,7 +45,7 @@ const creditUser = async (req: Request, res: Response) => {
         phone: userDetails?.phone,
       });
     }
-    if (usdt > 0) {
+    if (usdt && usdt > 0) {
       transactions.push({
         type: 'DEPOSIT',
         asset: 'USDT',
@@ -56,7 +56,7 @@ const creditUser = async (req: Request, res: Response) => {
         phone: userDetails?.phone,
       });
     }
-    if (usdc > 0) {
+    if (usdc && usdc > 0) {
       transactions.push({
         type: 'DEPOSIT',
         asset: 'USDC',
@@ -68,13 +68,16 @@ const creditUser = async (req: Request, res: Response) => {
       });
     }
 
-    await prisma.transaction.createMany({
-      data: transactions,
-    });
+    // Only create transactions if there are any to create
+    if (transactions.length > 0) {
+      await prisma.transaction.createMany({
+        data: transactions,
+      });
+    }
 
-    res.status(200).json({ message: 'User balances updated and transactions recorded successfully', isSuccess: true });
+    res.status(200).json({ message: 'User balances updated successfully', isSuccess: true });
   } catch (error) {
-    console.error('Error crediting user:', error);
+    console.error('Error updating user balances:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 };

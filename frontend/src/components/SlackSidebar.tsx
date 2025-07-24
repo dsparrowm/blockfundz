@@ -2,6 +2,7 @@ import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { useDarkMode } from '../contexts/DarkModeContext';
+import NexGenLogo from './ui/NexGenLogo';
 import Cookies from 'js-cookie';
 import {
     LayoutDashboard,
@@ -23,7 +24,9 @@ import {
     Hash,
     Plus,
     ChevronDown,
-    Circle
+    Circle,
+    MessageSquare,
+    MessageCircle
 } from 'lucide-react';
 
 interface SlackSidebarProps {
@@ -63,10 +66,10 @@ export const SlackSidebar: React.FC<SlackSidebarProps> = ({ className = '' }) =>
         { name: 'DepositHistory', icon: FileText, section: 'finance' },
         { name: 'Withdrawals', icon: Wallet, section: 'finance' },
         { name: 'WithdrawalHistory', icon: ArrowUpDown, section: 'finance' },
-        { name: 'Settings', icon: Settings, section: 'settings' },
-        { name: 'Profile', icon: User, section: 'account' },
+        { name: 'Settings', icon: Settings, section: 'account' },
         { name: 'AccountSettings', icon: Settings, section: 'account' },
-        { name: 'verify', icon: FileText, section: 'account' },
+        { name: 'kyc(New)', icon: FileText, section: 'account' },
+        { name: 'Support', icon: MessageSquare, section: 'support' },
         { name: 'Analytics', icon: BarChart3, section: 'analytics' },
     ];
 
@@ -77,7 +80,7 @@ export const SlackSidebar: React.FC<SlackSidebarProps> = ({ className = '' }) =>
         { name: 'Withdrawal Requests', icon: DollarSign, section: 'finance' },
         { name: 'Manage Investments', icon: TrendingUp, section: 'finance' },
         { name: 'Manage Plans', icon: PiggyBank, section: 'management' },
-        { name: 'Send Mail', icon: Mail, section: 'communication' },
+        { name: 'Direct Message', icon: MessageSquare, section: 'communication' },
     ];
 
     const navItems = isAdmin ? adminNavItems : userNavItems;
@@ -103,6 +106,7 @@ export const SlackSidebar: React.FC<SlackSidebarProps> = ({ className = '' }) =>
         finance: 'Finance',
         management: 'Management',
         account: 'Account',
+        analytics: 'Analytics',
         communication: 'Communication'
     };
 
@@ -113,12 +117,7 @@ export const SlackSidebar: React.FC<SlackSidebarProps> = ({ className = '' }) =>
                 {/* Header */}
                 <div className={`p-4 border-b ${isDarkMode ? 'border-[#2c2d33]' : 'border-[#5a1f5a]'}`}>
                     <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                            <div className={`w-8 h-8 ${isDarkMode ? 'bg-[#4a154b]' : 'bg-white'} rounded-lg flex items-center justify-center`}>
-                                <span className={`${isDarkMode ? 'text-white' : 'text-[#3f0f40]'} font-bold text-sm`}>BF</span>
-                            </div>
-                            <span className="font-semibold text-lg">BlockFundz</span>
-                        </div>
+                        <NexGenLogo size="md" dark={isDarkMode} />
                         <ChevronDown className={`w-4 h-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-300'}`} />
                     </div>
                     <div className="mt-3 flex items-center space-x-2">
@@ -135,7 +134,7 @@ export const SlackSidebar: React.FC<SlackSidebarProps> = ({ className = '' }) =>
                         <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                         <input
                             type="text"
-                            placeholder="Search BlockFundz"
+                            placeholder="Search NexGen"
                             className={`w-full ${isDarkMode ? 'bg-[#2c2d33] text-white border border-[#3c3f4c]' : 'bg-[#5a1f5a] text-white'} placeholder-gray-400 rounded-md pl-10 pr-3 py-2 text-sm focus:outline-none focus:ring-2 ${isDarkMode ? 'focus:ring-[#4a154b] focus:border-[#4a154b]' : 'focus:ring-white/20'}`}
                         />
                     </div>

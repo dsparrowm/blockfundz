@@ -134,13 +134,7 @@ const Withdraw = () => {
     }
 
     try {
-      const userId = localStorage.getItem('userId');
-      if (!userId) {
-        throw new Error('User not authenticated');
-      }
-
       await axiosInstance.post('/api/withdrawals', {
-        userId: parseInt(userId),
         amount: withdrawalAmount,
         asset,
         network,

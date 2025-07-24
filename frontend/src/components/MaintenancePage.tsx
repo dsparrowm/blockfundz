@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet';
-import { logo } from '../assets/icons'
+import NexGenLogo from './ui/NexGenLogo'
 
 const MaintenancePage = () => {
   const [timeLeft, setTimeLeft] = useState(() => {
@@ -70,7 +70,7 @@ const MaintenancePage = () => {
               d="M13 10V3L4 14h7v7l9-11h-7z"
             />
           </svg> */}
-          <img src={logo} alt="logo" width={70} height={70} />
+          <NexGenLogo variant="icon" size="xl" />
         </div>
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
           Scheduled Maintenance

@@ -1,13 +1,13 @@
-import About from './About';
 import AdminLogin from './AdminLogin';
+import AdminChatPage from './AdminChatPage';
 import Contact from './Contact';
 import Login from './Login';
 import Register from './Register';
 import TestToast from './TestToast';
 
 export {
-    About,
     AdminLogin,
+    AdminChatPage,
     Contact,
     Login,
     Register,

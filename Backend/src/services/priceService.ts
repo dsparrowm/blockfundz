@@ -90,8 +90,6 @@ export class PriceService {
             // Update in-memory cache
             this.cache = prices;
             this.lastFetch = new Date();
-
-            console.log('Price cache updated:', prices);
         } catch (error) {
             console.error('Failed to update price cache:', error);
             throw error;

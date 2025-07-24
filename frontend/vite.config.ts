@@ -8,12 +8,23 @@ export default defineConfig({
     host: true,
     port: 5173,
     watch: {
-      usePolling: true,
+      usePolling: false, // Disable polling for better performance
     },
   },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          router: ['react-router-dom'],
+          ui: ['lucide-react'],
+        },
+      },
     },
   },
 })

@@ -52,12 +52,10 @@ const Overview = () => {
   // User data effect
   useEffect(() => {
     const controller = new AbortController();
-    console.log('fetching user main Balance', user.mainBalance);
 
     const fetchUserData = async () => {
       try {
         const response = await axiosInstance.get('/api/user', {
-          params: { userDataId: localStorage.getItem('userId') },
           withCredentials: true,
           signal: controller.signal
         });
@@ -193,7 +191,7 @@ const Overview = () => {
               Caution: You need to verify your account to gain full functionality.{' '}
               <span
                 className="text-yellow-600 cursor-pointer underline font-medium"
-                onClick={() => setActiveComponent('verify')}
+                onClick={() => setActiveComponent('kyc(New)')}
               >
                 Let's get started!
               </span>

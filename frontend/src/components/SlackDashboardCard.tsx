@@ -107,7 +107,7 @@ export const SlackDashboardCard: React.FC<SlackDashboardCardProps> = ({
         {
             icon: Eye,
             label: 'View Details',
-            onClick: onViewDetails || (() => console.log('View details for:', title))
+            onClick: onViewDetails || (() => { })
         },
         {
             icon: Copy,
@@ -117,12 +117,12 @@ export const SlackDashboardCard: React.FC<SlackDashboardCardProps> = ({
         {
             icon: Download,
             label: 'Export Data',
-            onClick: onExport || (() => console.log('Export data for:', title))
+            onClick: onExport || (() => { })
         },
         {
             icon: Share2,
             label: 'Share',
-            onClick: onShare || (() => console.log('Share:', title))
+            onClick: onShare || (() => { })
         }
     ];
 
@@ -216,7 +216,6 @@ export const SlackDashboardCard: React.FC<SlackDashboardCardProps> = ({
                                             <button
                                                 onClick={() => {
                                                     setShowDropdown(false);
-                                                    console.log('Settings for:', title);
                                                 }}
                                                 className="w-full flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                                             >

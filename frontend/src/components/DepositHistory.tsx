@@ -44,14 +44,7 @@ const DepositHistory = () => {
     setLoading(true);
     setError('');
     try {
-      const userId = localStorage.getItem('userId');
-      if (!userId) {
-        throw new Error('User not authenticated');
-      }
-
-      const response = await axiosInstance.get('/api/deposits', {
-        params: { userId }
-      });
+      const response = await axiosInstance.get('/api/deposits');
 
       setDeposits(response.data.deposits || []);
     } catch (error: any) {

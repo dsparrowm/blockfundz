@@ -18,11 +18,10 @@ const UserMenu = () => {
     }, [user?.name, isAdmin]);
 
     const menuItems = useMemo(() => [
-        { label: 'View Profile', action: () => console.log('View Profile clicked') },
-        { label: 'Security Setting', action: () => console.log('Security Setting clicked') },
+        { label: 'View Profile', action: () => { } },
+        { label: 'Security Setting', action: () => { } },
         {
             label: 'Sign out', action: () => {
-                console.log('Sign Out clicked');
                 setUser(null);
             }
         },

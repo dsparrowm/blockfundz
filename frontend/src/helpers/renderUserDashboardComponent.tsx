@@ -11,6 +11,7 @@ import Profile from '../components/Profile';
 import KYCVerification from '../components/Kyc';
 import Settings from '../components/Settings';
 import Analytics from '../components/Analytics';
+import UserChatInterface from '../components/Support'; // Assuming you have a Support component
 
 const renderUserDashboardComponent = () => {
   const activeComponent = useStore((state) => state.activeComponent);
@@ -34,8 +35,10 @@ const renderUserDashboardComponent = () => {
       return <WithdrawalHistory />;
     case 'AccountSettings':
       return <AcountSettings />;
-    case 'verify':
+    case 'kyc(New)':
       return <KYCVerification />;
+    case 'Support':
+      return <UserChatInterface />;
     case 'Profile':
       return <Profile />;
     case 'Analytics':

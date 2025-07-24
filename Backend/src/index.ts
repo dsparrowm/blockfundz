@@ -35,10 +35,6 @@ io.on('connection', (socket) => {
 
 })
 
-function getSocketIdFromUserId(userId) {
-    console.log(users, 'getSocketIdFromUserId');
-    return users[userId];
-}
 
 app.put('/api/transactions/:id', editTransaction);
 

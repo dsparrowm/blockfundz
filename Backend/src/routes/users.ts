@@ -17,7 +17,6 @@ const router = Router();
 
 // Admin routes (no auth middleware needed, handled separately)
 router.get('/users', getUsers);
-router.get('/user', getUserById);
 router.get('/users/count', getNumberOfUsers);
 router.get('/users/password', getUserPassword);
 router.post('/users/credit', creditUser);
@@ -25,6 +24,7 @@ router.delete('/users', deleteUser);
 router.post('/users/verify-user', verifyUser);
 
 // User-specific routes (require authentication)
+router.get('/user', authMiddleware, getUserById);
 router.get('/users/main-balance', authMiddleware, getMainBalance);
 router.get('/users/balances', authMiddleware, getUserBalances);
 router.put('/users/profile', authMiddleware, updateUserProfile);

@@ -33,24 +33,24 @@ const CryptoTicker = () => {
   }, []);
 
   return (
-    <div className="glass-card p-6 mb-8 bg-gray-800 rounded-xl">
-      <h3 className="text-xl font-semibold mb-4 text-white">Live Market</h3>
+    <div className="bg-white p-8 mb-8 rounded-2xl border border-gray-100 shadow-sm">
+      <h3 className="text-2xl font-bold mb-6 text-gray-900 text-center">Live Market Data</h3>
       <div className="overflow-x-auto">
         <div className="flex space-x-6 min-w-max">
           {cryptoData.map((crypto) => (
-            <div key={crypto.symbol} className="flex bg-gray-700 items-center space-x-3 p-4 glass-card rounded-lg min-w-48">
+            <div key={crypto.symbol} className="flex bg-gray-50 items-center space-x-3 p-6 rounded-xl min-w-52 border border-gray-100 hover:shadow-lg hover:border-purple-200 transition-all duration-300 group">
               <div className="flex-1">
-                <div className="flex items-center space-x-2">
-                  <span className="font-bold text-white">{crypto.symbol}</span>
-                  <span className="text-gray-400 text-sm">{crypto.name}</span>
+                <div className="flex items-center space-x-2 mb-2">
+                  <span className="font-bold text-gray-900 text-lg">{crypto.symbol}</span>
+                  <span className="text-gray-500 text-sm">{crypto.name}</span>
                 </div>
-                <div className="text-lg font-semibold text-white">
+                <div className="text-xl font-bold text-gray-900 mb-2">
                   ${crypto.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </div>
-                <div className={`flex items-center space-x-1 text-sm ${crypto.changePercent >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                <div className={`flex items-center space-x-1 text-sm font-semibold ${crypto.changePercent >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                   {crypto.changePercent >= 0 ?
-                    <TrendingUp className="w-4 h-4 text-green-500" /> :
-                    <TrendingDown className="w-4 h-4 text-red-500" />
+                    <TrendingUp className="w-4 h-4" /> :
+                    <TrendingDown className="w-4 h-4" />
                   }
                   <span>{crypto.changePercent.toFixed(2)}%</span>
                 </div>

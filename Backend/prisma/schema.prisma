@@ -32,6 +32,13 @@ model User {
   notifications      Notification[]
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
+  
+  // Chat system relations
+  sentMessages       ChatMessage[] @relation("SentMessages")
+  receivedMessages   ChatMessage[] @relation("ReceivedMessages")
+  conversations      Conversation[] @relation("UserConversations")
+  adminConversations Conversation[] @relation("AdminConversations")
+  onlineStatus       OnlineStatus?
 }
 
 model Transaction {
@@ -119,4 +126,61 @@ model CryptoPrice {
   price     Float    // Price in USD
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// Chat System Models
+model Conversation {
+  id          String        @id @default(cuid())
+  userId      Int
+  adminId     Int
+  user        User          @relation("UserConversations", fields: [userId], references: [id], onDelete: Cascade)
+  admin       User          @relation("AdminConversations", fields: [adminId], references: [id], onDelete: Cascade)
+  messages    ChatMessage[]
+  lastMessage String?
+  lastMessageAt DateTime?
+  unreadCount Int           @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  
+  @@unique([userId, adminId])
+  @@index([userId])
+  @@index([adminId])
+  @@index([lastMessageAt])
+}
+
+model ChatMessage {
+  id             String       @id @default(cuid())
+  content        String
+  senderId       Int
+  recipientId    Int
+  conversationId String
+  sender         User         @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  recipient      User         @relation("ReceivedMessages", fields: [recipientId], references: [id], onDelete: Cascade)
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  isRead         Boolean      @default(false)
+  messageType    MessageType  @default(TEXT)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  
+  @@index([conversationId])
+  @@index([senderId])
+  @@index([recipientId])
+  @@index([createdAt])
+}
+
+model OnlineStatus {
+  id           Int      @id @default(autoincrement())
+  userId       Int      @unique
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isOnline     Boolean  @default(false)
+  lastSeen     DateTime @default(now())
+  socketId     String?
+  updatedAt    DateTime @updatedAt
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  FILE
+  SYSTEM
 }

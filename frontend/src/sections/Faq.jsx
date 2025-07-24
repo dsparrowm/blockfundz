@@ -27,7 +27,7 @@ const FAQSection = () => {
     },
     {
       question: "How can I contact customer support?",
-      answer: "Our customer support team is available 24/7 through multiple channels. You can reach us via email at support@example.com, through our live chat system, or by phone at 1-800-EXAMPLE."
+      answer: "Our customer support team is available 24/7 through multiple channels. You can reach us via email at support@blockfundz.com or by phone."
     }
   ];
 

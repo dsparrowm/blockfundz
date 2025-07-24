@@ -1,16 +1,16 @@
 
-const authUrl = 'https://blockfundzapi.onrender.com/api/auth'
+const authUrl = 'https://nexgenapi.onrender.com/api/auth'
 const protectedUrl = 'http://localhost:3001/api'
 
 const fetchDataFromServer = async (endpoint, method, body = null) => {
-    const options = {
+  const options = {
     method,
     headers: {
       'Content-Type': 'application/json',
     },
     body: body ? JSON.stringify(body) : null,
-    }
-    
+  }
+
   try {
     const response = await fetch(`${authUrl}${endpoint}`, options)
     if (!response.ok) {

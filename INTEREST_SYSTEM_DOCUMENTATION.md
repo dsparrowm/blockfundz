@@ -1,7 +1,7 @@
 # Interest Calculation System
 
 ## Overview
-The BlockFundz platform now automatically calculates and credits interest to users' accounts every 24 hours based on their active investment subscriptions.
+The NexGen platform now automatically calculates and credits interest to users' accounts every 24 hours based on their active investment subscriptions.
 
 ## How It Works
 

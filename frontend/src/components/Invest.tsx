@@ -144,7 +144,6 @@ const InvestmentPlans = () => {
 
     try {
       const response = await axiosInstance.post(`/api/investments/subscribe`, {
-        userId: localStorage.getItem('userId'),
         planId: selectedPlan.id,
         asset: assetType.toUpperCase(),
         amount: selectedPlan.minimumAmount

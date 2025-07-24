@@ -63,6 +63,15 @@ const Settings = () => {
         darkMode: false,
         autoRefresh: true
     });
+    const [pinData, setPinData] = useState({
+        currentPin: '',
+        newPin: '',
+        confirmPin: ''
+    });
+    const [hasPinSet, setHasPinSet] = useState(false);
+    const [showCurrentPin, setShowCurrentPin] = useState(false);
+    const [showNewPin, setShowNewPin] = useState(false);
+    const [showConfirmPin, setShowConfirmPin] = useState(false);
 
     const userData = useStore((state) => state.user);
     const { isDarkMode, toggleDarkMode } = useDarkMode();
@@ -93,6 +102,7 @@ const Settings = () => {
                 phone: userData.phone || ''
             });
         }
+        checkPinStatus();
     }, [userData]);
 
     const handlePasswordChange = async (e: React.FormEvent) => {
@@ -171,9 +181,88 @@ const Settings = () => {
         }
     };
 
+    const checkPinStatus = async () => {
+        try {
+            const response = await axiosInstance.get('/api/auth/user/withdrawal-pin-status');
+            setHasPinSet(response.data.hasPin);
+        } catch (err: any) {
+            console.error('Failed to check PIN status:', err);
+        }
+    };
+
+    const handlePinSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (hasPinSet) {
+            // Changing existing PIN
+            if (!pinData.currentPin) {
+                setError('Current PIN is required');
+                return;
+            }
+            if (pinData.currentPin.length !== 4) {
+                setError('Current PIN must be exactly 4 digits');
+                return;
+            }
+            if (pinData.newPin !== pinData.confirmPin) {
+                setError('New PINs do not match');
+                return;
+            }
+            if (pinData.newPin.length !== 4) {
+                setError('New PIN must be exactly 4 digits');
+                return;
+            }
+            if (!/^\d{4}$/.test(pinData.currentPin) || !/^\d{4}$/.test(pinData.newPin)) {
+                setError('PIN must contain only numbers');
+                return;
+            }
+        } else {
+            // Creating new PIN
+            if (pinData.newPin !== pinData.confirmPin) {
+                setError('PINs do not match');
+                return;
+            }
+            if (pinData.newPin.length !== 4) {
+                setError('PIN must be exactly 4 digits');
+                return;
+            }
+            if (!/^\d{4}$/.test(pinData.newPin)) {
+                setError('PIN must contain only numbers');
+                return;
+            }
+        }
+
+        setLoading(true);
+        setError('');
+        setSuccess('');
+
+        try {
+            if (hasPinSet) {
+                // Use change PIN endpoint
+                await axiosInstance.post('/api/auth/user/change-withdrawal-pin', {
+                    currentPin: pinData.currentPin,
+                    newPin: pinData.newPin
+                });
+            } else {
+                // Use set PIN endpoint
+                await axiosInstance.post('/api/auth/user/set-withdrawal-pin', {
+                    pin: pinData.newPin
+                });
+            }
+
+            setSuccess(hasPinSet ? 'PIN changed successfully!' : 'PIN created successfully!');
+            setPinData({ currentPin: '', newPin: '', confirmPin: '' });
+            setHasPinSet(true);
+        } catch (err: any) {
+            setError(err.response?.data?.message || 'Failed to update PIN');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const menuItems = [
         { id: 'profile', label: 'Profile', icon: User, color: 'blue' },
         { id: 'security', label: 'Security', icon: Shield, color: 'green' },
+        { id: 'pin', label: 'PIN', icon: Key, color: 'red' },
         { id: 'notifications', label: 'Notifications', icon: Bell, color: 'yellow' },
         { id: 'preferences', label: 'Preferences', icon: SettingsIcon, color: 'purple' },
         { id: 'billing', label: 'Billing', icon: CreditCard, color: 'indigo' },
@@ -192,7 +281,7 @@ const Settings = () => {
                             <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-300 bg-clip-text text-transparent">
                                 Settings
                             </h1>
-                            <p className="text-gray-600 dark:text-gray-400">Manage your BlockFundz account and preferences</p>
+                            <p className="text-gray-600 dark:text-gray-400">Manage your NexGen account and preferences</p>
                         </div>
                     </div>
                 </div>
@@ -509,6 +598,169 @@ const Settings = () => {
                             </div>
                         )}
 
+                        {/* PIN Settings */}
+                        {activeSection === 'pin' && (
+                            <div className="space-y-6">
+                                <SlackDashboardCard
+                                    title={hasPinSet ? "Change Withdrawal PIN" : "Create Withdrawal PIN"}
+                                    value=""
+                                    subtitle={hasPinSet ? "Update your withdrawal PIN for security" : "Set up a 4-digit PIN to secure your withdrawals"}
+                                    icon={Key}
+                                    color="red"
+                                    showActions={false}
+                                >
+                                    <form onSubmit={handlePinSubmit} className="space-y-6">
+                                        {hasPinSet && (
+                                            <div>
+                                                <Label htmlFor="currentPin" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                    Current PIN
+                                                </Label>
+                                                <div className="mt-1 relative">
+                                                    <Input
+                                                        id="currentPin"
+                                                        type={showCurrentPin ? "text" : "password"}
+                                                        value={pinData.currentPin}
+                                                        onChange={(e) => setPinData(prev => ({ ...prev, currentPin: e.target.value }))}
+                                                        className="pl-10 pr-10"
+                                                        maxLength={4}
+                                                        pattern="[0-9]{4}"
+                                                        placeholder="Enter current PIN"
+                                                        required
+                                                    />
+                                                    <Key className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setShowCurrentPin(!showCurrentPin)}
+                                                        className="absolute right-3 top-3 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+                                                    >
+                                                        {showCurrentPin ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        <div>
+                                            <Label htmlFor="newPin" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                {hasPinSet ? "New PIN" : "Create PIN"}
+                                            </Label>
+                                            <div className="mt-1 relative">
+                                                <Input
+                                                    id="newPin"
+                                                    type={showNewPin ? "text" : "password"}
+                                                    value={pinData.newPin}
+                                                    onChange={(e) => setPinData(prev => ({ ...prev, newPin: e.target.value }))}
+                                                    className="pl-10 pr-10"
+                                                    maxLength={4}
+                                                    pattern="[0-9]{4}"
+                                                    placeholder="Enter 4-digit PIN"
+                                                    required
+                                                />
+                                                <Key className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowNewPin(!showNewPin)}
+                                                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+                                                >
+                                                    {showNewPin ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <Label htmlFor="confirmPin" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                Confirm PIN
+                                            </Label>
+                                            <div className="mt-1 relative">
+                                                <Input
+                                                    id="confirmPin"
+                                                    type={showConfirmPin ? "text" : "password"}
+                                                    value={pinData.confirmPin}
+                                                    onChange={(e) => setPinData(prev => ({ ...prev, confirmPin: e.target.value }))}
+                                                    className="pl-10 pr-10"
+                                                    maxLength={4}
+                                                    pattern="[0-9]{4}"
+                                                    placeholder="Confirm your PIN"
+                                                    required
+                                                />
+                                                <Key className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowConfirmPin(!showConfirmPin)}
+                                                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+                                                >
+                                                    {showConfirmPin ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                                            <Button
+                                                type="submit"
+                                                disabled={loading}
+                                                className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white px-6 py-2 rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50"
+                                            >
+                                                {loading ? (
+                                                    <div className="flex items-center">
+                                                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                                        {hasPinSet ? 'Changing...' : 'Creating...'}
+                                                    </div>
+                                                ) : (
+                                                    <>
+                                                        <Key className="w-4 h-4 mr-2" />
+                                                        {hasPinSet ? 'Change PIN' : 'Create PIN'}
+                                                    </>
+                                                )}
+                                            </Button>
+                                        </div>
+                                    </form>
+                                </SlackDashboardCard>
+
+                                {/* PIN Information Card */}
+                                <SlackDashboardCard
+                                    title="PIN Security Information"
+                                    value=""
+                                    subtitle="Important information about your withdrawal PIN"
+                                    icon={Info}
+                                    color="blue"
+                                    showActions={false}
+                                >
+                                    <div className="space-y-4">
+                                        <div className="flex items-start gap-3 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-xl border border-blue-200 dark:border-blue-800">
+                                            <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" />
+                                            <div>
+                                                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">PIN Security</p>
+                                                <p className="text-sm text-gray-600 dark:text-gray-400">Your PIN is required for all withdrawal requests to ensure account security.</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-start gap-3 p-4 bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/30 dark:to-orange-900/30 rounded-xl border border-yellow-200 dark:border-yellow-800">
+                                            <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mt-0.5" />
+                                            <div>
+                                                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">Keep Your PIN Safe</p>
+                                                <p className="text-sm text-gray-600 dark:text-gray-400">Never share your PIN with anyone. NexGen support will never ask for your PIN.</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-start gap-3 p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 rounded-xl border border-green-200 dark:border-green-800">
+                                            <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5" />
+                                            <div>
+                                                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                                    PIN Status: {hasPinSet ? (
+                                                        <Badge className="ml-2 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Set</Badge>
+                                                    ) : (
+                                                        <Badge variant="outline" className="ml-2 border-red-200 text-red-800 dark:border-red-700 dark:text-red-200">Not Set</Badge>
+                                                    )}
+                                                </p>
+                                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                                    {hasPinSet ? 'Your withdrawal PIN is configured and active.' : 'You need to set up a PIN to make withdrawals.'}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </SlackDashboardCard>
+                            </div>
+                        )}
+
                         {/* Notifications */}
                         {activeSection === 'notifications' && (
                             <SlackDashboardCard
@@ -623,7 +875,7 @@ const Settings = () => {
                             <SlackDashboardCard
                                 title="App Preferences"
                                 value=""
-                                subtitle="Customize your BlockFundz experience"
+                                subtitle="Customize your NexGen experience"
                                 icon={SettingsIcon}
                                 color="purple"
                                 showActions={false}
