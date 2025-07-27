@@ -6,6 +6,14 @@ const getUsers = async (req: Request, res: Response) => {
     try {
         const userId = req.query.userId
         const users = await prisma.user.findMany({
+            where: {
+                NOT: {
+                    email: {
+                        contains: 'admin',
+                        mode: 'insensitive'
+                    }
+                }
+            },
             select: {
                 id: true,
                 email: true,

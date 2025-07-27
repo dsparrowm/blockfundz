@@ -1,8 +1,6 @@
 import express from 'express';
-import path from "path";
 import morgan from 'morgan';
 import cors from 'cors';
-import protect from './helpers/protect';
 import authenticationRoute from './routes/authentication';
 import tokenValidationRouter from './routes/validateToken';
 import routes from './routes/index';
@@ -10,6 +8,7 @@ import healthCheck from './handlers/healthCheck';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import authMiddleware from './middleware/authMiddleware';
+import NotificationRouter from './routes/adminNotifications';
 
 const app = express();
 
@@ -29,6 +28,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use("/api/auth", authenticationRoute)
 app.use("/api", authMiddleware, routes) // Protect routes with authMiddleware
 app.use('/token', tokenValidationRouter)
+app.use('/api', NotificationRouter);
 
 app.get('/status', healthCheck)
 

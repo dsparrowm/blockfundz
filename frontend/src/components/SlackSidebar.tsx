@@ -69,7 +69,7 @@ export const SlackSidebar: React.FC<SlackSidebarProps> = ({ className = '' }) =>
         { name: 'Settings', icon: Settings, section: 'account' },
         { name: 'AccountSettings', icon: Settings, section: 'account' },
         { name: 'kyc(New)', icon: FileText, section: 'account' },
-        { name: 'Support', icon: MessageSquare, section: 'support' },
+        // { name: 'Support', icon: MessageSquare, section: 'support' },
         { name: 'Analytics', icon: BarChart3, section: 'analytics' },
     ];
 
@@ -80,7 +80,7 @@ export const SlackSidebar: React.FC<SlackSidebarProps> = ({ className = '' }) =>
         { name: 'Withdrawal Requests', icon: DollarSign, section: 'finance' },
         { name: 'Manage Investments', icon: TrendingUp, section: 'finance' },
         { name: 'Manage Plans', icon: PiggyBank, section: 'management' },
-        { name: 'Direct Message', icon: MessageSquare, section: 'communication' },
+        { name: 'Notifications', icon: MessageSquare, section: 'communication' },
     ];
 
     const navItems = isAdmin ? adminNavItems : userNavItems;

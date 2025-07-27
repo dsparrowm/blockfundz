@@ -13,6 +13,7 @@ const Nav = () => {
     { name: "Service", link: "/", hash: "service" },
     { name: "About", link: "/", hash: "about" },
     { name: "Pricing", link: "/", hash: "pricing" },
+    { name: "Company", link: "/", hash: "our-team" },
     { name: "Contact", link: "/contact", hash: null },
   ];
 
@@ -91,6 +92,12 @@ const Nav = () => {
 
             {/* Right Side Actions */}
             <div className='md:flex md:items-center space-y-7 md:space-y-0 md:space-x-4 flex-shrink-0'>
+              <a
+                className='text-white cursor-pointer hover:text-orange-500 transition-colors text-xl block text-center md:inline'
+                onClick={() => handleNavigation("/talk-to-sales", null)}
+              >
+                Talk
+              </a>
               <a
                 className='text-white cursor-pointer hover:text-orange-500 transition-colors text-xl block text-center md:inline'
                 onClick={() => handleNavigation("/login", null)}

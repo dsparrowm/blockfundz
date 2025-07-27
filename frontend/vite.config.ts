@@ -8,8 +8,21 @@ export default defineConfig({
     host: true,
     port: 5173,
     watch: {
-      usePolling: false, // Disable polling for better performance
+      usePolling: true,
     },
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+        secure: false
+      },
+      '/chat-socket.io': {
+        target: 'http://localhost:3001',
+        ws: true,
+        changeOrigin: true,
+        secure: false
+      }
+    }
   },
   resolve: {
     alias: {

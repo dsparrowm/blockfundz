@@ -11,7 +11,7 @@ const axiosInstance = axios.create({
 // Request interceptor to add the token to headers
 axiosInstance.interceptors.request.use(
     (config) => {
-        const token = Cookies.get('token');
+        const token = localStorage.getItem('adminToken') || Cookies.get('token');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }

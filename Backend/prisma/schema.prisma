@@ -29,7 +29,6 @@ model User {
   transactions       Transaction[]
   investmentPlan     InvestmentPlan?
   withdrawalRequests WithdrawalRequest[]
-  notifications      Notification[]
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
   
@@ -86,12 +85,11 @@ model WithdrawalRequest {
 }
 
 model Notification {
-  id          Int       @id @default(autoincrement())
-  message     String
-  read        Boolean   @default(false)
-  userId      Int
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt   DateTime  @default(now())
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum TransactionType {

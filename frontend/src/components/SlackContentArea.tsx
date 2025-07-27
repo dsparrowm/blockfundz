@@ -8,12 +8,12 @@ import {
     Hash,
     AtSign,
     MessageSquare,
-    Bell,
     Mail,
     Info,
     Settings,
     Circle
 } from 'lucide-react';
+import UserNotificationBell from '../components/UserNotificationBell';
 
 interface SlackContentAreaProps {
     children: React.ReactNode;
@@ -87,11 +87,8 @@ export const SlackContentArea: React.FC<SlackContentAreaProps> = ({
                     <div className="p-1.5 text-gray-400 rounded">
                         <Mail className="w-4 h-4" />
                     </div>
-                    <button className="p-1.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#2c2d33] rounded relative">
-                        <Bell className="w-4 h-4" />
-                        {/* Notification badge */}
-                        <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                    </button>
+                    {/* Show notification bell only for users, not admin */}
+                    {!isAdmin && <UserNotificationBell />}
                     <button className="p-1.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#2c2d33] rounded">
                         <Info className="w-4 h-4" />
                     </button>

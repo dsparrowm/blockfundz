@@ -10,11 +10,11 @@ const Header = () => {
   const navigate = useNavigate();
 
   const navItems = [
-    { name: 'Product', href: '#' },
-    { name: 'Solutions', href: '#solutions' },
+    { name: 'Home', href: '#' },
+    { name: 'Features', href: '#features' },
     { name: 'Resources', href: '#resources' },
     { name: 'Pricing', href: '#pricing' },
-    { name: 'Company', href: '#company' }
+    { name: 'Company', href: '#our-team' }
   ];
 
   return (
@@ -39,9 +39,11 @@ const Header = () => {
           </nav>
 
           <div className="hidden lg:flex items-center space-x-3">
-            <Button variant="ghost" className="text-gray-700 hover:text-gray-900 hover:bg-gray-50 font-medium text-sm px-4 py-2">
-              TALK TO SALES
-            </Button>
+            <a href="/talk-to-sales">
+              <Button variant="ghost" className="text-gray-700 hover:text-gray-900 hover:bg-gray-50 font-medium text-sm px-4 py-2">
+                TALK TO SALES
+              </Button>
+            </a>
             <a href="/login">
               <Button variant="ghost" className="text-gray-700 hover:text-gray-900 hover:bg-gray-50 font-medium text-sm px-4 py-2">
                 SIGN IN
@@ -79,9 +81,11 @@ const Header = () => {
                 </a>
               ))}
               <div className="flex flex-col space-y-3 pt-4 border-t border-gray-100">
-                <Button variant="ghost" className="text-gray-700 hover:text-gray-900 justify-start w-full font-medium">
-                  TALK TO SALES
-                </Button>
+                <a href="/talk-to-sales">
+                  <Button variant="ghost" className="text-gray-700 hover:text-gray-900 justify-start w-full font-medium">
+                    TALK TO SALES
+                  </Button>
+                </a>
                 <a href="/login">
                   <Button variant="ghost" className="text-gray-700 hover:text-gray-900 justify-start w-full font-medium">
                     SIGN IN

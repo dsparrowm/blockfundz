@@ -7,8 +7,10 @@ import TransactionManagement from "../components/admin/TransactionManagement";
 import InvestmentPlansManagement from "../components/admin/InvestmentPlansManagement";
 import WithdrawalRequestManagement from "../components/admin/WithdrawalRequestManagement";
 import SendEmail from "../components/admin/SendEmail";
-import { AdminChatDashboard } from "../components/AdminChatDashboard";
+import AdminChatDashboard from "../components/AdminChatDashboard";
 import handleEditUser from "./handleEditUser";
+import AdminNotificationForm from "@/components/AdminNotificationForm";
+import AdminNotifications from "@/components/AdminNotifications";
 
 
 const renderAdminDashboardComponent = () => {
@@ -38,8 +40,10 @@ const renderAdminDashboardComponent = () => {
       return <InvestmentPlansManagement />;
     case 'Send Mail':
       return <SendEmail />;
-    case 'Direct Message':
-      return <AdminChatDashboard />;
+    case 'Notifications':
+      const userId = 3; // Replace with actual user ID
+      const token = localStorage.getItem('adminToken')
+      return <AdminNotifications userId={userId} token={token} />;
     default:
       return null;
   }
