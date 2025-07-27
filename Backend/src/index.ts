@@ -6,6 +6,8 @@ import { initSocket, io } from './socket';
 import prisma from './db';
 import jwt from 'jsonwebtoken';
 import authMiddleware from './middleware/authMiddleware';
+import editTransaction from './handlers/transactions/editTransactions';
+import { InterestCalculationService } from './services/InterestCalculationService';
 
 const server = http.createServer(app);
 initSocket(server); // No custom path, uses default /socket.io/
@@ -246,6 +248,11 @@ app.get('/api/online-status', authMiddleware, async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch online status' });
     }
 });
+
+app.put('/api/transactions/:id', editTransaction);
+
+// Start the interest calculation scheduler
+InterestCalculationService.startInterestCalculationScheduler();
 
 server.listen(3001, () => {
     console.log('server running on http://localhost:3001');
