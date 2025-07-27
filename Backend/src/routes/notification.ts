@@ -12,12 +12,14 @@ router.post('/admin/notifications', authMiddleware, async (req, res) => {
         return res.status(403).json({ error: 'Unauthorized: Admin access required' });
     }
     const { message } = req.body;
+    const title = "Notification";
+    const content = message;
     try {
         // Broadcast: create notification for every user except admin
         const users = await prisma.user.findMany({ where: { email: { not: process.env.ADMIN_EMAIL } } });
         const notifications = await Promise.all(
-            users.map(user =>
-                prisma.notification.create({ data: { message, userId: user.id } })
+            users.map(() =>
+                prisma.notification.create({ data: { title, content } })
             )
         );
         res.json({ count: notifications.length, notifications });
