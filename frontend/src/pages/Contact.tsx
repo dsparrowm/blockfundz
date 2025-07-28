@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Mail, MessageSquare, MapPin, Phone, Clock, Send } from 'lucide-react';
-import axios from 'axios';
+import axiosInstance from '../api/axiosInstance';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
 
@@ -23,7 +23,7 @@ const ContactUs = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${apiBaseUrl}/api/contact`, formData);
+      const response = await axiosInstance.post(`/api/contact`, formData);
       if (response.status === 200) {
         setIsSubmitted(true);
       }

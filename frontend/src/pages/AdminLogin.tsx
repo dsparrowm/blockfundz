@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../co
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
+import axiosInstance from "../api/axiosInstance";
 
 
 // Type for Zod error response
@@ -25,8 +26,6 @@ interface LoginFormData {
   email: string;
   password: string;
 }
-
-const apiBaseUrl = "http://localhost:3001";
 
 
 const Login = () => {
@@ -72,7 +71,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(`${apiBaseUrl}/api/auth/admin/login`, formData)
+      const response = await axiosInstance.post(`api/auth/admin/login`, formData)
       localStorage.setItem("adminToken", response.data.token)
       toast("Login successful", { className: "text-[15px] px-4 py-2 bg-green" })
       setAdminUser(response.data.userData || response.data.user)
