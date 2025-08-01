@@ -18,7 +18,7 @@ import Landing from './components/Landing2/Landing';
 import ProtectedSocketRoute from './components/ProtectedSocketRoute';
 
 const App = () => {
-  const maintenanceMode = true;
+  const maintenanceMode = import.meta.env.VITE_MAINTENANCE_MODE;
 
   return (
     <>

@@ -13,7 +13,7 @@ const MaintenancePage = () => {
     return { days: 0, hours: 0, minutes: 0, seconds: 0 };
   });
 
-  const calculateTimeLeft = (endTime) => {
+  function calculateTimeLeft(endTime) {
     const difference = endTime - Date.now();
     if (difference <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
 

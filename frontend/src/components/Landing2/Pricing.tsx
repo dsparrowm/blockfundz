@@ -62,16 +62,16 @@ const Pricing = () => {
   ];
 
   return (
-    <section id="pricing" className="py-24 bg-white">
+    <section id="pricing" className="py-24 bg-gray-900">
       <div className="container mx-auto px-6">
         <div className="text-center mb-20">
-          <h2 className="text-5xl md:text-6xl font-bold mb-6 text-gray-900">
+          <h2 className="text-5xl md:text-6xl font-bold mb-6 text-gray-100">
             Choose a plan that{' '}
             <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
               works for you
             </span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
             Upgrade at any time. For high-net-worth individuals with additional security, compliance,
             and support requirements, contact our sales team.
           </p>
@@ -81,9 +81,9 @@ const Pricing = () => {
           {pricingPlans.map((plan) => (
             <Card
               key={plan.name}
-              className={`bg-white border-2 hover:shadow-2xl transition-all duration-300 relative group ${plan.popular
-                ? 'border-purple-200 shadow-lg scale-105'
-                : 'border-gray-100 hover:border-purple-200'
+              className={`bg-gray-800 border-2 hover:shadow-2xl transition-all duration-300 relative group ${plan.popular
+                ? 'border-purple-500 shadow-lg scale-105'
+                : 'border-gray-700 hover:border-purple-500'
                 }`}
             >
               {plan.popular && (
@@ -95,21 +95,21 @@ const Pricing = () => {
               )}
 
               <CardHeader className="text-center pb-8 pt-8">
-                <CardTitle className="text-gray-900 text-2xl mb-4 font-bold">{plan.name}</CardTitle>
+                <CardTitle className="text-gray-100 text-2xl mb-4 font-bold">{plan.name}</CardTitle>
                 <div className="mb-6">
-                  <span className="text-5xl font-bold text-gray-900">{plan.price}</span>
-                  <span className="text-gray-500 text-lg ml-2">{plan.period}</span>
+                  <span className="text-5xl font-bold text-gray-100">{plan.price}</span>
+                  <span className="text-gray-400 text-lg ml-2">{plan.period}</span>
                 </div>
-                <p className="text-gray-600 leading-relaxed">{plan.description}</p>
-                <p className="text-sm text-gray-500 mt-2">{plan.note}</p>
+                <p className="text-gray-300 leading-relaxed">{plan.description}</p>
+                <p className="text-sm text-gray-400 mt-2">{plan.note}</p>
               </CardHeader>
 
               <CardContent className="px-6 pb-8">
                 <ul className="space-y-4 mb-8">
                   {plan.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start space-x-3">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700 leading-relaxed">{feature}</span>
+                      <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
+                      <span className="text-gray-300 leading-relaxed">{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -117,7 +117,7 @@ const Pricing = () => {
                 <Button
                   className={`w-full font-semibold py-4 text-sm transition-all duration-200 ${plan.popular
                     ? 'bg-purple-600 text-white hover:bg-purple-700 hover:-translate-y-0.5 shadow-lg'
-                    : 'bg-white text-purple-600 border-2 border-purple-600 hover:bg-purple-50'
+                    : 'bg-gray-800 text-purple-400 border-2 border-purple-500 hover:bg-purple-900/20'
                     }`}
                   onClick={() => navigate("/signup")}
                 >
@@ -130,14 +130,14 @@ const Pricing = () => {
 
         {/* Trust Banner */}
         <div className="text-center mt-20">
-          <p className="text-lg text-gray-600 mb-8">
-            Still have questions? <span className="text-purple-600 font-semibold cursor-pointer hover:underline">Get in touch</span>
+          <p className="text-lg text-gray-300 mb-8">
+            Still have questions? <span className="text-purple-400 font-semibold cursor-pointer hover:underline">Get in touch</span>
           </p>
-          <div className="bg-gray-50 rounded-2xl p-8 max-w-2xl mx-auto">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+          <div className="bg-gray-800 border border-gray-700 rounded-2xl p-8 max-w-2xl mx-auto">
+            <h3 className="text-2xl font-bold text-gray-100 mb-4">
               Looking for our Enterprise Grid?
             </h3>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-300 mb-6">
               NexGen Enterprise Grid is a version of NexGen built for very large organizations.
             </p>
             <Button className="bg-purple-600 text-white hover:bg-purple-700 px-8 py-3 font-semibold">

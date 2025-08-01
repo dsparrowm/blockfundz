@@ -105,16 +105,16 @@ const Stats = () => {
   ];
 
   return (
-    <section ref={sectionRef} className="py-24 bg-gray-50">
+    <section ref={sectionRef} className="py-24 bg-gray-900">
       <div className="container mx-auto px-6">
         <div className="text-center mb-20">
-          <h2 className="text-5xl md:text-6xl font-bold mb-6 text-gray-900">
+          <h2 className="text-5xl md:text-6xl font-bold mb-6 text-gray-100">
             Numbers that{' '}
             <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
               speak for themselves
             </span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
             See why industry leaders choose NexGen for their investment strategies and portfolio growth.
           </p>
         </div>
@@ -134,10 +134,10 @@ const Stats = () => {
               </div>
 
               <div className="space-y-2">
-                <h3 className="text-xl md:text-2xl font-semibold text-gray-900">
+                <h3 className="text-xl md:text-2xl font-semibold text-gray-100">
                   {stat.label}
                 </h3>
-                <p className="text-lg text-gray-600 leading-relaxed">
+                <p className="text-lg text-gray-300 leading-relaxed">
                   {stat.description}
                 </p>
               </div>
@@ -146,16 +146,16 @@ const Stats = () => {
         </div>
 
         {/* Additional Trust Indicators */}
-        <div className="mt-20 pt-16 border-t border-gray-200">
+        <div className="mt-20 pt-16 border-t border-gray-700">
           <div className="text-center">
-            <p className="text-sm text-gray-500 mb-8 uppercase tracking-wide opacity-0 animate-fade-in" style={{ animationDelay: '1.5s', animationFillMode: 'forwards' }}>
+            <p className="text-sm text-gray-400 mb-8 uppercase tracking-wide opacity-0 animate-fade-in" style={{ animationDelay: '1.5s', animationFillMode: 'forwards' }}>
               FEATURED IN
             </p>
             <div className="flex justify-center items-center space-x-12 opacity-0 animate-fade-in" style={{ animationDelay: '1.8s', animationFillMode: 'forwards' }}>
-              <div className="text-2xl font-bold text-gray-400 hover:text-gray-600 transition-colors duration-200">TechCrunch</div>
-              <div className="text-2xl font-bold text-gray-400 hover:text-gray-600 transition-colors duration-200">Forbes</div>
-              <div className="text-2xl font-bold text-gray-400 hover:text-gray-600 transition-colors duration-200">Bloomberg</div>
-              <div className="text-2xl font-bold text-gray-400 hover:text-gray-600 transition-colors duration-200">CNBC</div>
+              <div className="text-2xl font-bold text-gray-500 hover:text-gray-300 transition-colors duration-200">TechCrunch</div>
+              <div className="text-2xl font-bold text-gray-500 hover:text-gray-300 transition-colors duration-200">Forbes</div>
+              <div className="text-2xl font-bold text-gray-500 hover:text-gray-300 transition-colors duration-200">Bloomberg</div>
+              <div className="text-2xl font-bold text-gray-500 hover:text-gray-300 transition-colors duration-200">CNBC</div>
             </div>
           </div>
         </div>

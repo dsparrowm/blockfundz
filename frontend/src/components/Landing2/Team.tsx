@@ -29,16 +29,16 @@ const Team = () => {
   ];
 
   return (
-    <section id="our-team" className="py-24 bg-white">
+    <section id="our-team" className="py-24 bg-gray-900">
       <div className="container mx-auto px-6">
         <div className="text-center mb-20">
-          <h2 className="text-5xl md:text-6xl font-bold mb-6 text-gray-900">
+          <h2 className="text-5xl md:text-6xl font-bold mb-6 text-gray-100">
             Meet the experts helping{' '}
             <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
               you build wealth
             </span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
             Our leadership team combines decades of experience in finance, technology,
             and cryptocurrency to deliver exceptional results for individual investors.
           </p>
@@ -48,10 +48,10 @@ const Team = () => {
           {teamMembers.map((member, index) => (
             <div
               key={member.name}
-              className="bg-white p-8 rounded-2xl border border-gray-100 hover:border-purple-200 hover:shadow-xl transition-all duration-300 group text-center animate-fade-in"
+              className="bg-gray-800 p-8 rounded-2xl border border-gray-700 hover:border-purple-500 hover:shadow-xl transition-all duration-300 group text-center animate-fade-in"
               style={{ animationDelay: `${index * 0.2}s` }}
             >
-              <div className="w-24 h-24 mx-auto mb-6 rounded-full overflow-hidden ring-4 ring-gray-100 group-hover:ring-purple-200 transition-all duration-300">
+              <div className="w-24 h-24 mx-auto mb-6 rounded-full overflow-hidden ring-4 ring-gray-600 group-hover:ring-purple-500 transition-all duration-300">
                 <img
                   src={member.image}
                   alt={member.name}
@@ -59,9 +59,9 @@ const Team = () => {
                 />
               </div>
 
-              <h3 className="text-xl font-bold text-gray-900 mb-2">{member.name}</h3>
-              <p className="text-purple-600 font-semibold mb-4">{member.role}</p>
-              <p className="text-gray-600 text-sm leading-relaxed">{member.bio}</p>
+              <h3 className="text-xl font-bold text-gray-100 mb-2">{member.name}</h3>
+              <p className="text-purple-400 font-semibold mb-4">{member.role}</p>
+              <p className="text-gray-300 text-sm leading-relaxed">{member.bio}</p>
             </div>
           ))}
         </div>

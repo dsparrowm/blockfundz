@@ -14,7 +14,7 @@ const Hero = () => {
 
     // Text animation states
     const [visibleWords, setVisibleWords] = useState(0);
-    const [showCursor, setShowCursor] = useState(true);
+    const [showCursor, setShowCursor] = useState(false);
     const [gradientPosition, setGradientPosition] = useState(0);
 
     const heroWords = ["Grow", "your", "wealth", "with", "smart", "crypto", "investing"];
@@ -34,9 +34,9 @@ const Hero = () => {
         }, 300);
 
         // Blinking cursor
-        const cursorInterval = setInterval(() => {
-            setShowCursor(prev => !prev);
-        }, 500);
+        // const cursorInterval = setInterval(() => {
+        //     setShowCursor(prev => !prev);
+        // }, 500);
 
         // Animated gradient background
         const gradientInterval = setInterval(() => {
@@ -153,29 +153,29 @@ const Hero = () => {
 
         return () => clearInterval(interval);
     }, []); return (
-        <section className="relative bg-white pt-20 pb-24 overflow-hidden">
+        <section className="relative bg-gray-900 pt-20 pb-24 overflow-hidden">
             {/* Background Elements */}
             <div className="absolute inset-0">
-                <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-purple-100/30 rounded-full blur-3xl"></div>
-                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-100/30 rounded-full blur-3xl"></div>
+                <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-purple-500/20 rounded-full blur-3xl"></div>
+                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
             </div>
 
             <div className="container mx-auto px-6 relative z-10">
                 <div className="text-center max-w-6xl mx-auto">
                     {/* Company Logos */}
                     <div className="mb-12 pt-4">
-                        <p className="text-sm text-gray-500 mb-6 uppercase tracking-wide">TRUSTED BY LEADING COMPANIES</p>
+                        <p className="text-sm text-gray-400 mb-6 uppercase tracking-wide">TRUSTED BY LEADING COMPANIES</p>
                         <div className="flex justify-center items-center space-x-8 opacity-60">
-                            <div className="text-xl font-bold text-gray-400">Goldman Sachs</div>
-                            <div className="text-xl font-bold text-gray-400">JPMorgan</div>
-                            <div className="text-xl font-bold text-gray-400">Coinbase</div>
-                            <div className="text-xl font-bold text-gray-400">Binance</div>
+                            <div className="text-xl font-bold text-gray-500">Goldman Sachs</div>
+                            <div className="text-xl font-bold text-gray-500">JPMorgan</div>
+                            <div className="text-xl font-bold text-gray-500">Coinbase</div>
+                            <div className="text-xl font-bold text-gray-500">Binance</div>
                         </div>
                     </div>
 
                     {/* Main Hero Content */}
                     <div className="space-y-8 mb-16">
-                        <h1 className="text-6xl lg:text-7xl font-bold text-gray-900 leading-tight relative">
+                        <h1 className="text-6xl lg:text-7xl font-bold text-gray-100 leading-tight relative">
                             {/* Animated Background Text Effect */}
                             <div className="absolute inset-0 opacity-10">
                                 <span
@@ -226,10 +226,6 @@ const Hero = () => {
                                                 }}
                                             >
                                                 <span className={`
-                                                    ${word === 'smart' || word === 'crypto' || word === 'investing'
-                                                        ? 'bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent animate-gradient-shift'
-                                                        : ''
-                                                    }
                                                     ${word === 'smart' ? 'animate-bounce-gentle' : ''}
                                                     ${word === 'crypto' ? 'animate-pulse-gentle' : ''}
                                                     ${word === 'investing' ? 'animate-float-gentle' : ''}
@@ -249,7 +245,7 @@ const Hero = () => {
                         </h1>
 
                         {/* Animated subtitle with staggered word reveal */}
-                        <div className="text-xl lg:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                        <div className="text-xl lg:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
                             {subWords.map((word, index) => (
                                 <span
                                     key={index}
@@ -301,7 +297,7 @@ const Hero = () => {
 
                         <Button
                             variant="outline"
-                            className="border-2 border-purple-600 text-purple-600 hover:bg-purple-50 px-10 py-4 text-lg font-semibold rounded-xl transition-all duration-300"
+                            className="border-2 border-purple-400 text-purple-400 hover:bg-purple-900/20 hover:text-purple-300 px-10 py-4 text-lg font-semibold rounded-xl transition-all duration-300"
                         >
                             FIND YOUR PLAN
                         </Button>
@@ -311,13 +307,13 @@ const Hero = () => {
                     <div className="relative max-w-6xl mx-auto animate-slide-up">
                         <div className="relative">
                             {/* Main Dashboard Screenshot */}
-                            <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
+                            <div className="bg-gray-800 rounded-2xl shadow-2xl border border-gray-700 overflow-hidden">
                                 {/* Browser Bar */}
-                                <div className="bg-gray-100 px-6 py-3 border-b border-gray-200 flex items-center space-x-2">
+                                <div className="bg-gray-900 px-6 py-3 border-b border-gray-700 flex items-center space-x-2">
                                     <div className="w-3 h-3 bg-red-400 rounded-full"></div>
                                     <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
                                     <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                                    <div className="ml-4 bg-gray-200 rounded-lg px-4 py-1 text-sm text-gray-600 flex-1 max-w-md">
+                                    <div className="ml-4 bg-gray-800 rounded-lg px-4 py-1 text-sm text-gray-300 flex-1 max-w-md">
                                         🔒 nexgen.com/dashboard
                                     </div>
                                 </div>
@@ -390,11 +386,11 @@ const Hero = () => {
                                     </div>
 
                                     {/* Main Content */}
-                                    <div className="flex-1 bg-gray-50 p-6 overflow-hidden">
+                                    <div className="flex-1 bg-gray-900 p-6 overflow-hidden">
                                         {/* Header */}
                                         <div className="flex items-center justify-between mb-6">
                                             <div>
-                                                <h1 className="text-2xl font-bold text-gray-900">
+                                                <h1 className="text-2xl font-bold text-gray-100">
                                                     {animationStep >= 6 ? 'Withdrawals' :
                                                         animationStep >= 1 ? 'Investment Plans' : 'Dashboard Overview'}
                                                 </h1>
@@ -417,33 +413,33 @@ const Hero = () => {
                                             <div className="space-y-4">
                                                 {/* Balance Cards */}
                                                 <div className="grid grid-cols-4 gap-3">
-                                                    <div className={`bg-white p-3 rounded-lg shadow-sm ${highlightedElement === 'balance-card' ? 'ring-2 ring-green-400 bg-green-50' : ''
+                                                    <div className={`bg-gray-800 p-3 rounded-lg shadow-sm border border-gray-700 ${highlightedElement === 'balance-card' ? 'ring-2 ring-green-400 bg-green-900/20' : ''
                                                         }`}>
-                                                        <div className="text-lg font-bold text-green-600">
+                                                        <div className="text-lg font-bold text-green-400">
                                                             ${animationStep >= 9 ? '34,485' :
                                                                 animationStep >= 5 ? '32,485' : '28,340'}
                                                         </div>
-                                                        <div className="text-xs text-gray-600">Total Portfolio</div>
+                                                        <div className="text-xs text-gray-400">Total Portfolio</div>
                                                     </div>
-                                                    <div className="bg-white p-3 rounded-lg shadow-sm">
-                                                        <div className="text-lg font-bold text-purple-600">12.8%</div>
-                                                        <div className="text-xs text-gray-600">This Month</div>
+                                                    <div className="bg-gray-800 p-3 rounded-lg shadow-sm border border-gray-700">
+                                                        <div className="text-lg font-bold text-purple-400">12.8%</div>
+                                                        <div className="text-xs text-gray-400">This Month</div>
                                                     </div>
-                                                    <div className="bg-white p-3 rounded-lg shadow-sm">
-                                                        <div className="text-lg font-bold text-blue-600">
+                                                    <div className="bg-gray-800 p-3 rounded-lg shadow-sm border border-gray-700">
+                                                        <div className="text-lg font-bold text-blue-400">
                                                             {animationStep >= 5 ? '4' : '3'}
                                                         </div>
-                                                        <div className="text-xs text-gray-600">Active Plans</div>
+                                                        <div className="text-xs text-gray-400">Active Plans</div>
                                                     </div>
-                                                    <div className="bg-white p-3 rounded-lg shadow-sm">
-                                                        <div className="text-lg font-bold text-yellow-600">$445</div>
-                                                        <div className="text-xs text-gray-600">Today's Profit</div>
+                                                    <div className="bg-gray-800 p-3 rounded-lg shadow-sm border border-gray-700">
+                                                        <div className="text-lg font-bold text-yellow-400">$445</div>
+                                                        <div className="text-xs text-gray-400">Today's Profit</div>
                                                     </div>
                                                 </div>
 
                                                 {/* Chart placeholder */}
-                                                <div className="bg-white p-4 rounded-lg shadow-sm h-32">
-                                                    <div className="h-full bg-gradient-to-r from-purple-100 to-blue-100 rounded flex items-end justify-between p-2">
+                                                <div className="bg-gray-800 p-4 rounded-lg shadow-sm h-32 border border-gray-700">
+                                                    <div className="h-full bg-gradient-to-r from-purple-900/50 to-blue-900/50 rounded flex items-end justify-between p-2">
                                                         {[60, 70, 85, 78, 90, 95].map((height, i) => (
                                                             <div
                                                                 key={i}
@@ -461,32 +457,32 @@ const Hero = () => {
                                             <div className="space-y-4">
                                                 <div className="grid grid-cols-3 gap-4">
                                                     {/* Basic Plan */}
-                                                    <div className="bg-white p-4 rounded-lg shadow-sm border">
+                                                    <div className="bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-700">
                                                         <div className="text-center space-y-2">
-                                                            <h3 className="font-semibold text-gray-900">Basic Plan</h3>
-                                                            <div className="text-2xl font-bold text-blue-600">8.5%</div>
-                                                            <div className="text-xs text-gray-500">APY</div>
-                                                            <div className="text-sm text-gray-600">Min: $1,000</div>
-                                                            <button className="w-full mt-3 bg-blue-50 text-blue-600 py-2 rounded-lg text-sm font-medium">
+                                                            <h3 className="font-semibold text-gray-100">Basic Plan</h3>
+                                                            <div className="text-2xl font-bold text-blue-400">8.5%</div>
+                                                            <div className="text-xs text-gray-400">APY</div>
+                                                            <div className="text-sm text-gray-300">Min: $1,000</div>
+                                                            <button className="w-full mt-3 bg-blue-900/50 text-blue-400 py-2 rounded-lg text-sm font-medium">
                                                                 Select Plan
                                                             </button>
                                                         </div>
                                                     </div>
 
                                                     {/* Premium Plan */}
-                                                    <div className={`bg-white p-4 rounded-lg shadow-sm border-2 transition-all duration-500 ${highlightedElement === 'premium-plan' || animationStep >= 3
-                                                        ? 'border-purple-400 ring-2 ring-purple-200 bg-purple-50 scale-105'
-                                                        : 'border-gray-200'
+                                                    <div className={`bg-gray-800 p-4 rounded-lg shadow-sm border-2 transition-all duration-500 ${highlightedElement === 'premium-plan' || animationStep >= 3
+                                                        ? 'border-purple-400 ring-2 ring-purple-500/50 bg-purple-900/20 scale-105'
+                                                        : 'border-gray-700'
                                                         }`}>
                                                         <div className="relative">
                                                             <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
                                                                 <span className="bg-purple-600 text-white text-xs px-2 py-1 rounded-full">Recommended</span>
                                                             </div>
                                                             <div className="text-center space-y-2">
-                                                                <h3 className="font-semibold text-gray-900">Premium Plan</h3>
-                                                                <div className="text-2xl font-bold text-purple-600">12.8%</div>
-                                                                <div className="text-xs text-gray-500">APY</div>
-                                                                <div className="text-sm text-gray-600">Min: $5,000</div>
+                                                                <h3 className="font-semibold text-gray-100">Premium Plan</h3>
+                                                                <div className="text-2xl font-bold text-purple-400">12.8%</div>
+                                                                <div className="text-xs text-gray-400">APY</div>
+                                                                <div className="text-sm text-gray-300">Min: $5,000</div>
 
                                                                 <button className={`w-full mt-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${highlightedElement === 'subscribe-btn' || animationStep >= 4
                                                                     ? 'bg-purple-600 text-white ring-2 ring-purple-400'
@@ -506,13 +502,13 @@ const Hero = () => {
                                                     </div>
 
                                                     {/* Enterprise Plan */}
-                                                    <div className="bg-white p-4 rounded-lg shadow-sm border">
+                                                    <div className="bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-700">
                                                         <div className="text-center space-y-2">
-                                                            <h3 className="font-semibold text-gray-900">Enterprise</h3>
-                                                            <div className="text-2xl font-bold text-green-600">15.2%</div>
-                                                            <div className="text-xs text-gray-500">APY</div>
-                                                            <div className="text-sm text-gray-600">Min: $25,000</div>
-                                                            <button className="w-full mt-3 bg-green-50 text-green-600 py-2 rounded-lg text-sm font-medium">
+                                                            <h3 className="font-semibold text-gray-100">Enterprise</h3>
+                                                            <div className="text-2xl font-bold text-green-400">15.2%</div>
+                                                            <div className="text-xs text-gray-400">APY</div>
+                                                            <div className="text-sm text-gray-300">Min: $25,000</div>
+                                                            <button className="w-full mt-3 bg-green-900/50 text-green-400 py-2 rounded-lg text-sm font-medium">
                                                                 Select Plan
                                                             </button>
                                                         </div>
@@ -521,12 +517,12 @@ const Hero = () => {
 
                                                 {/* Success Message */}
                                                 {animationStep >= 4 && (
-                                                    <div className="bg-green-50 border border-green-200 p-4 rounded-lg animate-bounce-in">
-                                                        <div className="flex items-center space-x-2 text-green-800">
+                                                    <div className="bg-green-900/20 border border-green-700 p-4 rounded-lg animate-bounce-in">
+                                                        <div className="flex items-center space-x-2 text-green-400">
                                                             <Check className="w-5 h-5" />
                                                             <span className="font-medium">Successfully subscribed to Premium Plan!</span>
                                                         </div>
-                                                        <p className="text-sm text-green-600 mt-1">You're now earning 12.8% APY on your investments.</p>
+                                                        <p className="text-sm text-green-300 mt-1">You're now earning 12.8% APY on your investments.</p>
                                                     </div>
                                                 )}
                                             </div>
@@ -536,23 +532,23 @@ const Hero = () => {
                                         {animationStep >= 6 && animationStep < 9 && (
                                             <div className="space-y-6">
                                                 {/* Available Balance */}
-                                                <div className="bg-white p-4 rounded-lg shadow-sm border">
-                                                    <h3 className="text-lg font-semibold text-gray-900 mb-3">Available for Withdrawal</h3>
-                                                    <div className="text-3xl font-bold text-green-600">$8,450.75</div>
-                                                    <p className="text-sm text-gray-600 mt-1">From Premium Plan earnings</p>
+                                                <div className="bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-700">
+                                                    <h3 className="text-lg font-semibold text-gray-100 mb-3">Available for Withdrawal</h3>
+                                                    <div className="text-3xl font-bold text-green-400">$8,450.75</div>
+                                                    <p className="text-sm text-gray-400 mt-1">From Premium Plan earnings</p>
                                                 </div>
 
                                                 {/* Withdrawal Form */}
-                                                <div className="bg-white p-6 rounded-lg shadow-sm border">
-                                                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Request Withdrawal</h3>
+                                                <div className="bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-700">
+                                                    <h3 className="text-lg font-semibold text-gray-100 mb-4">Request Withdrawal</h3>
 
                                                     <div className="space-y-4">
                                                         <div>
-                                                            <label className="block text-sm font-medium text-gray-700 mb-2">Amount (USD)</label>
+                                                            <label className="block text-sm font-medium text-gray-300 mb-2">Amount (USD)</label>
                                                             <div className={`relative ${highlightedElement === 'withdrawal-amount' ? 'ring-2 ring-purple-400' : ''}`}>
                                                                 <input
                                                                     type="text"
-                                                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                                                    className="w-full p-3 bg-gray-700 border border-gray-600 text-gray-100 placeholder-gray-400 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                                                                     placeholder="Enter amount..."
                                                                     value={animationStep >= 7 ? "$2,000" : ""}
                                                                     readOnly
@@ -564,8 +560,8 @@ const Hero = () => {
                                                         </div>
 
                                                         <div>
-                                                            <label className="block text-sm font-medium text-gray-700 mb-2">Withdrawal Method</label>
-                                                            <select className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                                                            <label className="block text-sm font-medium text-gray-300 mb-2">Withdrawal Method</label>
+                                                            <select className="w-full p-3 bg-gray-700 border border-gray-600 text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500">
                                                                 <option>Bank Transfer (2-3 days)</option>
                                                                 <option>Crypto Wallet (Instant)</option>
                                                             </select>
@@ -589,12 +585,12 @@ const Hero = () => {
 
                                                 {/* Success Message */}
                                                 {animationStep >= 8 && (
-                                                    <div className="bg-green-50 border border-green-200 p-4 rounded-lg animate-bounce-in">
-                                                        <div className="flex items-center space-x-2 text-green-800">
+                                                    <div className="bg-green-900/20 border border-green-700 p-4 rounded-lg animate-bounce-in">
+                                                        <div className="flex items-center space-x-2 text-green-400">
                                                             <Check className="w-5 h-5" />
                                                             <span className="font-medium">Withdrawal request submitted successfully!</span>
                                                         </div>
-                                                        <p className="text-sm text-green-600 mt-1">$2,000 will be transferred to your bank account within 2-3 business days.</p>
+                                                        <p className="text-sm text-green-300 mt-1">$2,000 will be transferred to your bank account within 2-3 business days.</p>
                                                     </div>
                                                 )}
                                             </div>
