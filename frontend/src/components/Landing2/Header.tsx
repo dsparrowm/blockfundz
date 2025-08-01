@@ -22,7 +22,7 @@ const Header = () => {
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <NexGenLogo variant="full" size="sm" />
+            <NexGenLogo variant="full" size="lg" />
           </div>
 
           <nav className="hidden lg:flex items-center space-x-8">

@@ -121,7 +121,7 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
       <div aria-live="assertive" className="sr-only">
         {globalError && <p>{globalError}</p>}
       </div>
@@ -138,12 +138,12 @@ const Register = () => {
         </div>
 
         {/* Main Register Card */}
-        <Card className="shadow-lg border-0">
+        <Card className="shadow-lg border-0 bg-gray-800 border-gray-700">
           <CardHeader className="space-y-1 text-center">
-            <CardTitle className="text-2xl font-bold text-gray-900">
+            <CardTitle className="text-2xl font-bold text-gray-100">
               Create your account
             </CardTitle>
-            <CardDescription className="text-gray-600">
+            <CardDescription className="text-gray-300">
               Join NexGen and start investing today
             </CardDescription>
           </CardHeader>
@@ -151,7 +151,7 @@ const Register = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Name Input */}
               <div className="space-y-2">
-                <Label htmlFor="name" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="name" className="text-sm font-medium text-gray-200">
                   Full Name
                 </Label>
                 <div className="relative">
@@ -163,7 +163,7 @@ const Register = () => {
                     value={formValues.name}
                     onChange={handleInputChange}
                     placeholder="Enter your full name"
-                    className="pl-10"
+                    className="pl-10 bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400"
                     disabled={loading}
                     required
                   />
@@ -175,7 +175,7 @@ const Register = () => {
 
               {/* Email Input */}
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="email" className="text-sm font-medium text-gray-200">
                   Email Address
                 </Label>
                 <div className="relative">
@@ -187,7 +187,7 @@ const Register = () => {
                     value={formValues.email}
                     onChange={handleInputChange}
                     placeholder="Enter your email address"
-                    className="pl-10"
+                    className="pl-10 bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400"
                     disabled={loading}
                     required
                   />
@@ -199,7 +199,7 @@ const Register = () => {
 
               {/* Phone Input */}
               <div className="space-y-2">
-                <Label htmlFor="phone" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="phone" className="text-sm font-medium text-gray-200">
                   Phone Number
                 </Label>
                 <PhoneInput
@@ -219,34 +219,34 @@ const Register = () => {
                     height: '42px',
                     fontSize: '14px',
                     borderRadius: '6px',
-                    border: '1px solid #d1d5db',
+                    border: '1px solid #4b5563',
                     outline: 'none',
-                    color: '#374151',
-                    backgroundColor: '#ffffff',
+                    color: '#f3f4f6',
+                    backgroundColor: '#374151',
                     paddingLeft: '3rem'
                   }}
                   containerStyle={{
                     width: '100%',
-                    backgroundColor: '#ffffff',
-                    border: '1px solid #d1d5db',
+                    backgroundColor: '#374151',
+                    border: '1px solid #4b5563',
                     height: '42px',
                     borderRadius: '6px',
                   }}
                   buttonStyle={{
-                    backgroundColor: '#ffffff',
+                    backgroundColor: '#374151',
                     border: 'none',
                   }}
                   dropdownStyle={{
-                    backgroundColor: '#ffffff',
-                    color: '#374151',
-                    border: '1px solid #d1d5db',
+                    backgroundColor: '#374151',
+                    color: '#f3f4f6',
+                    border: '1px solid #4b5563',
                   }}
                 />
               </div>
 
               {/* Password Input */}
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="password" className="text-sm font-medium text-gray-200">
                   Password
                 </Label>
                 <div className="relative">
@@ -258,7 +258,7 @@ const Register = () => {
                     value={formValues.password}
                     onChange={handleInputChange}
                     placeholder="Create a strong password"
-                    className="pl-10"
+                    className="pl-10 bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400"
                     disabled={loading}
                     required
                   />
@@ -270,7 +270,7 @@ const Register = () => {
 
               {/* Confirm Password Input */}
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="confirmPassword" className="text-sm font-medium text-gray-200">
                   Confirm Password
                 </Label>
                 <div className="relative">
@@ -282,7 +282,7 @@ const Register = () => {
                     value={formValues.confirmPassword}
                     onChange={handleInputChange}
                     placeholder="Confirm your password"
-                    className="pl-10"
+                    className="pl-10 bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400"
                     disabled={loading}
                     required
                   />
@@ -296,7 +296,7 @@ const Register = () => {
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3"
               >
                 {loading ? (
                   <>
@@ -309,12 +309,12 @@ const Register = () => {
               </Button>
 
               {/* Sign In Link */}
-              <div className="text-center pt-4 border-t border-gray-200">
-                <p className="text-sm text-gray-600">
+              <div className="text-center pt-4 border-t border-gray-700">
+                <p className="text-sm text-gray-300">
                   Already have an account?{' '}
                   <Link
                     to="/login"
-                    className="text-blue-600 hover:text-blue-700 font-medium hover:underline"
+                    className="text-purple-400 hover:text-purple-300 font-medium hover:underline"
                   >
                     Sign in
                   </Link>

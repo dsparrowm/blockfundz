@@ -452,7 +452,7 @@ const UserManagement = ({
             </div>
           ) : (
             <>
-              <div className="overflow-hidden">
+              <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
                     <TableRow className="bg-gray-50">
@@ -467,7 +467,7 @@ const UserManagement = ({
                   <TableBody>
                     {paginatedUsers.map((user, index) => (
                       <TableRow key={user.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50/50"}>
-                        <TableCell>
+                        <TableCell className="min-w-[150px]">
                           <div className="space-y-1">
                             <div className="font-medium text-gray-900">{user.name}</div>
                             <Badge variant="outline" className="text-xs">
@@ -475,13 +475,13 @@ const UserManagement = ({
                             </Badge>
                           </div>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="min-w-[200px]">
                           <div className="space-y-1">
                             <div className="text-sm text-gray-900">{user.email}</div>
                             <div className="text-xs text-gray-500">{user.phone || 'N/A'}</div>
                           </div>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="min-w-[100px]">
                           <div className="space-y-1">
                             <Badge
                               variant={user.isVerified ? "default" : "secondary"}
@@ -491,12 +491,12 @@ const UserManagement = ({
                             </Badge>
                           </div>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="min-w-[120px]">
                           <div className="text-sm font-medium text-gray-900">
                             ${(user.balance || 0).toLocaleString()}
                           </div>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="min-w-[120px]">
                           <div className="text-sm text-gray-900">
                             {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
                           </div>
@@ -504,14 +504,14 @@ const UserManagement = ({
                             {user.createdAt ? new Date(user.createdAt).toLocaleTimeString() : 'N/A'}
                           </div>
                         </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-2 flex-wrap">
+                        <TableCell className="min-w-[300px]">
+                          <div className="flex items-center gap-1 flex-wrap">
                             {!user.isVerified && (
                               <Button
                                 variant="outline"
                                 size="sm"
                                 onClick={() => handleVerifyUser(user.id)}
-                                className="text-xs bg-green-50 text-green-700 hover:bg-green-100"
+                                className="text-xs bg-green-50 text-green-700 hover:bg-green-100 px-2 py-1"
                               >
                                 Verify
                               </Button>
@@ -521,10 +521,11 @@ const UserManagement = ({
                               variant="secondary"
                               size="sm"
                               onClick={() => handleViewBalances(user)}
-                              className="text-xs bg-blue-50 text-blue-700 hover:bg-blue-100"
+                              className="text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 px-2 py-1"
                             >
                               <Eye className="w-3 h-3 mr-1" />
-                              Balances
+                              <span className="hidden sm:inline">Balances</span>
+                              <span className="sm:hidden">View</span>
                             </Button>
 
                             <Dialog>
@@ -547,7 +548,7 @@ const UserManagement = ({
                                   Update Balance
                                 </Button>
                               </DialogTrigger>
-                              <DialogContent className="sm:max-w-[425px]">
+                              <DialogContent className="sm:max-w-[425px] mx-4">
                                 <DialogHeader>
                                   <DialogTitle>Update User Balance</DialogTitle>
                                   <DialogDescription>
@@ -555,8 +556,8 @@ const UserManagement = ({
                                   </DialogDescription>
                                 </DialogHeader>
                                 <div className="grid gap-4 py-4">
-                                  <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="mainBalance" className="text-right">
+                                  <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
+                                    <Label htmlFor="mainBalance" className="sm:text-right font-medium">
                                       Main Balance
                                     </Label>
                                     <Input
@@ -564,11 +565,11 @@ const UserManagement = ({
                                       type="number"
                                       value={mainBalance}
                                       onChange={(e) => setMainBalance(Number(e.target.value))}
-                                      className="col-span-3"
+                                      className="sm:col-span-3"
                                     />
                                   </div>
-                                  <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="bitcoin" className="text-right">
+                                  <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
+                                    <Label htmlFor="bitcoin" className="sm:text-right font-medium">
                                       Bitcoin
                                     </Label>
                                     <Input
@@ -576,11 +577,11 @@ const UserManagement = ({
                                       type="number"
                                       value={bitcoinBalance}
                                       onChange={(e) => setBitcoinBalance(Number(e.target.value))}
-                                      className="col-span-3"
+                                      className="sm:col-span-3"
                                     />
                                   </div>
-                                  <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="ethereum" className="text-right">
+                                  <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
+                                    <Label htmlFor="ethereum" className="sm:text-right font-medium">
                                       Ethereum
                                     </Label>
                                     <Input
@@ -588,11 +589,11 @@ const UserManagement = ({
                                       type="number"
                                       value={ethereumBalance}
                                       onChange={(e) => setEthereumBalance(Number(e.target.value))}
-                                      className="col-span-3"
+                                      className="sm:col-span-3"
                                     />
                                   </div>
-                                  <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="usdt" className="text-right">
+                                  <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
+                                    <Label htmlFor="usdt" className="sm:text-right font-medium">
                                       USDT
                                     </Label>
                                     <Input
@@ -600,11 +601,11 @@ const UserManagement = ({
                                       type="number"
                                       value={usdtBalance}
                                       onChange={(e) => setUsdtBalance(Number(e.target.value))}
-                                      className="col-span-3"
+                                      className="sm:col-span-3"
                                     />
                                   </div>
-                                  <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="usdc" className="text-right">
+                                  <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
+                                    <Label htmlFor="usdc" className="sm:text-right font-medium">
                                       USDC
                                     </Label>
                                     <Input
@@ -612,11 +613,11 @@ const UserManagement = ({
                                       type="number"
                                       value={usdcBalance}
                                       onChange={(e) => setUsdcBalance(Number(e.target.value))}
-                                      className="col-span-3"
+                                      className="sm:col-span-3"
                                     />
                                   </div>
-                                  <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="bnb" className="text-right">
+                                  <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
+                                    <Label htmlFor="bnb" className="sm:text-right font-medium">
                                       BNB
                                     </Label>
                                     <Input
@@ -624,7 +625,7 @@ const UserManagement = ({
                                       type="number"
                                       value={bnbBalance}
                                       onChange={(e) => setBnbBalance(Number(e.target.value))}
-                                      className="col-span-3"
+                                      className="sm:col-span-3"
                                     />
                                   </div>
                                 </div>
@@ -799,8 +800,8 @@ const UserManagement = ({
 
               {/* Pagination */}
               {totalPages > 1 && (
-                <div className="flex justify-between items-center mt-6 pt-4 border-t border-gray-200">
-                  <div className="text-sm text-gray-500">
+                <div className="flex flex-col sm:flex-row justify-between items-center mt-6 pt-4 border-t border-gray-200 gap-4">
+                  <div className="text-sm text-gray-500 text-center sm:text-left">
                     Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredUsers.length)} of {filteredUsers.length} users
                   </div>
                   <div className="flex items-center gap-2">
@@ -809,19 +810,23 @@ const UserManagement = ({
                       size="sm"
                       onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                       disabled={currentPage === 1}
+                      className="px-3 py-1"
                     >
-                      Previous
+                      <span className="hidden sm:inline">Previous</span>
+                      <span className="sm:hidden">Prev</span>
                     </Button>
-                    <span className="text-sm text-gray-600">
-                      Page {currentPage} of {totalPages}
+                    <span className="text-sm text-gray-600 px-2">
+                      {currentPage}/{totalPages}
                     </span>
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                       disabled={currentPage === totalPages}
+                      className="px-3 py-1"
                     >
-                      Next
+                      <span className="hidden sm:inline">Next</span>
+                      <span className="sm:hidden">Next</span>
                     </Button>
                   </div>
                 </div>

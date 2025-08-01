@@ -2,69 +2,74 @@ interface ChatConfig {
     // WebSocket Configuration
     websocket: {
         url: string;
-        reconnectAttempts: number;
-        reconnectDelay: number;
-        heartbeatInterval: number;
-        connectionTimeout: number;
-    };
-
-    // API Configuration
+        rec
+    },
     api: {
-        baseUrl: string;
-        timeout: number;
-        retryAttempts: number;
-        retryDelay: number;
+        baseUrl: (import.meta as any).env?.VITE_API_URL || 'https://staging-api.nexgen.com',
+            timeout: 8000,
+                retryAttempts: 2, tAttempts: number;
+reconnectDelay: number;
+heartbeatInterval: number;
+connectionTimeout: number;
     };
 
-    // Message Configuration
-    messages: {
-        maxLength: number;
-        typingTimeout: number;
-        markAsReadDelay: number;
-        loadMoreCount: number;
-        maxFileSize: number; // in bytes
-        allowedFileTypes: string[];
-    };
+// API Configuration
+api: {
+    baseUrl: string;
+    timeout: number;
+    retryAttempts: number;
+    retryDelay: number;
+};
 
-    // UI Configuration
-    ui: {
-        maxConversations: number;
-        messagePageSize: number;
-        searchDebounceDelay: number;
-        autoScrollThreshold: number;
-        enableAnimations: boolean;
-        theme: 'light' | 'dark' | 'system';
-    };
+// Message Configuration
+messages: {
+    maxLength: number;
+    typingTimeout: number;
+    markAsReadDelay: number;
+    loadMoreCount: number;
+    maxFileSize: number; // in bytes
+    allowedFileTypes: string[];
+};
 
-    // Notification Configuration
-    notifications: {
-        enabled: boolean;
-        sound: boolean;
-        browser: boolean;
-        inApp: boolean;
-        maxActiveNotifications: number;
-        notificationDuration: number;
-    };
+// UI Configuration
+ui: {
+    maxConversations: number;
+    messagePageSize: number;
+    searchDebounceDelay: number;
+    autoScrollThreshold: number;
+    enableAnimations: boolean;
+    theme: 'light' | 'dark' | 'system';
+};
 
-    // Feature Flags
-    features: {
-        typing: boolean;
-        fileUpload: boolean;
-        messageSearch: boolean;
-        conversationExport: boolean;
-        userPresence: boolean;
-        messageReactions: boolean;
-        messageEditing: boolean;
-        messageThreads: boolean;
-    };
+// Notification Configuration
+notifications: {
+    enabled: boolean;
+    sound: boolean;
+    browser: boolean;
+    inApp: boolean;
+    maxActiveNotifications: number;
+    notificationDuration: number;
+};
 
-    // Security Configuration
-    security: {
-        enableEncryption: boolean;
-        maxLoginAttempts: number;
-        sessionTimeout: number;
-        requireEmailVerification: boolean;
-    };
+// Feature Flags
+features: {
+    typing: boolean;
+    fileUpload: boolean;
+    messageSearch: boolean;
+    conversationExport: boolean;
+    userPresence: boolean;
+    messageReactions: boolean;
+    messageEditing: boolean;
+    messageThreads: boolean;
+};
+
+// Security Configuration
+security: {
+    enableEncryption: boolean;
+    maxLoginAttempts: number;
+    sessionTimeout: number;
+    requireEmailVerification: boolean;
+};
 }
 
 // Environment-based configuration
@@ -75,14 +80,14 @@ const getEnvironmentConfig = (): Partial<ChatConfig> => {
         case 'production':
             return {
                 websocket: {
-                    url: (import.meta as any).env?.VITE_WS_URL || 'wss://api.blockfundz.com/ws',
+                    url: (import.meta as any).env?.VITE_WS_URL || 'wss://api.nexgen.com/ws',
                     reconnectAttempts: 5,
                     reconnectDelay: 3000,
                     heartbeatInterval: 30000,
                     connectionTimeout: 10000,
                 },
                 api: {
-                    baseUrl: (import.meta as any).env?.VITE_API_URL || 'https://api.blockfundz.com',
+                    baseUrl: (import.meta as any).env?.VITE_API_URL || 'https://api.nexgen.com',
                     timeout: 10000,
                     retryAttempts: 3,
                     retryDelay: 1000,
@@ -100,14 +105,14 @@ const getEnvironmentConfig = (): Partial<ChatConfig> => {
         case 'staging':
             return {
                 websocket: {
-                    url: (import.meta as any).env?.VITE_WS_URL || 'wss://staging-api.blockfundz.com/ws',
+                    url: (import.meta as any).env?.VITE_WS_URL || 'wss://staging-api.nexgen.com/ws',
                     reconnectAttempts: 3,
                     reconnectDelay: 2000,
                     heartbeatInterval: 25000,
                     connectionTimeout: 8000,
                 },
                 api: {
-                    baseUrl: (import.meta as any).env?.VITE_API_URL || 'https://staging-api.blockfundz.com',
+                    baseUrl: (import.meta as any).env?.VITE_API_URL || 'https://staging-api.nexgen.com',
                     timeout: 8000,
                     retryAttempts: 2,
                     retryDelay: 800,

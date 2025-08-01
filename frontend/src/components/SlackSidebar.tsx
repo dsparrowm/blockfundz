@@ -31,9 +31,15 @@ import {
 
 interface SlackSidebarProps {
     className?: string;
+    isOpen?: boolean;
+    onClose?: () => void;
 }
 
-export const SlackSidebar: React.FC<SlackSidebarProps> = ({ className = '' }) => {
+export const SlackSidebar: React.FC<SlackSidebarProps> = ({
+    className = '',
+    isOpen = false,
+    onClose
+}) => {
     const location = useLocation();
     const navigate = useNavigate();
     const isAdmin = location.pathname.startsWith('/admin');
@@ -111,14 +117,31 @@ export const SlackSidebar: React.FC<SlackSidebarProps> = ({ className = '' }) =>
     };
 
     return (
-        <div className={`flex h-screen ${isDarkMode ? 'bg-[#1a1d29]' : 'bg-[#3f0f40]'} text-white ${className}`}>
+        <div className={`${
+            // Desktop: always visible, mobile: slide in/out
+            'lg:relative lg:translate-x-0 ' +
+            (isOpen ? 'fixed inset-y-0 left-0 translate-x-0 z-50' : 'fixed inset-y-0 left-0 -translate-x-full z-50') +
+            ' lg:z-auto transition-transform duration-300 ease-in-out'
+            } flex h-screen ${isDarkMode ? 'bg-[#1a1d29]' : 'bg-[#3f0f40]'} text-white ${className}`}>
             {/* Main Sidebar */}
-            <div className="w-64 flex flex-col">
+            <div className="w-64 lg:w-64 flex flex-col">
                 {/* Header */}
                 <div className={`p-4 border-b ${isDarkMode ? 'border-[#2c2d33]' : 'border-[#5a1f5a]'}`}>
                     <div className="flex items-center justify-between">
                         <NexGenLogo size="md" dark={isDarkMode} />
-                        <ChevronDown className={`w-4 h-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-300'}`} />
+                        <div className="flex items-center space-x-2">
+                            <ChevronDown className={`w-4 h-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-300'}`} />
+                            {/* Close button for mobile */}
+                            <button
+                                onClick={onClose}
+                                className="lg:hidden p-1 rounded-md hover:bg-white/10"
+                                aria-label="Close sidebar"
+                            >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                     <div className="mt-3 flex items-center space-x-2">
                         <Circle className="w-3 h-3 text-green-400 fill-current" />
@@ -134,7 +157,7 @@ export const SlackSidebar: React.FC<SlackSidebarProps> = ({ className = '' }) =>
                         <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                         <input
                             type="text"
-                            placeholder="Search NexGen"
+                            placeholder={`Search ${isAdmin ? 'Admin' : 'NexGen'}`}
                             className={`w-full ${isDarkMode ? 'bg-[#2c2d33] text-white border border-[#3c3f4c]' : 'bg-[#5a1f5a] text-white'} placeholder-gray-400 rounded-md pl-10 pr-3 py-2 text-sm focus:outline-none focus:ring-2 ${isDarkMode ? 'focus:ring-[#4a154b] focus:border-[#4a154b]' : 'focus:ring-white/20'}`}
                         />
                     </div>

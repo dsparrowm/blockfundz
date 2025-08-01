@@ -1,7 +1,8 @@
 import React from 'react';
+import logoImage from '../../assets/icons/logo.png';
 
 interface NexGenLogoProps {
-    size?: 'sm' | 'md' | 'lg' | 'xl';
+    size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
     variant?: 'full' | 'icon' | 'text';
     className?: string;
     showText?: boolean;
@@ -16,42 +17,35 @@ const NexGenLogo: React.FC<NexGenLogoProps> = ({
     dark = false
 }) => {
     const sizeClasses = {
-        sm: 'w-6 h-6',
-        md: 'w-8 h-8',
-        lg: 'w-12 h-12',
-        xl: 'w-16 h-16'
+        sm: 'w-8 h-8',
+        md: 'w-10 h-10',
+        lg: 'w-14 h-14',
+        xl: 'w-18 h-18',
+        '2xl': 'w-24 h-24'
     };
 
     const textSizeClasses = {
-        sm: 'text-sm',
-        md: 'text-lg',
-        lg: 'text-xl',
-        xl: 'text-2xl'
+        sm: 'text-base',
+        md: 'text-xl',
+        lg: 'text-2xl',
+        xl: 'text-3xl',
+        '2xl': 'text-4xl'
     };
 
-    const LogoIcon = () => (
-        <div className={`${sizeClasses[size]} bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-600 rounded-lg flex items-center justify-center shadow-md hover:shadow-lg transition-shadow ${className}`}>
-            <svg
-                viewBox="0 0 32 32"
-                className="w-3/4 h-3/4 text-white"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-            >
-                {/* Stylized N */}
-                <path d="M6 26V6h4l8 12V6h4v20h-4l-8-12v12H6z" fill="currentColor" stroke="none" />
-                {/* Modern accent lines */}
-                <path d="M24 8l4-2M24 12l4-2M24 16l4-2" strokeWidth="1.5" opacity="0.7" />
-                {/* Bottom accent */}
-                <path d="M6 28h20" strokeWidth="2" opacity="0.5" />
-            </svg>
-        </div>
-    );
+    const LogoIcon = () => {
+        return (
+            <img
+                src={logoImage}
+                alt="NexGen Logo"
+                className={`${sizeClasses[size]} object-contain ${className}`}
+            />
+        );
+    };
 
     const LogoText = () => (
         <span className={`font-bold ${textSizeClasses[size]} ${dark
-                ? 'text-white'
-                : 'bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent'
+            ? 'text-white'
+            : 'bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent'
             }`}>
             NexGen
         </span>

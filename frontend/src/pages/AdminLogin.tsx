@@ -113,7 +113,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+    <div className="min-h-screen !bg-gray-900 flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-8">
         {/* Logo Section */}
         <div className="text-center">
@@ -126,12 +126,12 @@ const Login = () => {
         </div>
 
         {/* Main Admin Login Card */}
-        <Card className="shadow-lg border-0">
+        <Card className="shadow-lg border-0 !bg-gray-800 !border-gray-700">
           <CardHeader className="space-y-1 text-center">
-            <CardTitle className="text-2xl font-bold text-gray-900">
+            <CardTitle className="text-2xl font-bold !text-white">
               Admin Portal
             </CardTitle>
-            <CardDescription className="text-gray-600">
+            <CardDescription className="!text-gray-300">
               Sign in to the admin dashboard
             </CardDescription>
           </CardHeader>
@@ -139,7 +139,7 @@ const Login = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Email Input */}
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="email" className="text-sm font-medium !text-gray-200">
                   Email address
                 </Label>
                 <div className="relative">
@@ -151,7 +151,7 @@ const Login = () => {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Enter your admin email"
-                    className="pl-10"
+                    className="pl-10 !bg-gray-700 !border-gray-600 !text-white placeholder:!text-gray-400"
                     disabled={loading}
                     required
                   />
@@ -163,7 +163,7 @@ const Login = () => {
 
               {/* Password Input */}
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="password" className="text-sm font-medium !text-gray-200">
                   Password
                 </Label>
                 <div className="relative">
@@ -175,7 +175,7 @@ const Login = () => {
                     value={formData.password}
                     onChange={handleChange}
                     placeholder="Enter your password"
-                    className="pl-10"
+                    className="pl-10 !bg-gray-700 !border-gray-600 !text-white placeholder:!text-gray-400"
                     disabled={loading}
                     required
                   />
@@ -189,7 +189,7 @@ const Login = () => {
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
+                className="w-full !bg-purple-600 hover:!bg-purple-700 !text-white py-3"
               >
                 {loading ? (
                   <>

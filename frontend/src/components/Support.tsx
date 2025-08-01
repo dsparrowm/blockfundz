@@ -213,7 +213,7 @@ const Support = () => {
                 </div>
                 <div className="bg-white p-4 rounded-lg border border-gray-200">
                     <h3 className="font-medium text-gray-900 mb-2">Email Support</h3>
-                    <p className="text-sm text-gray-600">support@blockfundz.com</p>
+                    <p className="text-sm text-gray-600">support@nexgen.com</p>
                 </div>
                 <div className="bg-white p-4 rounded-lg border border-gray-200">
                     <h3 className="font-medium text-gray-900 mb-2">Response Time</h3>

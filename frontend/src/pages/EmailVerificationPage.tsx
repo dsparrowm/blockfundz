@@ -4,6 +4,10 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useStore } from "../store/useStore";
 import Spinner from '../components/spinners/Spinner';
+import NexGenLogo from "../components/ui/NexGenLogo";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import { Button } from "../components/ui/button";
+import { Label } from "../components/ui/label";
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string || "http://localhost:3001";
 
@@ -54,33 +58,67 @@ const EmailVerificationPage = () => {
     };
 
     return (
-        <div className="flex justify-center items-center h-screen bg-coral-black">
-            <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-                <h1 className="text-2xl font-bold mb-6 text-center">Email Verification</h1>
-                <p className="text-center mb-6">Enter the 6-digit code sent to your email</p>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="flex justify-center space-x-2">
-                        {verificationCode.map((code, index) => (
-                            <input
-                                key={index}
-                                type="text"
-                                value={code}
-                                onChange={(e) => handleChange(e, index)}
-                                onKeyDown={(e) => handleKeyDown(e, index)}
-                                ref={(el) => (inputRefs.current[index] = el)}
-                                className="w-12 h-12 text-center text-2xl border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                maxLength={1}
-                            />
-                        ))}
-                    </div>
-                    <button
-                        type="submit"
-                        className="w-full bg-orange-500 text-white py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors"
-                        disabled={isLoading}
+        <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
+            <div className="w-full max-w-md space-y-8">
+                {/* Logo Section */}
+                <div className="text-center">
+                    <div
+                        className="inline-block cursor-pointer"
+                        onClick={() => navigate('/')}
                     >
-                        {isLoading ? (<Spinner />) : 'Verify Email'}
-                    </button>
-                </form>
+                        <NexGenLogo variant="full" size="lg" />
+                    </div>
+                </div>
+
+                {/* Main Verification Card */}
+                <Card className="shadow-lg border-0 bg-gray-800 border-gray-700">
+                    <CardHeader className="space-y-1 text-center">
+                        <CardTitle className="text-2xl font-bold text-gray-100">
+                            Email Verification
+                        </CardTitle>
+                        <CardDescription className="text-gray-300">
+                            Enter the 6-digit code sent to your email
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            <div className="space-y-2">
+                                <Label className="text-sm font-medium text-gray-200 text-center block">
+                                    Verification Code
+                                </Label>
+                                <div className="flex justify-center space-x-2">
+                                    {verificationCode.map((code, index) => (
+                                        <input
+                                            key={index}
+                                            type="text"
+                                            value={code}
+                                            onChange={(e) => handleChange(e, index)}
+                                            onKeyDown={(e) => handleKeyDown(e, index)}
+                                            ref={(el) => (inputRefs.current[index] = el)}
+                                            className="w-12 h-12 text-center text-2xl border border-gray-600 bg-gray-700 text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                                            maxLength={1}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+
+                            <Button
+                                type="submit"
+                                disabled={isLoading}
+                                className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3"
+                            >
+                                {isLoading ? (
+                                    <>
+                                        <Spinner />
+                                        <span className="ml-2">Verifying...</span>
+                                    </>
+                                ) : (
+                                    'Verify Email'
+                                )}
+                            </Button>
+                        </form>
+                    </CardContent>
+                </Card>
             </div>
         </div>
     );

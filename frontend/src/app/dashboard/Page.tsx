@@ -46,7 +46,7 @@ export default function Page() {
     <SlackLayout>
       {/* Crypto Ticker - Only for users and non-chat components */}
       {shouldShowCryptoTicker && (
-        <div className="mb-6 bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
+        <div className="mb-4 lg:mb-6 bg-white rounded-lg border border-gray-200 p-3 lg:p-4 shadow-sm">
           <CryptoTicker />
         </div>
       )}

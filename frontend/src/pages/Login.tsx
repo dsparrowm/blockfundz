@@ -159,23 +159,23 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
 
       {/* Forgot Password Dialog */}
       <Dialog open={forgotDialogOpen} onOpenChange={setForgotDialogOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md !bg-gray-800 !border-gray-700">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <FaLock className="text-blue-600" />
+            <DialogTitle className="flex items-center gap-2 !text-gray-100">
+              <FaLock className="text-purple-400" />
               Forgot Password?
             </DialogTitle>
-            <DialogDescription>
+            <DialogDescription className="!text-gray-300">
               Enter your email address and we'll send you a password reset link.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleForgotPassword} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="forgot-email">Email Address</Label>
+              <Label htmlFor="forgot-email" className="!text-gray-200">Email Address</Label>
               <Input
                 id="forgot-email"
                 type="email"
@@ -185,6 +185,7 @@ const Login = () => {
                 onChange={e => setForgotEmail(e.target.value)}
                 disabled={forgotLoading}
                 autoFocus
+                className="!bg-gray-700 !border-gray-600 !text-gray-100 placeholder:!text-gray-400"
               />
             </div>
             <div className="flex gap-2 pt-4">
@@ -192,7 +193,7 @@ const Login = () => {
                 type="button"
                 variant="outline"
                 onClick={() => setForgotDialogOpen(false)}
-                className="flex-1"
+                className="flex-1 !border-gray-600 !text-gray-300 hover:!bg-gray-700"
                 disabled={forgotLoading}
               >
                 Cancel
@@ -200,7 +201,7 @@ const Login = () => {
               <Button
                 type="submit"
                 disabled={forgotLoading}
-                className="flex-1"
+                className="flex-1 bg-purple-600 hover:bg-purple-700"
               >
                 {forgotLoading ? (
                   <>
@@ -228,12 +229,12 @@ const Login = () => {
         </div>
 
         {/* Main Login Card */}
-        <Card className="shadow-lg border-0">
+        <Card className="shadow-lg border-0 !bg-gray-800 !border-gray-700 !text-gray-100">
           <CardHeader className="space-y-1 text-center">
-            <CardTitle className="text-2xl font-bold text-gray-900">
+            <CardTitle className="text-2xl font-bold !text-gray-100">
               Welcome back
             </CardTitle>
-            <CardDescription className="text-gray-600">
+            <CardDescription className="!text-gray-300">
               Sign in to your NexGen account
             </CardDescription>
           </CardHeader>
@@ -241,7 +242,7 @@ const Login = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Email Input */}
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="email" className="text-sm font-medium !text-gray-200">
                   Email address
                 </Label>
                 <div className="relative">
@@ -253,7 +254,7 @@ const Login = () => {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Enter your email"
-                    className="pl-10"
+                    className="pl-10 !bg-gray-700 !border-gray-600 !text-gray-100 placeholder:!text-gray-400"
                     disabled={loading}
                     required
                   />
@@ -265,7 +266,7 @@ const Login = () => {
 
               {/* Password Input */}
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="password" className="text-sm font-medium !text-gray-200">
                   Password
                 </Label>
                 <div className="relative">
@@ -277,7 +278,7 @@ const Login = () => {
                     value={formData.password}
                     onChange={handleChange}
                     placeholder="Enter your password"
-                    className="pl-10"
+                    className="pl-10 !bg-gray-700 !border-gray-600 !text-gray-100 placeholder:!text-gray-400"
                     disabled={loading}
                     required
                   />
@@ -292,7 +293,7 @@ const Login = () => {
                 <Button
                   type="button"
                   variant="link"
-                  className="p-0 h-auto text-blue-600 hover:text-blue-700"
+                  className="p-0 h-auto text-purple-400 hover:text-purple-300"
                   onClick={() => setForgotDialogOpen(true)}
                   disabled={loading}
                 >
@@ -304,7 +305,7 @@ const Login = () => {
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3"
               >
                 {loading ? (
                   <>
@@ -317,12 +318,12 @@ const Login = () => {
               </Button>
 
               {/* Register Link */}
-              <div className="text-center pt-4 border-t border-gray-200">
-                <p className="text-sm text-gray-600">
+              <div className="text-center pt-4 border-t !border-gray-700">
+                <p className="text-sm !text-gray-300">
                   Don't have an account?{' '}
                   <Link
                     to="/signup"
-                    className="text-blue-600 hover:text-blue-700 font-medium hover:underline"
+                    className="text-purple-400 hover:text-purple-300 font-medium hover:underline"
                   >
                     Sign up
                   </Link>
