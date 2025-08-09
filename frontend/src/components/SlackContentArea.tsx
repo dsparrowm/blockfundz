@@ -34,8 +34,8 @@ export const SlackContentArea: React.FC<SlackContentAreaProps> = ({
         ? useStore((state) => state.activeAdminComponent)
         : useStore((state) => state.activeComponent);
 
-    // Detect chat components like Support and Direct Message
-    const isChatComponent = activeComponent === 'Support' || activeComponent === 'Direct Message';
+    // Detect components that need special layout (full height, no padding)
+    const isSpecialComponent = activeComponent === 'Support';
 
     const getChannelIcon = () => {
         if (isAdmin) {
@@ -111,7 +111,7 @@ export const SlackContentArea: React.FC<SlackContentAreaProps> = ({
             </div>
 
             {/* Content */}
-            <div className={`flex-1 bg-gray-50 dark:bg-[#1a1d29] ${isChatComponent ? 'overflow-hidden h-full' : 'overflow-y-auto p-3 lg:p-6'}`}>
+            <div className={`flex-1 bg-gray-50 dark:bg-[#1a1d29] ${isSpecialComponent ? 'overflow-hidden h-full' : 'overflow-y-auto p-3 lg:p-6'}`}>
                 {/* Mobile Search - shown only on mobile when main search is hidden */}
                 <div className="md:hidden mb-4 px-1">
                     <div className="relative">

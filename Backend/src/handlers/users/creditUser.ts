@@ -1,84 +1,127 @@
 import { Request, Response } from 'express';
 import prisma from '../../db';
+import cryptoPriceService from '../../services/cryptoPriceService';
+
+interface CreditRequest {
+  userId: number;
+  currency: 'BITCOIN' | 'ETHEREUM' | 'USDT' | 'USDC';
+  amount: number;
+  reason?: string;
+  adminId?: number;
+}
 
 const creditUser = async (req: Request, res: Response) => {
-  const { userId, bitcoin, ethereum, usdt, usdc, mainBalance } = req.body;
+  const { userId, currency, amount, reason, adminId }: CreditRequest = req.body;
+
   try {
-    const user = await prisma.user.update({
+    // Validation
+    if (!userId || !currency || !amount || amount <= 0) {
+      return res.status(400).json({
+        message: 'userId, currency, and positive amount are required'
+      });
+    }
+
+    // Validate currency type
+    const validCurrencies = ['BITCOIN', 'ETHEREUM', 'USDT', 'USDC'];
+    if (!validCurrencies.includes(currency)) {
+      return res.status(400).json({
+        message: 'Invalid currency. Must be BITCOIN, ETHEREUM, USDT, or USDC'
+      });
+    }
+
+    // Check if user exists
+    const user = await prisma.user.findUnique({
       where: { id: Number(userId) },
-      data: {
-        mainBalance: mainBalance || 0,
-        bitcoinBalance: bitcoin || 0,
-        ethereumBalance: ethereum || 0,
-        usdtBalance: usdt || 0,
-        usdcBalance: usdc || 0,
+      select: {
+        id: true,
+        name: true,
+        phone: true,
+        email: true,
+        bitcoinBalance: true,
+        ethereumBalance: true,
+        usdtBalance: true,
+        usdcBalance: true
+      }
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Get current exchange rate and calculate USD equivalent
+    const exchangeRate = await cryptoPriceService.getAssetPrice(currency);
+    const usdEquivalent = amount * exchangeRate;
+
+    // Start database transaction
+    const result = await prisma.$transaction(async (tx) => {
+      // Create transaction record first
+      const transaction = await tx.transaction.create({
+        data: {
+          type: `CREDIT_${currency}` as any,
+          asset: currency as any,
+          amount: amount,
+          usdEquivalent: usdEquivalent,
+          exchangeRate: exchangeRate,
+          status: 'COMPLETED',
+          userId: user.id,
+          name: user.name,
+          phone: user.phone,
+          reason: reason || 'Admin credit',
+          adminId: adminId,
+          details: `Admin credited ${amount} ${currency} (${usdEquivalent.toFixed(2)} USD)`
+        }
+      });
+
+      // Update user's specific crypto balance
+      const balanceField = `${currency.toLowerCase()}Balance` as 'bitcoinBalance' | 'ethereumBalance' | 'usdtBalance' | 'usdcBalance';
+      const currentBalance = user[balanceField] || 0;
+      const newBalance = currentBalance + amount;
+
+      const updatedUser = await tx.user.update({
+        where: { id: user.id },
+        data: {
+          [balanceField]: newBalance
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          bitcoinBalance: true,
+          ethereumBalance: true,
+          usdtBalance: true,
+          usdcBalance: true
+        }
+      });
+
+      return { transaction, updatedUser };
+    });
+
+    // Calculate new main balance
+    const newMainBalance = await cryptoPriceService.calculateMainBalance(result.updatedUser);
+
+    // Update main balance
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { mainBalance: newMainBalance }
+    });
+
+    return res.status(200).json({
+      message: `Successfully credited ${amount} ${currency} to ${user.name}`,
+      transaction: result.transaction,
+      user: {
+        ...result.updatedUser,
+        mainBalance: newMainBalance
       },
+      exchangeRate,
+      usdEquivalent: usdEquivalent.toFixed(2)
     });
 
-    // Fetch user's name and phone
-    const userDetails = await prisma.user.findUnique({
-      where: { id: Number(userId) },
-      select: { name: true, phone: true },
+  } catch (error: any) {
+    console.error('Error crediting user:', error);
+    return res.status(500).json({
+      message: 'Failed to credit user',
+      error: error.message
     });
-
-    // Create transaction records for each updated asset (only for positive amounts)
-    const transactions = [];
-    if (bitcoin && bitcoin > 0) {
-      transactions.push({
-        type: 'DEPOSIT',
-        asset: 'BITCOIN',
-        amount: bitcoin,
-        status: 'COMPLETED',
-        userId: user.id,
-        name: userDetails?.name,
-        phone: userDetails?.phone,
-      });
-    }
-    if (ethereum && ethereum > 0) {
-      transactions.push({
-        type: 'DEPOSIT',
-        asset: 'ETHEREUM',
-        amount: ethereum,
-        status: 'COMPLETED',
-        userId: user.id,
-        name: userDetails?.name,
-        phone: userDetails?.phone,
-      });
-    }
-    if (usdt && usdt > 0) {
-      transactions.push({
-        type: 'DEPOSIT',
-        asset: 'USDT',
-        amount: usdt,
-        status: 'COMPLETED',
-        userId: user.id,
-        name: userDetails?.name,
-        phone: userDetails?.phone,
-      });
-    }
-    if (usdc && usdc > 0) {
-      transactions.push({
-        type: 'DEPOSIT',
-        asset: 'USDC',
-        amount: usdc,
-        status: 'COMPLETED',
-        userId: user.id,
-        name: userDetails?.name,
-        phone: userDetails?.phone,
-      });
-    }
-
-    // Only create transactions if there are any to create
-    if (transactions.length > 0) {
-      await prisma.transaction.createMany({
-        data: transactions,
-      });
-    }
-
-    res.status(200).json({ message: 'User balances updated successfully', isSuccess: true });
-  } catch (error) {
-    console.error('Error updating user balances:', error);
-    res.status(500).json({ message: 'Internal server error' });
   }
 };
 

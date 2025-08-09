@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { Login, Contact, Register, AdminLogin, AdminChatPage } from './pages';
+import { Login, Contact, Register, AdminLogin } from './pages';
 import TalkToSales from './pages/TalkToSales';
 import Page from './app/dashboard/Page';
 import { DashboardLayout, AuthLayout, MainLayout } from './components/layout';
@@ -15,7 +15,6 @@ import ResetPassword from './pages/ResetPassword';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Landing from './components/Landing2/Landing';
-import ProtectedSocketRoute from './components/ProtectedSocketRoute';
 
 const App = () => {
   const maintenanceMode = import.meta.env.VITE_MAINTENANCE_MODE;
@@ -41,33 +40,20 @@ const App = () => {
           <Route path="/talk-to-sales" element={<TalkToSales />} />
           <Route path="/test" element={<TestToast />} />
 
-          {/* Protected Routes - With Conditional Socket Connection */}
+          {/* Protected Routes */}
           <Route path="/dashboard" element={
-            <ProtectedSocketRoute>
-              <DashboardLayout>
-                <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div></div>}>
-                  <Page />
-                </Suspense>
-              </DashboardLayout>
-            </ProtectedSocketRoute>
+            <DashboardLayout>
+              <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div></div>}>
+                <Page />
+              </Suspense>
+            </DashboardLayout>
           } />
           <Route path="/admin/dashboard" element={
-            <ProtectedSocketRoute>
-              <DashboardLayout>
-                <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div></div>}>
-                  <Page />
-                </Suspense>
-              </DashboardLayout>
-            </ProtectedSocketRoute>
-          } />
-          <Route path="/admin/chat" element={
-            <ProtectedSocketRoute>
-              <DashboardLayout>
-                <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div></div>}>
-                  <AdminChatPage />
-                </Suspense>
-              </DashboardLayout>
-            </ProtectedSocketRoute>
+            <DashboardLayout>
+              <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div></div>}>
+                <Page />
+              </Suspense>
+            </DashboardLayout>
           } />
 
           {/* 404 Page */}

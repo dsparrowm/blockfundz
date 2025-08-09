@@ -11,7 +11,7 @@ import Profile from '../components/Profile';
 import KYCVerification from '../components/Kyc';
 import Settings from '../components/Settings';
 import Analytics from '../components/Analytics';
-import UserChatInterface from '../components/Support'; // Assuming you have a Support component
+import UserSupportInterface from '../components/Support'; // Support component
 
 const renderUserDashboardComponent = () => {
   const activeComponent = useStore((state) => state.activeComponent);
@@ -38,7 +38,7 @@ const renderUserDashboardComponent = () => {
     case 'kyc(New)':
       return <KYCVerification />;
     case 'Support':
-      return <UserChatInterface />;
+      return <UserSupportInterface />;
     case 'Profile':
       return <Profile />;
     case 'Analytics':

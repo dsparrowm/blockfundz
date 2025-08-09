@@ -76,6 +76,27 @@ const UserManagement = ({
 
   // Form states
   const [newUser, setNewUser] = useState({ name: '', email: '', phone: '', password: '' });
+
+  // New multi-currency credit states
+  const [creditForm, setCreditForm] = useState({
+    currency: 'BITCOIN' as 'BITCOIN' | 'ETHEREUM' | 'USDT' | 'USDC',
+    amount: 0,
+    reason: ''
+  });
+  const [isCrediting, setIsCrediting] = useState(false);
+  const [usdPreview, setUsdPreview] = useState(0);
+
+  // USD input mode for BTC and ETH
+  const [inputMode, setInputMode] = useState<'CRYPTO' | 'USD'>('CRYPTO');
+  const [usdAmount, setUsdAmount] = useState(0);
+  const [cryptoPrices, setCryptoPrices] = useState({
+    BITCOIN: 116515,
+    ETHEREUM: 4274.31,
+    USDT: 1,
+    USDC: 1
+  });
+
+  // Legacy states (keep for compatibility)
   const [bitcoinBalance, setBitcoinBalance] = useState(0);
   const [mainBalance, setMainBalance] = useState(0);
   const [ethereumBalance, setEthereumBalance] = useState(0);
@@ -98,6 +119,24 @@ const UserManagement = ({
   const userData = useStore(state => state.user);
   const setUser = useStore(state => state.setUser);
 
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get('/api/users');
+
+      // Filter out admin user
+      const filteredUsers = response.data.users.filter((user: User) => user.email !== 'admin@mail.com');
+
+      setUsers(filteredUsers);
+    } catch (error: any) {
+      console.error('❌ Error fetching users:', error);
+      console.error('❌ Error response:', error.response);
+      toast.error(error.response?.data?.message || 'Failed to fetch users');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (propUsers && propUsers.length > 0) {
       setUsers(propUsers);
@@ -105,25 +144,8 @@ const UserManagement = ({
       return;
     }
 
-    const fetchUsers = async () => {
-      setLoading(true);
-      try {
-        const response = await axiosInstance.get('/api/users');
-
-        // Filter out admin user
-        const filteredUsers = response.data.users.filter((user: User) => user.email !== 'admin@mail.com');
-
-        setUsers(filteredUsers);
-      } catch (error: any) {
-        console.error('❌ Error fetching users:', error);
-        console.error('❌ Error response:', error.response);
-        toast.error(error.response?.data?.message || 'Failed to fetch users');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchUsers();
+    fetchCryptoPrices(); // Fetch prices when component loads
   }, [propUsers]);
 
   const filteredUsers = useMemo(() => {
@@ -183,39 +205,138 @@ const UserManagement = ({
     setIsBalanceDialogOpen(true);
   };
 
-  const handleUpdateBalance = async () => {
-    if (!selectedUserId) return;
+  const handleCreditUser = async () => {
+    if (!selectedUserId || creditForm.amount <= 0) {
+      toast.error('Please select a user and enter a valid amount');
+      return;
+    }
 
+    setIsCrediting(true);
     try {
+      console.log('Making credit request with data:', {
+        userId: selectedUserId,
+        currency: creditForm.currency,
+        amount: creditForm.amount,
+        reason: creditForm.reason || 'Admin credit',
+        adminId: userData?.id
+      });
+
       const response = await axiosInstance.post('/api/users/credit', {
         userId: selectedUserId,
-        mainBalance: mainBalance,
-        bitcoin: bitcoinBalance,
-        ethereum: ethereumBalance,
-        usdt: usdtBalance,
-        usdc: usdcBalance,
-        bnb: bnbBalance
+        currency: creditForm.currency,
+        amount: creditForm.amount,
+        reason: creditForm.reason || 'Admin credit',
+        adminId: userData?.id // Pass admin ID if available
       });
-      toast.success('User balance updated successfully');
 
-      // Reset balances
-      setBitcoinBalance(0);
-      setMainBalance(0);
-      setEthereumBalance(0);
-      setUsdtBalance(0);
-      setUsdcBalance(0);
-      setBnbBalance(0);
+      console.log('Credit response:', response);
+      console.log('Response status:', response.status);
+      console.log('Response data:', response.data);
 
-      // Update user balance in the UI - overwrite instead of add
-      setUsers(users.map(user =>
-        user.id === selectedUserId ? {
-          ...user,
-          balance: mainBalance // Only update main balance, or adjust based on your needs
-        } : user
-      ));
+      toast.success(response.data.message);
+
+      // Reset form
+      setCreditForm({
+        currency: 'BITCOIN',
+        amount: 0,
+        reason: ''
+      });
+      setUsdPreview(0);
+      setUsdAmount(0);
+      setInputMode('CRYPTO');
+      setIsBalanceDialogOpen(false);
+
+      // Refresh users list
+      fetchUsers();
+
     } catch (error: any) {
-      console.error('Error updating user balance:', error);
-      toast.error(error.response?.data?.message || 'Failed to update user balance');
+      console.error('Error crediting user - Full error object:', error);
+      console.error('Error response:', error.response);
+      console.error('Error response data:', error.response?.data);
+      console.error('Error response status:', error.response?.status);
+      console.error('Error message:', error.message);
+
+      toast.error(error.response?.data?.message || 'Failed to credit user');
+    } finally {
+      setIsCrediting(false);
+    }
+  };
+
+  // Calculate USD preview when amount or currency changes
+  const calculateUsdPreview = async (amount: number, currency: string) => {
+    if (amount <= 0) {
+      setUsdPreview(0);
+      return;
+    }
+
+    try {
+      const rate = cryptoPrices[currency as keyof typeof cryptoPrices] || 1;
+      setUsdPreview(amount * rate);
+    } catch (error) {
+      console.error('Error calculating USD preview:', error);
+      setUsdPreview(0);
+    }
+  };
+
+  // Fetch current crypto prices
+  const fetchCryptoPrices = async () => {
+    try {
+      const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether,usd-coin&vs_currencies=usd');
+      const data = await response.json();
+
+      const prices = {
+        BITCOIN: data.bitcoin.usd,
+        ETHEREUM: data.ethereum.usd,
+        USDT: data.tether.usd,
+        USDC: data['usd-coin'].usd
+      };
+
+      setCryptoPrices(prices);
+      return prices;
+    } catch (error) {
+      console.error('Error fetching crypto prices:', error);
+      return cryptoPrices; // Return current prices as fallback
+    }
+  };
+
+  // Handle input mode change
+  const handleInputModeChange = (mode: 'CRYPTO' | 'USD') => {
+    setInputMode(mode);
+
+    if (mode === 'USD') {
+      // Convert current crypto amount to USD
+      const currentUsdValue = creditForm.amount * cryptoPrices[creditForm.currency as keyof typeof cryptoPrices];
+      setUsdAmount(currentUsdValue);
+    } else {
+      // Convert current USD amount to crypto
+      const currentCryptoValue = usdAmount / cryptoPrices[creditForm.currency as keyof typeof cryptoPrices];
+      setCreditForm(prev => ({ ...prev, amount: currentCryptoValue }));
+    }
+  };
+
+  // Handle USD amount change
+  const handleUsdAmountChange = (usdValue: number) => {
+    setUsdAmount(usdValue);
+
+    if (usdValue <= 0) {
+      setCreditForm(prev => ({ ...prev, amount: 0 }));
+      setUsdPreview(0);
+      return;
+    }
+
+    const cryptoValue = usdValue / cryptoPrices[creditForm.currency as keyof typeof cryptoPrices];
+    setCreditForm(prev => ({ ...prev, amount: cryptoValue }));
+    setUsdPreview(usdValue);
+  };
+
+  // Handle crypto amount change
+  const handleCryptoAmountChange = (cryptoValue: number) => {
+    setCreditForm(prev => ({ ...prev, amount: cryptoValue }));
+    calculateUsdPreview(cryptoValue, creditForm.currency);
+
+    if (inputMode === 'USD') {
+      const usdValue = cryptoValue * cryptoPrices[creditForm.currency as keyof typeof cryptoPrices];
+      setUsdAmount(usdValue);
     }
   };
 
@@ -535,103 +656,153 @@ const UserManagement = ({
                                   size="sm"
                                   onClick={() => {
                                     setSelectedUserId(user.id);
-                                    // Pre-populate with current balance
-                                    setMainBalance(user.balance || 0);
-                                    setBitcoinBalance(0);
-                                    setEthereumBalance(0);
-                                    setUsdtBalance(0);
-                                    setUsdcBalance(0);
-                                    setBnbBalance(0);
+                                    // Reset credit form
+                                    setCreditForm({
+                                      currency: 'BITCOIN',
+                                      amount: 0,
+                                      reason: ''
+                                    });
+                                    setUsdPreview(0);
                                   }}
                                   className="text-xs bg-purple-50 text-purple-700 hover:bg-purple-100"
                                 >
-                                  Update Balance
+                                  Credit Balance
                                 </Button>
                               </DialogTrigger>
                               <DialogContent className="sm:max-w-[425px] mx-4">
                                 <DialogHeader>
-                                  <DialogTitle>Update User Balance</DialogTitle>
+                                  <DialogTitle>Credit User Balance</DialogTitle>
                                   <DialogDescription>
-                                    Set new balances for the user's account. Enter amounts for each currency. This will overwrite existing balances.
+                                    Credit cryptocurrency to the user's account. Select currency and amount to add to their balance.
                                   </DialogDescription>
                                 </DialogHeader>
                                 <div className="grid gap-4 py-4">
                                   <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
-                                    <Label htmlFor="mainBalance" className="sm:text-right font-medium">
-                                      Main Balance
+                                    <Label htmlFor="currency" className="sm:text-right font-medium">
+                                      Currency
                                     </Label>
-                                    <Input
-                                      id="mainBalance"
-                                      type="number"
-                                      value={mainBalance}
-                                      onChange={(e) => setMainBalance(Number(e.target.value))}
-                                      className="sm:col-span-3"
-                                    />
+                                    <Select
+                                      value={creditForm.currency}
+                                      onValueChange={(value: any) => {
+                                        setCreditForm({ ...creditForm, currency: value });
+                                        setInputMode('CRYPTO'); // Reset to crypto mode when currency changes
+                                        calculateUsdPreview(creditForm.amount, value);
+                                      }}
+                                    >
+                                      <SelectTrigger className="sm:col-span-3">
+                                        <SelectValue placeholder="Select currency" />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        <SelectItem value="BITCOIN">Bitcoin (BTC)</SelectItem>
+                                        <SelectItem value="ETHEREUM">Ethereum (ETH)</SelectItem>
+                                        <SelectItem value="USDT">Tether (USDT)</SelectItem>
+                                        <SelectItem value="USDC">USD Coin (USDC)</SelectItem>
+                                      </SelectContent>
+                                    </Select>
                                   </div>
+
+                                  {/* Input Mode Toggle for BTC and ETH */}
+                                  {(creditForm.currency === 'BITCOIN' || creditForm.currency === 'ETHEREUM') && (
+                                    <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
+                                      <Label className="sm:text-right font-medium">
+                                        Input Mode
+                                      </Label>
+                                      <div className="sm:col-span-3">
+                                        <div className="flex gap-2">
+                                          <Button
+                                            type="button"
+                                            variant={inputMode === 'CRYPTO' ? 'default' : 'outline'}
+                                            size="sm"
+                                            onClick={() => handleInputModeChange('CRYPTO')}
+                                            className="flex-1"
+                                          >
+                                            {creditForm.currency === 'BITCOIN' ? 'BTC' : 'ETH'}
+                                          </Button>
+                                          <Button
+                                            type="button"
+                                            variant={inputMode === 'USD' ? 'default' : 'outline'}
+                                            size="sm"
+                                            onClick={() => handleInputModeChange('USD')}
+                                            className="flex-1"
+                                          >
+                                            USD
+                                          </Button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+
                                   <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
-                                    <Label htmlFor="bitcoin" className="sm:text-right font-medium">
-                                      Bitcoin
+                                    <Label htmlFor="amount" className="sm:text-right font-medium">
+                                      {inputMode === 'USD' && (creditForm.currency === 'BITCOIN' || creditForm.currency === 'ETHEREUM')
+                                        ? 'USD Amount'
+                                        : `${creditForm.currency === 'BITCOIN' ? 'BTC' : creditForm.currency === 'ETHEREUM' ? 'ETH' : creditForm.currency} Amount`}
                                     </Label>
-                                    <Input
-                                      id="bitcoin"
-                                      type="number"
-                                      value={bitcoinBalance}
-                                      onChange={(e) => setBitcoinBalance(Number(e.target.value))}
-                                      className="sm:col-span-3"
-                                    />
+                                    {inputMode === 'USD' && (creditForm.currency === 'BITCOIN' || creditForm.currency === 'ETHEREUM') ? (
+                                      <Input
+                                        id="usd-amount"
+                                        type="number"
+                                        step="0.01"
+                                        value={usdAmount}
+                                        onChange={(e) => handleUsdAmountChange(Number(e.target.value))}
+                                        placeholder="0.00"
+                                        className="sm:col-span-3"
+                                      />
+                                    ) : (
+                                      <Input
+                                        id="amount"
+                                        type="number"
+                                        step="0.00000001"
+                                        value={creditForm.amount}
+                                        onChange={(e) => handleCryptoAmountChange(Number(e.target.value))}
+                                        placeholder="0.00000000"
+                                        className="sm:col-span-3"
+                                      />
+                                    )}
                                   </div>
+
+                                  {/* Show conversion preview */}
+                                  {creditForm.amount > 0 && (
+                                    <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
+                                      <Label className="sm:text-right font-medium text-gray-600">
+                                        {inputMode === 'USD' ? 'Crypto Amount' : 'USD Value'}
+                                      </Label>
+                                      <div className="sm:col-span-3 text-green-600 font-semibold">
+                                        {inputMode === 'USD'
+                                          ? `≈ ${creditForm.amount.toFixed(8)} ${creditForm.currency === 'BITCOIN' ? 'BTC' : 'ETH'}`
+                                          : `≈ $${usdPreview.toLocaleString()}`
+                                        }
+                                      </div>
+                                    </div>
+                                  )}
+
                                   <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
-                                    <Label htmlFor="ethereum" className="sm:text-right font-medium">
-                                      Ethereum
+                                    <Label htmlFor="reason" className="sm:text-right font-medium">
+                                      Reason
                                     </Label>
                                     <Input
-                                      id="ethereum"
-                                      type="number"
-                                      value={ethereumBalance}
-                                      onChange={(e) => setEthereumBalance(Number(e.target.value))}
-                                      className="sm:col-span-3"
-                                    />
-                                  </div>
-                                  <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
-                                    <Label htmlFor="usdt" className="sm:text-right font-medium">
-                                      USDT
-                                    </Label>
-                                    <Input
-                                      id="usdt"
-                                      type="number"
-                                      value={usdtBalance}
-                                      onChange={(e) => setUsdtBalance(Number(e.target.value))}
-                                      className="sm:col-span-3"
-                                    />
-                                  </div>
-                                  <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
-                                    <Label htmlFor="usdc" className="sm:text-right font-medium">
-                                      USDC
-                                    </Label>
-                                    <Input
-                                      id="usdc"
-                                      type="number"
-                                      value={usdcBalance}
-                                      onChange={(e) => setUsdcBalance(Number(e.target.value))}
-                                      className="sm:col-span-3"
-                                    />
-                                  </div>
-                                  <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
-                                    <Label htmlFor="bnb" className="sm:text-right font-medium">
-                                      BNB
-                                    </Label>
-                                    <Input
-                                      id="bnb"
-                                      type="number"
-                                      value={bnbBalance}
-                                      onChange={(e) => setBnbBalance(Number(e.target.value))}
+                                      id="reason"
+                                      value={creditForm.reason}
+                                      onChange={(e) => setCreditForm({ ...creditForm, reason: e.target.value })}
+                                      placeholder="Reason for credit (optional)"
                                       className="sm:col-span-3"
                                     />
                                   </div>
                                 </div>
                                 <DialogFooter>
-                                  <Button type="submit" onClick={handleUpdateBalance}>
-                                    Update Balance
+                                  <Button
+                                    type="submit"
+                                    onClick={handleCreditUser}
+                                    disabled={isCrediting || creditForm.amount <= 0}
+                                  >
+                                    {isCrediting ? (
+                                      <div className="flex items-center gap-2">
+                                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                        Crediting...
+                                      </div>
+                                    ) : (
+                                      `Credit ${creditForm.currency}`
+                                    )}
                                   </Button>
                                 </DialogFooter>
                               </DialogContent>

@@ -19,10 +19,9 @@ export default function Page() {
   const coins = coin.map(([key, value]) => ({ name: key, balance: value }));
 
   // Components that should not show crypto ticker
-  const chatComponents = ['Support'];
-  const adminChatComponents = ['Direct Message'];
+  const supportComponents = ['Support'];
 
-  const shouldShowCryptoTicker = !isAdmin && !chatComponents.includes(activeComponent);
+  const shouldShowCryptoTicker = !isAdmin && !supportComponents.includes(activeComponent);
 
   const [cryptoData, setCryptoData] = useState([
     { symbol: 'BTC', price: 64823.45, change: 2.45 },
@@ -44,7 +43,7 @@ export default function Page() {
 
   return (
     <SlackLayout>
-      {/* Crypto Ticker - Only for users and non-chat components */}
+      {/* Crypto Ticker - Only for users and non-support components */}
       {shouldShowCryptoTicker && (
         <div className="mb-4 lg:mb-6 bg-white rounded-lg border border-gray-200 p-3 lg:p-4 shadow-sm">
           <CryptoTicker />

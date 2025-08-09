@@ -378,7 +378,7 @@
   animation: float 3s ease-in-out infinite;
 }
 
-/* Chat message animations */
+/* Input and form styles */
 @keyframes fadeIn {
   from {
     opacity: 0;

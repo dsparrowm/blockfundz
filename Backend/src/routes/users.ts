@@ -11,9 +11,7 @@ import getUserPassword from '../handlers/users/getUserPassword';
 import updateUserProfile from '../handlers/users/updateUserProfile';
 import updateNotificationSettings from '../handlers/users/updateNotificationSettings';
 import updateUserPreferences from '../handlers/users/updateUserPreferences';
-import getUserConversation from '../handlers/users/chat/getUserConversation';
 import authMiddleware from '../middleware/authMiddleware';
-import getAdminConversations from '../handlers/admin/chat/getAdminConversations';
 
 const router = Router();
 
@@ -22,13 +20,11 @@ router.get('/users', getUsers);
 router.get('/users/count', getNumberOfUsers);
 router.get('/users/password', getUserPassword);
 router.post('/users/credit', creditUser);
-router.delete('/users', deleteUser);
+router.delete('/users/:id', deleteUser);
 router.post('/users/verify-user', verifyUser);
 
 // User-specific routes (require authentication)
 router.get('/user', authMiddleware, getUserById);
-router.get('/user-conversation', authMiddleware, getUserConversation);
-router.get('/conversations', authMiddleware, getAdminConversations);
 router.get('/users/main-balance', authMiddleware, getMainBalance);
 router.get('/users/balances', authMiddleware, getUserBalances);
 router.put('/users/profile', authMiddleware, updateUserProfile);

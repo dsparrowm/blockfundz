@@ -1,5 +1,6 @@
 import prisma from "../db";
 import { Request, Response } from "express";
+import cryptoPriceService from "../services/cryptoPriceService";
 
 const getUserBalances = async (req: Request, res: Response) => {
     try {
@@ -12,7 +13,7 @@ const getUserBalances = async (req: Request, res: Response) => {
             });
         }
 
-        const response = await prisma.user.findMany({
+        const user = await prisma.user.findUnique({
             where: {
                 id: userId,
             },
@@ -21,9 +22,30 @@ const getUserBalances = async (req: Request, res: Response) => {
                 usdtBalance: true,
                 usdcBalance: true,
                 bitcoinBalance: true,
+                mainBalance: true,
             },
         });
-        const balances = response[0];
+
+        if (!user) {
+            return res.status(404).json({
+                error: 'User not found'
+            });
+        }
+
+        // Calculate real-time main balance
+        const calculatedMainBalance = await cryptoPriceService.calculateMainBalance(user);
+
+        // Update the stored main balance with calculated value
+        await prisma.user.update({
+            where: { id: userId },
+            data: { mainBalance: calculatedMainBalance }
+        });
+
+        const balances = {
+            ...user,
+            mainBalance: calculatedMainBalance
+        };
+
         res.json({ balances });
     } catch (error) {
         console.error("Error fetching user balances:", error);

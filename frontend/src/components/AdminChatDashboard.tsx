@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useSocket } from '../context/SocketContext.tsx';
 import axiosInstance from '../api/axiosInstance';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,12 +11,10 @@ import AdminNotificationForm from './AdminNotificationForm';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 const AdminChatDashboard = ({ userId, token }) => {
-    const socket = useSocket();
     const [conversations, setConversations] = useState([]);
     const [selectedConversationId, setSelectedConversationId] = useState(null);
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState('');
-    const [typing, setTyping] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [onlineUsers, setOnlineUsers] = useState(new Set());
     const [notificationDialogOpen, setNotificationDialogOpen] = useState(false);
@@ -41,51 +38,6 @@ const AdminChatDashboard = ({ userId, token }) => {
 
     const selectedConversation = conversations.find(c => c.id === selectedConversationId);
 
-    // Handle incoming messages
-    useEffect(() => {
-        if (!socket) return;
-
-        const handlePrivateMessage = (msg) => {
-            if (msg.conversationId === selectedConversationId) {
-                setMessages((prev) => [...prev, msg]);
-            }
-            setConversations((prev) =>
-                prev.map(conv =>
-                    conv.id === msg.conversationId
-                        ? { ...conv, lastMessage: msg.content, lastMessageAt: msg.createdAt, unreadCount: msg.senderId === parseInt(userId) ? 0 : conv.unreadCount + 1 }
-                        : conv
-                )
-            );
-        };
-
-        const handleTyping = ({ isTyping, conversationId }) => {
-            if (conversationId === selectedConversationId) {
-                setTyping(isTyping);
-            }
-        };
-
-        const handleMessagesRead = ({ conversationId }) => {
-            if (conversationId === selectedConversationId) {
-                setMessages((prev) => prev.map(msg => ({ ...msg, isRead: true })));
-                setConversations((prev) =>
-                    prev.map(conv =>
-                        conv.id === conversationId ? { ...conv, unreadCount: 0 } : conv
-                    )
-                );
-            }
-        };
-
-        socket.on('private-message', handlePrivateMessage);
-        socket.on('typing', handleTyping);
-        socket.on('messages-read', handleMessagesRead);
-
-        return () => {
-            socket.off('private-message', handlePrivateMessage);
-            socket.off('typing', handleTyping);
-            socket.off('messages-read', handleMessagesRead);
-        };
-    }, [socket, selectedConversationId]);
-
     // Filter conversations based on search
     const filteredConversations = conversations.filter(conv =>
         conv.user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -94,14 +46,26 @@ const AdminChatDashboard = ({ userId, token }) => {
 
     // Send message
     const handleSendMessage = () => {
-        if (message.trim() && selectedConversationId && socket) {
+        if (message.trim() && selectedConversationId) {
             const messageData = {
                 content: message,
                 senderId: parseInt(userId, 10),
                 recipientId: selectedConversation?.userId,
                 conversationId: selectedConversationId
             };
-            socket.emit('private-message', messageData);
+
+            // Send message via API instead of Socket.IO
+            axiosInstance.post('/conversations/send-message', messageData, {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+                .then(() => {
+                    setMessages(prev => [...prev, { ...messageData, timestamp: new Date().toISOString() }]);
+                })
+                .catch(err => {
+                    console.error('Failed to send message:', err);
+                    toast.error('Failed to send message');
+                });
+
             setMessage('');
         }
     };
@@ -109,13 +73,7 @@ const AdminChatDashboard = ({ userId, token }) => {
     // Handle typing
     const handleTyping = (e) => {
         setMessage(e.target.value);
-        if (selectedConversation && socket) {
-            socket.emit('typing', {
-                recipientId: selectedConversation.userId,
-                conversationId: selectedConversationId,
-                isTyping: e.target.value.length > 0
-            });
-        }
+        // Removed real-time typing indicators - no Socket.IO
     };
 
     // Handle Enter key
@@ -128,12 +86,17 @@ const AdminChatDashboard = ({ userId, token }) => {
 
     // Mark messages as read
     const markMessagesRead = () => {
-        if (socket && selectedConversation) {
-            socket.emit('mark-messages-read', {
+        if (selectedConversation) {
+            // Mark messages as read via API instead of Socket.IO
+            axiosInstance.post('/conversations/mark-read', {
                 conversationId: selectedConversationId,
-                userId: parseInt(userId, 10),
-                senderId: selectedConversation.userId
-            });
+                userId: parseInt(userId, 10)
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+                .catch(err => {
+                    console.error('Failed to mark messages as read:', err);
+                });
         }
     };
 

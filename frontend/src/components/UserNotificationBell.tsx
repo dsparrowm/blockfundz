@@ -1,6 +1,5 @@
 
 import { useState, useEffect } from 'react';
-import useNotificationSocket from '../hooks/useNotificationSocket';
 import axiosInstance from '../api/axiosInstance';
 import { Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -16,15 +15,29 @@ const UserNotificationBell = () => {
   // Fetch initial notifications
   useEffect(() => {
     axiosInstance.get('/notifications')
-      .then(res => setNotifications(res.data))
+      .then(res => {
+        setNotifications(res.data);
+        // Count unread notifications
+        const unread = res.data.filter(notification => !notification.read).length;
+        setUnreadCount(unread);
+      })
       .catch(() => { });
   }, []);
 
-  // Real-time notification update
-  useNotificationSocket((newNotification) => {
-    setNotifications((prev) => [newNotification, ...prev]);
-    setUnreadCount((count) => count + 1);
-  });
+  // Polling for new notifications (since we removed real-time updates)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      axiosInstance.get('/notifications')
+        .then(res => {
+          setNotifications(res.data);
+          const unread = res.data.filter(notification => !notification.read).length;
+          setUnreadCount(unread);
+        })
+        .catch(() => { });
+    }, 30000); // Poll every 30 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   // Reset unread count when dialog is opened
   useEffect(() => {
