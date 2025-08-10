@@ -14,7 +14,7 @@ const UserNotificationBell = () => {
 
   // Fetch initial notifications
   useEffect(() => {
-    axiosInstance.get('/notifications')
+    axiosInstance.get('/api/notifications')
       .then(res => {
         setNotifications(res.data);
         // Count unread notifications
@@ -27,7 +27,7 @@ const UserNotificationBell = () => {
   // Polling for new notifications (since we removed real-time updates)
   useEffect(() => {
     const interval = setInterval(() => {
-      axiosInstance.get('/notifications')
+      axiosInstance.get('/api/notifications')
         .then(res => {
           setNotifications(res.data);
           const unread = res.data.filter(notification => !notification.read).length;

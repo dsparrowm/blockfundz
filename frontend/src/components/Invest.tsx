@@ -218,7 +218,7 @@ const InvestmentPlans = () => {
       </div>
 
       {/* Investment Plans Section */}
-      <div className="bg-white dark:bg-[#2c2d33] rounded-xl border border-gray-200 dark:border-[#3c3f4c] shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-600 shadow-sm overflow-hidden">
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-[#4a154b] dark:to-[#1a1d29] px-6 py-6 text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full transform translate-x-16 -translate-y-16"></div>
           <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full transform -translate-x-12 translate-y-12"></div>
@@ -298,9 +298,9 @@ const InvestmentPlans = () => {
 
       {/* Confirmation Dialog */}
       <AlertDialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
-        <AlertDialogContent className="max-w-md bg-white dark:bg-[#2c2d33] border-gray-200 dark:border-[#3c3f4c]">
+        <AlertDialogContent className="max-w-md bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
           <AlertDialogHeader className="text-center">
-            <div className="w-16 h-16 bg-gradient-to-r from-green-400 to-blue-500 dark:from-[#4a154b] dark:to-[#1a1d29] rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 bg-gradient-to-r from-green-400 to-blue-500 dark:from-blue-600 dark:to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
               <TrendingUp className="w-8 h-8 text-white" />
             </div>
             <AlertDialogTitle className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
@@ -338,10 +338,10 @@ const InvestmentPlans = () => {
             </div>
           </div>
 
-          <AlertDialogFooter className="flex space-x-3 pt-4 border-t border-gray-100 dark:border-[#3c3f4c]">
+          <AlertDialogFooter className="flex space-x-3 pt-4 border-t border-gray-100 dark:border-gray-600">
             <AlertDialogCancel
               onClick={() => setSelectedPlan(null)}
-              className="flex-1 bg-gray-100 dark:bg-[#3c3f4c] hover:bg-gray-200 dark:hover:bg-[#4a4e5c] text-gray-700 dark:text-gray-300 border-0"
+              className="flex-1 bg-gray-100 dark:bg-gray-600 hover:bg-gray-200 dark:hover:bg-gray-500 text-gray-700 dark:text-gray-300 border-0"
             >
               Cancel
             </AlertDialogCancel>
@@ -357,7 +357,7 @@ const InvestmentPlans = () => {
 
       {/* Asset Selection Dialog */}
       <AlertDialog open={showAssetDialog} onOpenChange={setShowAssetDialog}>
-        <AlertDialogContent className="max-w-md bg-white dark:bg-[#2c2d33] border-gray-200 dark:border-[#3c3f4c]">
+        <AlertDialogContent className="max-w-md bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
           <AlertDialogHeader className="text-center">
             <AlertDialogTitle className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
               Choose Payment Asset
@@ -389,11 +389,11 @@ const InvestmentPlans = () => {
                     disabled={!hasBalance}
                     className={`
                       flex items-center justify-between p-4 border-2 rounded-xl transition-all duration-200
-                      ${hasBalance ? assetInfo.color + ' cursor-pointer transform hover:scale-[1.02]' : 'border-gray-100 dark:border-[#3c3f4c] bg-gray-50 dark:bg-[#1a1d29] cursor-not-allowed opacity-50'}
+                      ${hasBalance ? assetInfo.color + ' cursor-pointer transform hover:scale-[1.02]' : 'border-gray-100 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 cursor-not-allowed opacity-50'}
                     `}
                   >
                     <div className="flex items-center space-x-3">
-                      <div className={`w-10 h-10 rounded-full bg-white dark:bg-[#2c2d33] border-2 ${hasBalance ? assetInfo.color.split(' ')[0] : 'border-gray-200 dark:border-[#3c3f4c]'} flex items-center justify-center font-bold text-lg ${hasBalance ? assetInfo.textColor : 'text-gray-400 dark:text-gray-500'}`}>
+                      <div className={`w-10 h-10 rounded-full bg-white dark:bg-gray-700 border-2 ${hasBalance ? assetInfo.color.split(' ')[0] : 'border-gray-200 dark:border-gray-600'} flex items-center justify-center font-bold text-lg ${hasBalance ? assetInfo.textColor : 'text-gray-400 dark:text-gray-500'}`}>
                         {assetInfo.icon}
                       </div>
                       <div className="text-left">
@@ -437,7 +437,7 @@ const InvestmentPlans = () => {
             </div>
           </div>
 
-          <AlertDialogFooter className="flex space-x-3 pt-4 border-t border-gray-100 dark:border-[#3c3f4c]">
+          <AlertDialogFooter className="flex space-x-3 pt-4 border-t border-gray-100 dark:border-gray-600">
             <AlertDialogCancel
               onClick={() => {
                 setShowAssetDialog(false);
@@ -453,14 +453,14 @@ const InvestmentPlans = () => {
 
       {/* Insufficient Balance Dialog */}
       <AlertDialog open={showInsufficientDialog} onOpenChange={setShowInsufficientDialog}>
-        <AlertDialogContent className="bg-white dark:bg-[#2c2d33] border-gray-200 dark:border-[#3c3f4c]">
+        <AlertDialogContent className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-gray-900 dark:text-white">Insufficient Balance</AlertDialogTitle>
             <AlertDialogDescription className="text-gray-600 dark:text-gray-300">
               Your balance is insufficient for this subscription. Would you like to make a deposit or select another asset?
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className="border-t border-gray-100 dark:border-[#3c3f4c] pt-4">
+          <AlertDialogFooter className="border-t border-gray-100 dark:border-gray-600 pt-4">
             <AlertDialogCancel
               onClick={() => {
                 setShowInsufficientDialog(false);

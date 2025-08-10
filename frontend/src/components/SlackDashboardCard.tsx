@@ -128,7 +128,7 @@ export const SlackDashboardCard: React.FC<SlackDashboardCardProps> = ({
 
     if (loading) {
         return (
-            <div className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 ${className}`}>
+            <div className={`bg-white dark:bg-[#1e1e1e] rounded-lg border border-gray-200 dark:border-[#2a2a2a] p-6 ${className}`}>
                 <div className="animate-pulse">
                     <div className="flex items-center justify-between mb-4">
                         <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
@@ -142,7 +142,7 @@ export const SlackDashboardCard: React.FC<SlackDashboardCardProps> = ({
     }
 
     return (
-        <div className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-200 hover:shadow-md relative ${className}`}>
+        <div className={`bg-white dark:bg-[#1e1e1e] rounded-lg border border-gray-200 dark:border-[#2a2a2a] hover:border-gray-300 dark:hover:border-[#333333] transition-all duration-200 hover:shadow-md relative ${className}`}>
             {/* Header */}
             <div className="flex items-center justify-between p-4 pb-2">
                 <div className="flex items-center space-x-2">
@@ -197,7 +197,7 @@ export const SlackDashboardCard: React.FC<SlackDashboardCardProps> = ({
                                     ></div>
 
                                     {/* Dropdown Menu */}
-                                    <div className="absolute right-0 top-8 z-20 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2">
+                                    <div className="absolute right-0 top-8 z-20 w-48 bg-white dark:bg-[#1e1e1e] rounded-lg shadow-lg border border-gray-200 dark:border-[#2a2a2a] py-2">
                                         {defaultActions.map((action, index) => {
                                             const ActionIcon = action.icon;
                                             return (

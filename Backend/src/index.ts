@@ -25,7 +25,7 @@ app.get('/api/users', authMiddleware, async (req, res) => {
         });
         res.json(users);
     } catch (err) {
-        console.error('❌ Error fetching users:', err);
+        console.error('Error fetching users:', err);
         res.status(500).json({ error: 'Failed to fetch users' });
     }
 });
@@ -42,7 +42,7 @@ app.get('/api/online-status', authMiddleware, async (req, res) => {
         const statuses = Array.isArray(userIds) ? userIds.map(id => ({ userId: parseInt(id as string), isOnline: false })) : [];
         res.json(statuses);
     } catch (err) {
-        console.error('❌ Error fetching online status:', err);
+        console.error('Error fetching online status:', err);
         res.status(500).json({ error: 'Failed to fetch online status' });
     }
 });

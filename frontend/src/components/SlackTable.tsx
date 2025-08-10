@@ -36,7 +36,7 @@ export const SlackTable: React.FC<SlackTableProps> = ({
 }) => {
     if (loading) {
         return (
-            <div className={`bg-white rounded-lg border border-gray-200 ${className}`}>
+            <div className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600 ${className}`}>
                 <div className="p-6">
                     <div className="animate-pulse space-y-4">
                         <div className="h-4 bg-gray-200 rounded w-1/4"></div>
@@ -57,7 +57,7 @@ export const SlackTable: React.FC<SlackTableProps> = ({
     }
 
     return (
-        <div className={`bg-white rounded-lg border border-gray-200 shadow-sm ${className}`}>
+        <div className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm ${className}`}>
             {/* Header */}
             {(title || subtitle || searchValue !== undefined || onRefresh || actions) && (
                 <div className="p-4 border-b border-gray-200">
@@ -130,7 +130,7 @@ export const SlackTable: React.FC<SlackTableProps> = ({
                             </th>
                         </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                         {data.length === 0 ? (
                             <tr>
                                 <td colSpan={columns.length + 1} className="px-4 py-8 text-center text-gray-500">

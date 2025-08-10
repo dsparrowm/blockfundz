@@ -268,8 +268,8 @@ const Overview = () => {
       </div>
 
       {/* Recent Activity */}
-      <div className="bg-white dark:bg-[#2c2d33] rounded-lg border border-gray-200 dark:border-[#3c3f4c] shadow-sm">
-        <div className="px-6 py-4 border-b border-gray-200 dark:border-[#3c3f4c]">
+      <div className="bg-white dark:bg-[#1e1e1e] rounded-lg border border-gray-200 dark:border-[#2a2a2a] shadow-sm">
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-[#2e2e2e]">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <TrendingUp className="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -335,7 +335,7 @@ const Overview = () => {
 
               {/* Pagination */}
               {Math.ceil(transactions.length / activitiesPerPage) > 1 && (
-                <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200 dark:border-[#3c3f4c]">
+                <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200 dark:border-gray-600">
                   <div className="text-sm text-gray-700 dark:text-gray-300">
                     Showing {(currentPage - 1) * activitiesPerPage + 1} to{' '}
                     {Math.min(currentPage * activitiesPerPage, transactions.length)} of{' '}
@@ -345,7 +345,7 @@ const Overview = () => {
                     <button
                       onClick={handlePreviousPage}
                       disabled={currentPage === 1}
-                      className="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-[#3c3f4c] rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-[#2c2d33] hover:bg-gray-50 dark:hover:bg-[#3c3f4c] disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <ChevronLeft className="w-4 h-4" />
                       Previous
@@ -356,7 +356,7 @@ const Overview = () => {
                     <button
                       onClick={handleNextPage}
                       disabled={currentPage * activitiesPerPage >= transactions.length}
-                      className="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-[#3c3f4c] rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-[#2c2d33] hover:bg-gray-50 dark:hover:bg-[#3c3f4c] disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Next
                       <ChevronRight className="w-4 h-4" />
@@ -370,11 +370,11 @@ const Overview = () => {
       </div>
 
       {/* Referral Section */}
-      <div className="bg-white dark:bg-[#2c2d33] rounded-lg border border-gray-200 dark:border-[#3c3f4c] shadow-sm">
-        <div className="px-6 py-4 border-b border-gray-200 dark:border-[#3c3f4c]">
+      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm">
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-600">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Refer Us & Earn</h3>
-            <span className="text-sm text-gray-400 bg-gray-100 dark:bg-[#3c3f4c] px-2 py-1 rounded">Coming Soon</span>
+            <span className="text-sm text-gray-400 bg-gray-100 dark:bg-gray-600 px-2 py-1 rounded">Coming Soon</span>
           </div>
         </div>
         <div className="px-6 py-4">
@@ -382,7 +382,7 @@ const Overview = () => {
             Use the below link to invite your friends and earn rewards.
           </p>
           <div className="flex items-center space-x-2">
-            <div className="flex-1 bg-gray-50 dark:bg-[#1a1d29] border border-gray-200 dark:border-[#3c3f4c] rounded-lg px-3 py-2">
+            <div className="flex-1 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-2">
               <span className="text-sm text-gray-600 dark:text-gray-400 font-mono">teamapexllc.com/ref?ref=disparrown</span>
             </div>
             <button className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">

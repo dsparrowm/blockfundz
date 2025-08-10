@@ -6,6 +6,7 @@ import validateTokenRouter from "./validateToken"
 import sendEmailRouter from "./email"
 import getDepositHistoryRouter from "./deposits"
 import userRouter from "./users"
+import notificationRouter from "./notification"
 
 const router = Router();
 
@@ -16,5 +17,6 @@ router.use(withdrawalRouter);
 router.use(validateTokenRouter);
 router.use(sendEmailRouter);
 router.use(getDepositHistoryRouter);
+router.use(notificationRouter);
 
 export default router;

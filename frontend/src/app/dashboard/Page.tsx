@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useStore } from "../../store/useStore";
+import { useDarkMode } from "../../contexts/DarkModeContext";
 import { extractBalances } from "../../helpers/extractCoinBalances";
 import renderUserDashboardComponent from "../../helpers/renderUserDashboardComponent";
 import renderAdminDashboardComponent from "../../helpers/renderAdminDashboardComponent";
@@ -13,6 +14,7 @@ export default function Page() {
   const userData = useStore(state => state.user);
   const activeComponent = useStore(state => state.activeComponent);
   const activeAdminComponent = useStore(state => state.activeAdminComponent);
+  const { isDarkMode } = useDarkMode();
 
   const data = userData?.balances ? extractBalances(userData.balances) : {};
   const coin = Object.entries(data);
@@ -45,7 +47,7 @@ export default function Page() {
     <SlackLayout>
       {/* Crypto Ticker - Only for users and non-support components */}
       {shouldShowCryptoTicker && (
-        <div className="mb-4 lg:mb-6 bg-white rounded-lg border border-gray-200 p-3 lg:p-4 shadow-sm">
+        <div className={`mb-4 lg:mb-6 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-lg border p-3 lg:p-4 shadow-sm`}>
           <CryptoTicker />
         </div>
       )}

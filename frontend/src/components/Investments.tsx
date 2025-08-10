@@ -165,7 +165,7 @@ const Investments = () => {
       </div>
 
       {/* Main Investments Table */}
-      <div className="bg-white shadow-lg border-0 rounded-lg">
+      <div className="bg-white dark:bg-gray-800 shadow-lg border-0 dark:border dark:border-gray-600 rounded-lg">
         <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-t-lg p-6">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold flex items-center space-x-2">
@@ -217,7 +217,7 @@ const Investments = () => {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Interest</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                   {filteredInvestments.map((investment) => (
                     <tr key={investment.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">

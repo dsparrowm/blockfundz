@@ -219,7 +219,7 @@ const Withdraw = () => {
       </div>
 
       {/* Withdrawal Form */}
-      <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
+      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm">
         <div className="px-6 py-4 border-b border-gray-200">
           <div className="flex items-center space-x-2">
             <ArrowUpRight className="w-5 h-5 text-purple-600" />

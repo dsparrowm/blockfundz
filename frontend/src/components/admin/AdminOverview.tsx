@@ -5,6 +5,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 import { Users, CreditCard, TrendingUp, Activity, DollarSign, ArrowUpRight } from 'lucide-react';
 import SlackDashboardCard from '../SlackDashboardCard';
 import Spinner from '../spinners/Spinner';
+import { useDarkMode } from '../../contexts/DarkModeContext';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -13,6 +14,7 @@ const AdminOverview = () => {
   const [totalTransactions, setTotalTransactions] = useState(0);
   const [totalInvestments, setTotalInvestments] = useState(0);
   const [loading, setLoading] = useState(true);
+  const { isDarkMode } = useDarkMode();
 
   useEffect(() => {
     const fetchData = async () => {

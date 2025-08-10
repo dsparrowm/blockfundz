@@ -26,7 +26,8 @@ import {
     ChevronDown,
     Circle,
     MessageSquare,
-    MessageCircle
+    MessageCircle,
+    Shield
 } from 'lucide-react';
 
 interface SlackSidebarProps {
@@ -82,6 +83,7 @@ export const SlackSidebar: React.FC<SlackSidebarProps> = ({
     const adminNavItems = [
         { name: 'Dashboard', icon: LayoutDashboard, section: 'general' },
         { name: 'Users Management', icon: Users, section: 'management' },
+        { name: 'Admin Audit Trail', icon: Shield, section: 'management' },
         { name: 'Manage Transactions', icon: ArrowUpDown, section: 'finance' },
         { name: 'Withdrawal Requests', icon: DollarSign, section: 'finance' },
         { name: 'Manage Investments', icon: TrendingUp, section: 'finance' },

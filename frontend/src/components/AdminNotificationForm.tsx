@@ -12,7 +12,7 @@ const AdminNotificationForm = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axiosInstance.post('/admin/notifications', { message });
+      await axiosInstance.post('/api/admin/notifications/broadcast', { message });
       toast('Notification broadcasted!');
       setMessage('');
     } catch {

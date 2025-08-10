@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useStore } from "../store/useStore";
 import AdminOverview from "../components/admin/AdminOverview";
 import UserManagement from "../components/admin/UserManagement";
+import AdminAuditTrail from "../components/admin/AdminAuditTrail";
 import InvestmentManagement from "../components/admin/InvestmentManagement";
 import TransactionManagement from "../components/admin/TransactionManagement";
 import InvestmentPlansManagement from "../components/admin/InvestmentPlansManagement";
@@ -35,6 +36,8 @@ const renderAdminDashboardComponent = () => {
       return <WithdrawalRequestManagement />;
     case 'Users Management':
       return <UserManagement onEditUser={handleEditUser} isLoading={loading} />;
+    case 'Admin Audit Trail':
+      return <AdminAuditTrail />;
     case 'Manage Plans':
       return <InvestmentPlansManagement />;
     case 'Send Mail':

@@ -5,7 +5,7 @@ import authMiddleware from '../middleware/authMiddleware';
 const router = Router();
 
 // Admin creates a notification
-router.post('/admin/notifications', authMiddleware, async (req, res) => {
+router.post('/admin/notifications/broadcast', authMiddleware, async (req, res) => {
     // Only allow admin
     const admin = await prisma.user.findFirst({ where: { email: process.env.ADMIN_EMAIL } });
     if (!admin || req.user.email !== admin.email) {

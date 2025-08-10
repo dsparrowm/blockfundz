@@ -45,7 +45,7 @@ const Hero = () => {
 
         return () => {
             clearInterval(typewriterInterval);
-            clearInterval(cursorInterval);
+            // clearInterval(cursorInterval);
             clearInterval(gradientInterval);
         };
     }, []);

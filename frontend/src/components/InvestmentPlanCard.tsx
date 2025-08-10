@@ -62,7 +62,7 @@ const InvestmentPlanCard: React.FC<InvestmentPlanCardProps> = ({ plan, isSubscri
   const IconComponent = theme.icon;
 
   return (
-    <div className={`relative bg-white dark:bg-[#2c2d33] rounded-xl border border-gray-200 dark:border-[#3c3f4c] shadow-sm hover:shadow-lg dark:hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden ${plan.recommended ? 'ring-2 ring-yellow-400 dark:ring-yellow-500' : ''}`}>
+    <div className={`relative bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-600 shadow-sm hover:shadow-lg dark:hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden ${plan.recommended ? 'ring-2 ring-yellow-400 dark:ring-yellow-500' : ''}`}>
       {/* Recommended Badge */}
       {plan.recommended && (
         <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
@@ -94,7 +94,7 @@ const InvestmentPlanCard: React.FC<InvestmentPlanCardProps> = ({ plan, isSubscri
       </div>
 
       {/* Interest Rate Highlight */}
-      <div className="px-6 py-4 bg-gray-50 dark:bg-[#1a1d29] border-b border-gray-100 dark:border-[#3c3f4c]">
+      <div className="px-6 py-4 bg-gray-50 dark:bg-gray-900 border-b border-gray-100 dark:border-gray-600">
         <div className="text-center">
           <div className="flex items-baseline justify-center space-x-1">
             <span className={`text-4xl font-bold text-${theme.accent} dark:text-white`}>{plan.interestRate}%</span>

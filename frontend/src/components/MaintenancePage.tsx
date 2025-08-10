@@ -79,7 +79,7 @@ const MaintenancePage = () => {
           We're upgrading our systems. Service will resume in:
         </p>
 
-        <div className="bg-white p-6 rounded-lg shadow-lg">
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border dark:border-gray-600">
           <div className="flex justify-center space-x-4 mb-4">
             <div className="text-center">
               <div className="text-2xl font-bold text-orange-500">

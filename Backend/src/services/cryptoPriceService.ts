@@ -14,7 +14,6 @@ class CryptoPriceService {
 
     async getCurrentPrices(): Promise<CryptoPrices> {
         try {
-            console.log('🔄 Fetching prices from CoinGecko API...');
             const response = await axios.get(
                 'https://api.coingecko.com/api/v3/simple/price',
                 {
@@ -25,17 +24,13 @@ class CryptoPriceService {
                 }
             );
 
-            console.log('✅ CoinGecko API response:', response.data);
-
             // Update database with latest prices
             await this.updatePricesInDB(response.data);
 
             return response.data;
         } catch (error) {
-            console.error('❌ Error fetching crypto prices from API:', error);
-            console.error('❌ API Error details:', error.response?.data);
+            console.error('Error fetching crypto prices from API:', error);
             // Fallback to database prices if API fails
-            console.log('🔄 Falling back to database prices...');
             return await this.getPricesFromDB();
         }
     }
@@ -45,17 +40,12 @@ class CryptoPriceService {
         const cached = this.cache.get(symbol);
 
         if (cached && (now - cached.timestamp) < this.CACHE_DURATION) {
-            console.log(`📦 Using cached price for ${symbol}: $${cached.price}`);
             return cached.price;
         }
-
-        console.log(`🔄 Cache miss for ${symbol}, fetching fresh prices...`);
 
         // Fetch fresh prices
         const prices = await this.getCurrentPrices();
         const price = this.extractPriceForSymbol(symbol, prices);
-
-        console.log(`💰 Fresh price for ${symbol}: $${price}`);
 
         // Update cache
         this.cache.set(symbol, { price, timestamp: now });
@@ -117,32 +107,25 @@ class CryptoPriceService {
 
     private async getPricesFromDB(): Promise<CryptoPrices> {
         try {
-            console.log('🔄 Fetching prices from database...');
             const dbPrices = await prisma.cryptoPrice.findMany({
                 where: {
                     symbol: { in: ['BTC', 'ETH', 'USDT', 'USDC'] }
                 }
             });
 
-            console.log('📊 Database prices found:', dbPrices);
-
             const priceMap = dbPrices.reduce((acc, price) => {
                 acc[price.symbol] = price.price;
                 return acc;
             }, {} as { [key: string]: number });
 
-            const result = {
+            return {
                 bitcoin: { usd: priceMap['BTC'] || 50000 },
                 ethereum: { usd: priceMap['ETH'] || 3000 },
                 tether: { usd: priceMap['USDT'] || 1 },
                 'usd-coin': { usd: priceMap['USDC'] || 1 }
             };
-
-            console.log('📈 Using prices from database:', result);
-            return result;
         } catch (error) {
-            console.error('❌ Error fetching prices from database:', error);
-            console.log('⚠️ Using default fallback prices');
+            console.error('Error fetching prices from database:', error);
             // Return default prices as last resort
             return {
                 bitcoin: { usd: 50000 },

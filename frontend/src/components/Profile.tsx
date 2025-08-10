@@ -35,7 +35,7 @@ export function ProfileComponent() {
     }
 
     return (
-        <div className="max-w-4xl mx-auto mt-[20px] p-6 bg-white rounded-lg shadow-sm">
+        <div className="max-w-4xl mx-auto mt-[20px] p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border dark:border-gray-600">
             <h1 className="text-2xl font-bold mb-6 flex items-center gap-2">
                 <User size={24} />
                 My Profile

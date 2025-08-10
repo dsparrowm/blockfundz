@@ -50,16 +50,22 @@ const AdminNotifications = ({ userId, token }: { userId: number; token: string }
     const fetchNotifications = async () => {
         setIsLoading(true);
         try {
-            const res = await axiosInstance.get(`/api/notifications?page=${page}&limit=${limit}`, {
+            const res = await axiosInstance.get(`/api/admin/notifications?page=${page}&limit=${limit}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             console.log('Fetched notifications:', res.data.notifications); // Debug log
+            // Check if response has expected structure
+            if (!res.data.notifications || !Array.isArray(res.data.notifications)) {
+                console.error('Invalid response structure:', res.data);
+                toast.error('Invalid response from server');
+                return;
+            }
             // Deduplicate notifications by id
             const uniqueNotifications = Array.from(
                 new Map(res.data.notifications.map((notif: Notification) => [notif.id, notif])).values()
-            );
+            ) as Notification[];
             setNotifications(uniqueNotifications);
-            setTotal(res.data.total);
+            setTotal(res.data.total || 0);
         } catch (err) {
             console.error('Failed to fetch notifications:', err);
             toast.error('Failed to fetch notifications');
@@ -81,8 +87,8 @@ const AdminNotifications = ({ userId, token }: { userId: number; token: string }
 
         try {
             const res = await axiosInstance.post(
-                '/api/notifications',
-                { ...newNotification, userId },
+                '/api/admin/notifications',
+                { title: newNotification.title, content: newNotification.content },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             console.log('Created notification:', res.data); // Debug log
@@ -106,8 +112,8 @@ const AdminNotifications = ({ userId, token }: { userId: number; token: string }
 
         try {
             const res = await axiosInstance.put(
-                `/api/notifications/${editingNotification.id}`,
-                { title: editingNotification.title, content: editingNotification.content, userId },
+                `/api/admin/notifications/${editingNotification.id}`,
+                { title: editingNotification.title, content: editingNotification.content },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             console.log('Updated notification:', res.data); // Debug log
@@ -125,7 +131,7 @@ const AdminNotifications = ({ userId, token }: { userId: number; token: string }
     // Handle delete notification
     const handleDeleteNotification = async (id: number) => {
         try {
-            await axiosInstance.delete(`/api/notifications/${id}`, {
+            await axiosInstance.delete(`/api/admin/notifications/${id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setNotifications((prev) => prev.filter((notif) => notif.id !== id));

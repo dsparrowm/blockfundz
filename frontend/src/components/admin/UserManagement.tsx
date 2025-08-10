@@ -28,11 +28,12 @@ import {
 } from "../ui/alert-dialog";
 import Spinner from '../spinners/Spinner';
 import { toast } from 'sonner';
-import { Users, Search, DollarSign, Shield, TrendingUp, Filter, UserPlus, Edit, Trash, Eye } from 'lucide-react';
+import { Users, Search, DollarSign, Shield, TrendingUp, Filter, UserPlus, Edit, Trash, Eye, RotateCcw } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
 import SlackDashboardCard from '../SlackDashboardCard';
 import { useStore } from '../../store/useStore';
+import { useDarkMode } from '../../contexts/DarkModeContext';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -117,6 +118,7 @@ const UserManagement = ({
 
   const itemsPerPage = 10;
   const userData = useStore(state => state.user);
+  const { isDarkMode } = useDarkMode();
   const setUser = useStore(state => state.setUser);
 
   const fetchUsers = async () => {
@@ -129,8 +131,7 @@ const UserManagement = ({
 
       setUsers(filteredUsers);
     } catch (error: any) {
-      console.error('❌ Error fetching users:', error);
-      console.error('❌ Error response:', error.response);
+      console.error('Error fetching users:', error);
       toast.error(error.response?.data?.message || 'Failed to fetch users');
     } finally {
       setLoading(false);
@@ -213,14 +214,6 @@ const UserManagement = ({
 
     setIsCrediting(true);
     try {
-      console.log('Making credit request with data:', {
-        userId: selectedUserId,
-        currency: creditForm.currency,
-        amount: creditForm.amount,
-        reason: creditForm.reason || 'Admin credit',
-        adminId: userData?.id
-      });
-
       const response = await axiosInstance.post('/api/users/credit', {
         userId: selectedUserId,
         currency: creditForm.currency,
@@ -228,10 +221,6 @@ const UserManagement = ({
         reason: creditForm.reason || 'Admin credit',
         adminId: userData?.id // Pass admin ID if available
       });
-
-      console.log('Credit response:', response);
-      console.log('Response status:', response.status);
-      console.log('Response data:', response.data);
 
       toast.success(response.data.message);
 
@@ -250,13 +239,35 @@ const UserManagement = ({
       fetchUsers();
 
     } catch (error: any) {
-      console.error('Error crediting user - Full error object:', error);
-      console.error('Error response:', error.response);
-      console.error('Error response data:', error.response?.data);
-      console.error('Error response status:', error.response?.status);
-      console.error('Error message:', error.message);
-
+      console.error('Error crediting user:', error);
       toast.error(error.response?.data?.message || 'Failed to credit user');
+    } finally {
+      setIsCrediting(false);
+    }
+  };
+
+  const handleResetBalance = async (userId: string, userName: string) => {
+    if (!userId) {
+      toast.error('Please select a user');
+      return;
+    }
+
+    setIsCrediting(true);
+    try {
+      const response = await axiosInstance.post('/api/users/reset-balance', {
+        userId: userId,
+        reason: 'Admin balance reset',
+        adminId: userData?.id // Pass admin ID if available
+      });
+
+      toast.success(response.data.message);
+
+      // Refresh users list to show updated balances
+      fetchUsers();
+
+    } catch (error: any) {
+      console.error('Error resetting user balance:', error);
+      toast.error(error.response?.data?.message || 'Failed to reset user balance');
     } finally {
       setIsCrediting(false);
     }
@@ -380,15 +391,15 @@ const UserManagement = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className={`space-y-6 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <Users className="h-6 w-6 text-blue-600" />
-            <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
+            <Users className={`h-6 w-6 ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`} />
+            <h1 className={`text-2xl font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>User Management</h1>
           </div>
-          <p className="text-gray-600">Monitor and manage all platform users and their activities</p>
+          <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Monitor and manage all platform users and their activities</p>
         </div>
         <div className="flex items-center gap-3">
           <Dialog open={isAddUserDialogOpen} onOpenChange={setIsAddUserDialogOpen}>
@@ -587,7 +598,7 @@ const UserManagement = ({
                   </TableHeader>
                   <TableBody>
                     {paginatedUsers.map((user, index) => (
-                      <TableRow key={user.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50/50"}>
+                      <TableRow key={user.id} className={index % 2 === 0 ? "bg-white dark:bg-[#1e1e1e]" : "bg-gray-50/50 dark:bg-[#181818]"}>
                         <TableCell className="min-w-[150px]">
                           <div className="space-y-1">
                             <div className="font-medium text-gray-900">{user.name}</div>
@@ -932,6 +943,37 @@ const UserManagement = ({
                             >
                               <Edit className="w-3 h-3" />
                             </Button>
+
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="text-orange-600 hover:bg-orange-50"
+                                  disabled={isCrediting}
+                                >
+                                  <RotateCcw className="w-3 h-3" />
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Reset User Balance</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    Are you sure you want to reset all balances for {user.name} to zero? This will set their main balance, Bitcoin, Ethereum, USDT, and USDC balances to $0. This action cannot be undone and transaction records will be created for tracking.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={() => handleResetBalance(user.id, user.name)}
+                                    className="bg-orange-600 hover:bg-orange-700"
+                                    disabled={isCrediting}
+                                  >
+                                    {isCrediting ? 'Resetting...' : 'Reset Balance'}
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
 
                             <AlertDialog>
                               <AlertDialogTrigger asChild>

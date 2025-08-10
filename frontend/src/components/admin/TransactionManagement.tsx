@@ -33,7 +33,7 @@ import Spinner from '../spinners/Spinner';
 
 interface Transaction {
   id: number;
-  type: 'DEPOSIT' | 'WITHDRAWAL' | 'SUBSCRIPTION';
+  type: 'DEPOSIT' | 'WITHDRAWAL' | 'SUBSCRIPTION' | 'CREDIT_BITCOIN' | 'CREDIT_ETHEREUM' | 'CREDIT_USDT' | 'CREDIT_USDC';
   asset: 'BITCOIN' | 'ETHEREUM' | 'USDT' | 'USDC';
   amount: number;
   status: 'PENDING' | 'COMPLETED' | 'ACTIVE' | 'INACTIVE';
@@ -44,11 +44,14 @@ interface Transaction {
     id: number;
     name: string;
     email: string;
+    phone?: string;
   };
   name?: string;
   phone?: string;
   planName?: string;
   planId?: number;
+  usdEquivalent?: number;
+  isAdminTransaction?: boolean; // Flag to identify admin transactions
 }
 
 const TransactionManagement = () => {
@@ -70,17 +73,50 @@ const TransactionManagement = () => {
   const fetchTransactions = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get('/api/transactions');
+      // Fetch both regular transactions and admin audit trail
+      const [transactionsResponse, auditResponse] = await Promise.all([
+        axiosInstance.get('/api/transactions'),
+        axiosInstance.get('/api/admin/audit/trail?limit=100') // Get more audit entries
+      ]);
 
-      if (response.data && response.data.transactions) {
-        setTransactions(response.data.transactions);
-      } else {
-        console.error('Unexpected response structure:', response.data);
-        showToastMessage('error', 'Invalid response from server');
+      let allTransactions: Transaction[] = [];
+
+      // Add regular transactions
+      if (transactionsResponse.data && transactionsResponse.data.transactions) {
+        allTransactions = [...transactionsResponse.data.transactions];
       }
+
+      // Add admin audit trail transactions
+      if (auditResponse.data && auditResponse.data.auditTrail) {
+        const auditTransactions: Transaction[] = auditResponse.data.auditTrail.map((audit: any) => ({
+          id: audit.id,
+          type: audit.action, // CREDIT_BITCOIN, CREDIT_ETHEREUM, etc.
+          asset: audit.asset,
+          amount: audit.amount,
+          status: audit.status,
+          date: audit.timestamp,
+          details: audit.details,
+          userId: audit.user.id,
+          user: {
+            id: audit.user.id,
+            name: audit.user.name,
+            email: audit.user.email,
+            phone: audit.user.phone
+          },
+          usdEquivalent: audit.usdEquivalent,
+          isAdminTransaction: true // Flag to identify admin transactions
+        }));
+
+        allTransactions = [...allTransactions, ...auditTransactions];
+      }
+
+      // Sort by date (newest first)
+      allTransactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+      setTransactions(allTransactions);
     } catch (error: any) {
       console.error('Error fetching transactions:', error);
-      console.error('Error response:', error.response?.data); // Debug log
+      console.error('Error response:', error.response?.data);
       const errorMessage = error.response?.data?.message || 'Failed to fetch transactions';
       showToastMessage('error', errorMessage);
     } finally {
@@ -94,19 +130,22 @@ const TransactionManagement = () => {
 
     setEditLoading(true);
     try {
-      const response = await axiosInstance.put(
-        `/api/transactions/${selectedTransaction.id}`,
-        {
-          type: selectedTransaction.type,
-          asset: selectedTransaction.asset,
-          amount: selectedTransaction.amount,
-          status: selectedTransaction.status,
-          details: selectedTransaction.details,
-          name: selectedTransaction.name,
-          phone: selectedTransaction.phone,
-          planName: selectedTransaction.planName
-        }
-      );
+      // Determine the correct endpoint based on transaction type
+      const endpoint = selectedTransaction.isAdminTransaction
+        ? `/api/transactions/${selectedTransaction.id}` // For now, use same endpoint
+        : `/api/transactions/${selectedTransaction.id}`;
+
+      const response = await axiosInstance.put(endpoint, {
+        type: selectedTransaction.type,
+        asset: selectedTransaction.asset,
+        amount: selectedTransaction.amount,
+        status: selectedTransaction.status,
+        details: selectedTransaction.details,
+        name: selectedTransaction.name,
+        phone: selectedTransaction.phone,
+        planName: selectedTransaction.planName,
+        usdEquivalent: selectedTransaction.usdEquivalent
+      });
 
       if (response.data && response.data.transaction) {
         setTransactions(prev => prev.map(tx =>
@@ -166,6 +205,10 @@ const TransactionManagement = () => {
       case 'DEPOSIT': return ArrowDownLeft;
       case 'WITHDRAWAL': return ArrowUpRight;
       case 'SUBSCRIPTION': return CreditCard;
+      case 'CREDIT_BITCOIN':
+      case 'CREDIT_ETHEREUM':
+      case 'CREDIT_USDT':
+      case 'CREDIT_USDC': return TrendingUp;
       default: return DollarSign;
     }
   };
@@ -185,6 +228,10 @@ const TransactionManagement = () => {
       case 'DEPOSIT': return 'text-blue-600 bg-blue-50 border-blue-200';
       case 'WITHDRAWAL': return 'text-purple-600 bg-purple-50 border-purple-200';
       case 'SUBSCRIPTION': return 'text-indigo-600 bg-indigo-50 border-indigo-200';
+      case 'CREDIT_BITCOIN':
+      case 'CREDIT_ETHEREUM':
+      case 'CREDIT_USDT':
+      case 'CREDIT_USDC': return 'text-green-600 bg-green-50 border-green-200';
       default: return 'text-gray-600 bg-gray-50 border-gray-200';
     }
   };
@@ -395,7 +442,7 @@ const TransactionManagement = () => {
                                 value={selectedTransaction?.type || ''}
                                 onValueChange={(value) => selectedTransaction && setSelectedTransaction({
                                   ...selectedTransaction,
-                                  type: value as 'DEPOSIT' | 'WITHDRAWAL' | 'SUBSCRIPTION'
+                                  type: value as 'DEPOSIT' | 'WITHDRAWAL' | 'SUBSCRIPTION' | 'CREDIT_BITCOIN' | 'CREDIT_ETHEREUM' | 'CREDIT_USDT' | 'CREDIT_USDC'
                                 })}
                               >
                                 <SelectTrigger className="border-gray-200 focus:border-purple-500 focus:ring-purple-500">
@@ -405,6 +452,10 @@ const TransactionManagement = () => {
                                   <SelectItem value="DEPOSIT">Deposit</SelectItem>
                                   <SelectItem value="WITHDRAWAL">Withdrawal</SelectItem>
                                   <SelectItem value="SUBSCRIPTION">Subscription</SelectItem>
+                                  <SelectItem value="CREDIT_BITCOIN">Admin Credit Bitcoin</SelectItem>
+                                  <SelectItem value="CREDIT_ETHEREUM">Admin Credit Ethereum</SelectItem>
+                                  <SelectItem value="CREDIT_USDT">Admin Credit USDT</SelectItem>
+                                  <SelectItem value="CREDIT_USDC">Admin Credit USDC</SelectItem>
                                 </SelectContent>
                               </Select>
                             </div>
@@ -465,7 +516,7 @@ const TransactionManagement = () => {
                                 value={selectedTransaction?.status || ''}
                                 onValueChange={(value) => selectedTransaction && setSelectedTransaction({
                                   ...selectedTransaction,
-                                  status: value
+                                  status: value as 'PENDING' | 'COMPLETED' | 'ACTIVE' | 'INACTIVE'
                                 })}
                               >
                                 <SelectTrigger className="border-gray-200 focus:border-purple-500 focus:ring-purple-500">

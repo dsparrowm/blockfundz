@@ -5,17 +5,17 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 dark:ring-offset-[#2c2d33] dark:focus-visible:ring-[#4a154b]",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 dark:ring-offset-[#1e1e1e] dark:focus-visible:ring-[#bb86fc]",
   {
     variants: {
       variant: {
-        default: "bg-slate-900 text-slate-50 hover:bg-slate-900/90 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-50/90",
+        default: "bg-slate-900 text-slate-50 hover:bg-slate-900/90 dark:bg-[#611f69] dark:text-slate-50 dark:hover:bg-[#7c2990]",
         destructive:
           "bg-red-500 text-slate-50 hover:bg-red-500/90 dark:bg-red-900 dark:text-slate-50 dark:hover:bg-red-900/90",
         outline:
-          "border border-slate-200 bg-white hover:bg-slate-100 hover:text-slate-900 dark:border-[#3c3f4c] dark:bg-[#2c2d33] dark:hover:bg-[#3c3f4c] dark:hover:text-white",
+          "border border-slate-200 bg-white hover:bg-slate-100 hover:text-slate-900 dark:border-[#2e2e2e] dark:bg-[#2a2a2a] dark:hover:bg-[#333333] dark:hover:text-[#ffffff]",
         secondary:
-          "bg-slate-100 text-slate-900 hover:bg-slate-100/80 dark:bg-[#3c3f4c] dark:text-white dark:hover:bg-[#4a4e5c]",
+          "bg-slate-100 text-slate-900 hover:bg-slate-100/80 dark:bg-[#2a2a2a] dark:text-[#ffffff] dark:hover:bg-[#333333]",
         ghost: "hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-[#3c3f4c] dark:hover:text-white",
         link: "text-slate-900 underline-offset-4 hover:underline dark:text-slate-50",
       },
