@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import axiosInstance from '../../api/axiosInstance';
 import { Button } from "@/components/ui/button";
-import { Check, X, Clock, DollarSign } from 'lucide-react';
+import { Check, X, Clock, DollarSign, Copy } from 'lucide-react';
 import SlackTable from '../SlackTable';
 import SlackDashboardCard from '../SlackDashboardCard';
 import Spinner from '../spinners/Spinner';
@@ -32,11 +32,22 @@ const WithdrawalRequestManagement = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const itemsPerPage = 10;
 
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setSuccessMessage('Address copied to clipboard!');
+      setTimeout(() => setSuccessMessage(''), 3000);
+    } catch (err) {
+      setErrorMessage('Failed to copy address');
+      setTimeout(() => setErrorMessage(''), 3000);
+    }
+  };
+
   useEffect(() => {
     const fetchWithdrawalRequests = async () => {
       setLoading(true);
       try {
-        const response = await axiosInstance.get('/api/withdrawals');
+        const response = await axiosInstance.get('/api/admin/withdrawals/all');
         setWithdrawalRequests(response.data.withdrawalRequests);
       } catch (error) {
         console.error('Error fetching withdrawal requests:', error);
@@ -173,10 +184,23 @@ const WithdrawalRequestManagement = () => {
     {
       key: 'address',
       title: 'Address',
-      render: (value: string) => (
-        <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded">
-          {value ? `${value.substring(0, 10)}...` : 'N/A'}
-        </span>
+      render: (value: string, row: WithdrawalRequest) => (
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded flex-1">
+            {value ? `${value.substring(0, 10)}...` : 'N/A'}
+          </span>
+          {value && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-6 w-6 p-0 hover:bg-gray-200"
+              onClick={() => copyToClipboard(value)}
+              title="Copy address to clipboard"
+            >
+              <Copy className="w-3 h-3" />
+            </Button>
+          )}
+        </div>
       )
     },
     {

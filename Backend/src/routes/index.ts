@@ -7,6 +7,7 @@ import sendEmailRouter from "./email"
 import getDepositHistoryRouter from "./deposits"
 import userRouter from "./users"
 import notificationRouter from "./notification"
+import adminRouter from "./admin"
 
 const router = Router();
 
@@ -18,5 +19,6 @@ router.use(validateTokenRouter);
 router.use(sendEmailRouter);
 router.use(getDepositHistoryRouter);
 router.use(notificationRouter);
+router.use('/admin', adminRouter);
 
 export default router;
