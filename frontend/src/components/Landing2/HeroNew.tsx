@@ -153,23 +153,23 @@ const Hero = () => {
 
         return () => clearInterval(interval);
     }, []); return (
-        <section className="relative bg-gray-900 pt-20 pb-24 overflow-hidden">
+        <section className="relative bg-gray-900 pt-16 sm:pt-20 pb-16 sm:pb-24 overflow-hidden">
             {/* Background Elements (hidden on very small screens) */}
             <div className="absolute inset-0">
                 <div className="hidden sm:block absolute top-1/4 left-1/6 w-44 md:w-56 h-44 md:h-56 bg-purple-500/20 rounded-full blur-3xl"></div>
                 <div className="hidden sm:block absolute bottom-1/4 right-1/6 w-56 md:w-72 h-56 md:h-72 bg-blue-500/20 rounded-full blur-3xl"></div>
             </div>
 
-            <div className="container mx-auto px-6 relative z-10">
-                <div className="text-center max-w-6xl mx-auto">
+            <div className="container mx-auto px-4 sm:px-6 relative z-10">
+                <div className="text-center max-w-full sm:max-w-6xl mx-auto">
                     {/* Company Logos */}
                     <div className="mb-12 pt-4">
                         <p className="text-sm text-gray-400 mb-6 uppercase tracking-wide">TRUSTED BY LEADING COMPANIES</p>
-                        <div className="flex justify-center items-center space-x-8 opacity-60">
-                            <div className="text-xl font-bold text-gray-500">Goldman Sachs</div>
-                            <div className="text-xl font-bold text-gray-500">JPMorgan</div>
-                            <div className="text-xl font-bold text-gray-500">Coinbase</div>
-                            <div className="text-xl font-bold text-gray-500">Binance</div>
+                        <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-8 opacity-60">
+                            <div className="text-lg sm:text-xl font-bold text-gray-500">Goldman Sachs</div>
+                            <div className="text-lg sm:text-xl font-bold text-gray-500">JPMorgan</div>
+                            <div className="text-lg sm:text-xl font-bold text-gray-500">Coinbase</div>
+                            <div className="text-lg sm:text-xl font-bold text-gray-500">Binance</div>
                         </div>
                     </div>
 
@@ -455,7 +455,7 @@ const Hero = () => {
                                         {/* Investment Plans View */}
                                         {animationStep >= 1 && (
                                             <div className="space-y-4">
-                                                <div className="grid grid-cols-3 gap-4">
+                                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                                     {/* Basic Plan */}
                                                     <div className="bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-700">
                                                         <div className="text-center space-y-2">

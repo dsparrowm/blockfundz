@@ -84,7 +84,7 @@ const HowItWorks = () => {
         <div className="hidden sm:block absolute bottom-0 right-1/6 w-44 md:w-56 h-44 md:h-56 bg-gradient-to-br from-blue-900/20 to-green-900/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
       </div>
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
         {/* Title */}
         <div className="text-center mb-12 sm:mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 text-gray-100">
@@ -100,7 +100,7 @@ const HowItWorks = () => {
         </div>
 
         {/* Interactive Steps Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-full sm:max-w-6xl mx-auto">
           {howItWorksSteps.map((step, index) => (
             <div key={step.step} className="relative">
               {/* Step Card */}
@@ -194,7 +194,7 @@ const HowItWorks = () => {
         {/* Completion Message */}
         {completedSteps.length === howItWorksSteps.length && (
           <div className="text-center mt-16 animate-bounce-in">
-            <div className="bg-gradient-to-r from-green-900/50 to-emerald-900/50 border-2 border-green-500 p-8 rounded-2xl max-w-2xl mx-auto">
+            <div className="bg-gradient-to-r from-green-900/50 to-emerald-900/50 border-2 border-green-500 p-8 rounded-2xl max-w-full sm:max-w-2xl mx-auto">
               <div className="text-5xl mb-4 animate-bounce">🚀</div>
               <h3 className="text-3xl font-bold text-gray-100 mb-4">Wealth Transformation Complete!</h3>
               <p className="text-lg text-gray-300 mb-6">

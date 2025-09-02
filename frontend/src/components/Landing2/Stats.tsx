@@ -151,11 +151,11 @@ const Stats = () => {
             <p className="text-sm text-gray-400 mb-8 uppercase tracking-wide opacity-0 animate-fade-in" style={{ animationDelay: '1.5s', animationFillMode: 'forwards' }}>
               FEATURED IN
             </p>
-            <div className="flex justify-center items-center space-x-12 opacity-0 animate-fade-in" style={{ animationDelay: '1.8s', animationFillMode: 'forwards' }}>
-              <div className="text-2xl font-bold text-gray-500 hover:text-gray-300 transition-colors duration-200">TechCrunch</div>
-              <div className="text-2xl font-bold text-gray-500 hover:text-gray-300 transition-colors duration-200">Forbes</div>
-              <div className="text-2xl font-bold text-gray-500 hover:text-gray-300 transition-colors duration-200">Bloomberg</div>
-              <div className="text-2xl font-bold text-gray-500 hover:text-gray-300 transition-colors duration-200">CNBC</div>
+            <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-8 opacity-0 animate-fade-in" style={{ animationDelay: '1.8s', animationFillMode: 'forwards' }}>
+              <div className="text-lg sm:text-2xl font-bold text-gray-500 hover:text-gray-300 transition-colors duration-200">TechCrunch</div>
+              <div className="text-lg sm:text-2xl font-bold text-gray-500 hover:text-gray-300 transition-colors duration-200">Forbes</div>
+              <div className="text-lg sm:text-2xl font-bold text-gray-500 hover:text-gray-300 transition-colors duration-200">Bloomberg</div>
+              <div className="text-lg sm:text-2xl font-bold text-gray-500 hover:text-gray-300 transition-colors duration-200">CNBC</div>
             </div>
           </div>
         </div>

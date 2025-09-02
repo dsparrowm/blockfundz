@@ -4,7 +4,7 @@ import NexGenLogo from "../ui/NexGenLogo"
 const Footer = () => {
   return (
     <footer className="bg-gray-800 border-t border-gray-700">
-      <div className="container mx-auto px-6 py-16">
+      <div className="container mx-auto px-4 sm:px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 mb-12">
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-2 mb-6">
@@ -74,9 +74,9 @@ const Footer = () => {
               <input
                 type="email"
                 placeholder="name@company.com"
-                className="bg-gray-600 border border-gray-500 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 min-w-64"
+                className="bg-gray-600 border border-gray-500 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 min-w-0 sm:min-w-64"
               />
-              <button className="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold whitespace-nowrap hover:bg-purple-700 transition-all duration-200 hover:-translate-y-0.5">
+              <button className="bg-purple-600 text-white px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-all duration-200 hover:-translate-y-0.5">
                 SUBSCRIBE
               </button>
             </div>
@@ -86,7 +86,7 @@ const Footer = () => {
         {/* Bottom Section */}
         <div className="border-t border-gray-600 pt-8">
           <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
-            <div className="flex items-center space-x-6 text-sm text-gray-400">
+            <div className="flex items-center space-x-4 sm:space-x-6 text-sm text-gray-400">
               <span>&copy; 2025 NexGen Technologies, Inc. All rights reserved.</span>
               <a href="#" className="hover:text-purple-400 transition-colors flex items-center space-x-1">
                 <FileText className="w-4 h-4" />

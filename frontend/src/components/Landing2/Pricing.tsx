@@ -77,7 +77,7 @@ const Pricing = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-full sm:max-w-6xl mx-auto">
           {pricingPlans.map((plan) => (
             <Card
               key={plan.name}
@@ -133,7 +133,7 @@ const Pricing = () => {
           <p className="text-lg text-gray-300 mb-8">
             Still have questions? <span className="text-purple-400 font-semibold cursor-pointer hover:underline">Get in touch</span>
           </p>
-          <div className="bg-gray-800 border border-gray-700 rounded-2xl p-8 max-w-2xl mx-auto">
+          <div className="bg-gray-800 border border-gray-700 rounded-2xl p-8 max-w-full sm:max-w-2xl mx-auto">
             <h3 className="text-2xl font-bold text-gray-100 mb-4">
               Looking for our Enterprise Grid?
             </h3>

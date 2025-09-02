@@ -67,7 +67,7 @@ const PersonalWealth = () => {
                 </div>
 
                 <div className="text-center mt-16">
-                    <div className="bg-gray-800 p-8 rounded-2xl border border-purple-500 shadow-lg max-w-4xl mx-auto">
+                    <div className="bg-gray-800 p-8 rounded-2xl border border-purple-500 shadow-lg max-w-full sm:max-w-4xl mx-auto">
                         <h3 className="text-2xl font-bold text-gray-100 mb-4">
                             Ready to start building your personal wealth?
                         </h3>
