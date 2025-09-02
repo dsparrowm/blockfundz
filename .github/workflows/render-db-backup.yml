@@ -11,7 +11,13 @@ jobs:
 
     steps:
       - name: Install PostgreSQL client
-        run: sudo apt-get install -y postgresql-client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget gnupg
+          echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+          wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client-17
 
       - name: Dump PostgreSQL Database
         env:
@@ -20,7 +26,7 @@ jobs:
           mkdir -p backup
           TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
           FILE="pg_backup_$TIMESTAMP.sql"
-          pg_dump "$DATABASE_URL" > backup/$FILE
+          /usr/lib/postgresql/17/bin/pg_dump "$DATABASE_URL" > backup/$FILE
           echo "Backup saved to backup/$FILE"
 
       - name: Upload Backup to GitHub Artifacts
