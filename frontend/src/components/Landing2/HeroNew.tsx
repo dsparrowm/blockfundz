@@ -154,10 +154,10 @@ const Hero = () => {
         return () => clearInterval(interval);
     }, []); return (
         <section className="relative bg-gray-900 pt-20 pb-24 overflow-hidden">
-            {/* Background Elements */}
+            {/* Background Elements (hidden on very small screens) */}
             <div className="absolute inset-0">
-                <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-purple-500/20 rounded-full blur-3xl"></div>
-                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
+                <div className="hidden sm:block absolute top-1/4 left-1/6 w-44 md:w-56 h-44 md:h-56 bg-purple-500/20 rounded-full blur-3xl"></div>
+                <div className="hidden sm:block absolute bottom-1/4 right-1/6 w-56 md:w-72 h-56 md:h-72 bg-blue-500/20 rounded-full blur-3xl"></div>
             </div>
 
             <div className="container mx-auto px-6 relative z-10">
@@ -175,7 +175,7 @@ const Hero = () => {
 
                     {/* Main Hero Content */}
                     <div className="space-y-8 mb-16">
-                        <h1 className="text-6xl lg:text-7xl font-bold text-gray-100 leading-tight relative">
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-100 leading-tight relative">
                             {/* Animated Background Text Effect */}
                             <div className="absolute inset-0 opacity-10">
                                 <span
@@ -245,7 +245,7 @@ const Hero = () => {
                         </h1>
 
                         {/* Animated subtitle with staggered word reveal */}
-                        <div className="text-xl lg:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                        <div className="text-base sm:text-lg lg:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
                             {subWords.map((word, index) => (
                                 <span
                                     key={index}
@@ -289,7 +289,7 @@ const Hero = () => {
                     {/* CTA Buttons */}
                     <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 animate-fade-in-delay-2">
                         <Button
-                            className="bg-purple-600 hover:bg-purple-700 text-white px-10 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
+                            className="bg-purple-600 hover:bg-purple-700 text-white px-6 sm:px-10 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
                             onClick={() => navigate("/signup")}
                         >
                             TRY FOR FREE
@@ -297,14 +297,14 @@ const Hero = () => {
 
                         <Button
                             variant="outline"
-                            className="border-2 border-purple-400 text-purple-400 hover:bg-purple-900/20 hover:text-purple-300 px-10 py-4 text-lg font-semibold rounded-xl transition-all duration-300"
+                            className="border-2 border-purple-400 text-purple-400 hover:bg-purple-900/20 hover:text-purple-300 px-6 sm:px-10 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl transition-all duration-300"
                         >
                             FIND YOUR PLAN
                         </Button>
                     </div>
 
-                    {/* Dashboard Screenshot with Mouse Demo */}
-                    <div className="relative max-w-6xl mx-auto animate-slide-up">
+                    {/* Dashboard Screenshot with Mouse Demo (hidden on xs to improve responsiveness) */}
+                    <div className="relative max-w-6xl mx-auto animate-slide-up px-2 sm:px-0 hidden sm:block">
                         <div className="relative">
                             {/* Main Dashboard Screenshot */}
                             <div className="bg-gray-800 rounded-2xl shadow-2xl border border-gray-700 overflow-hidden">
@@ -319,9 +319,9 @@ const Hero = () => {
                                 </div>
 
                                 {/* Dashboard Layout */}
-                                <div className="flex h-96">
-                                    {/* Sidebar */}
-                                    <div className="w-64 bg-gray-900 text-white flex flex-col">
+                                <div className="flex flex-col sm:flex-row h-auto sm:h-96">
+                                    {/* Sidebar (collapses above content on small screens) */}
+                                    <div className="w-full sm:w-56 sm:sm:w-64 bg-gray-900 text-white flex flex-col">
                                         {/* Logo */}
                                         <div className="p-4 border-b border-gray-700">
                                             <h2 className="text-xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
@@ -386,7 +386,7 @@ const Hero = () => {
                                     </div>
 
                                     {/* Main Content */}
-                                    <div className="flex-1 bg-gray-900 p-6 overflow-hidden">
+                                    <div className="flex-1 bg-gray-900 p-4 sm:p-6 overflow-hidden">
                                         {/* Header */}
                                         <div className="flex items-center justify-between mb-6">
                                             <div>
@@ -412,7 +412,7 @@ const Hero = () => {
                                         {animationStep === 0 && (
                                             <div className="space-y-4">
                                                 {/* Balance Cards */}
-                                                <div className="grid grid-cols-4 gap-3">
+                                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                                                     <div className={`bg-gray-800 p-3 rounded-lg shadow-sm border border-gray-700 ${highlightedElement === 'balance-card' ? 'ring-2 ring-green-400 bg-green-900/20' : ''
                                                         }`}>
                                                         <div className="text-lg font-bold text-green-400">
@@ -438,7 +438,7 @@ const Hero = () => {
                                                 </div>
 
                                                 {/* Chart placeholder */}
-                                                <div className="bg-gray-800 p-4 rounded-lg shadow-sm h-32 border border-gray-700">
+                                                <div className="bg-gray-800 p-4 rounded-lg shadow-sm h-24 sm:h-32 border border-gray-700">
                                                     <div className="h-full bg-gradient-to-r from-purple-900/50 to-blue-900/50 rounded flex items-end justify-between p-2">
                                                         {[60, 70, 85, 78, 90, 95].map((height, i) => (
                                                             <div

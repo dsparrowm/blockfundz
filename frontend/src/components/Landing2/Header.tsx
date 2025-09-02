@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Button } from '../ui/button';
 import { Menu, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -17,9 +17,31 @@ const Header = () => {
     { name: 'Company', href: '#our-team' }
   ];
 
+  const headerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const onDocClick = (e: MouseEvent) => {
+      if (!headerRef.current) return;
+      if (isMenuOpen && !headerRef.current.contains(e.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsMenuOpen(false);
+    };
+
+    document.addEventListener('mousedown', onDocClick);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDocClick);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [isMenuOpen]);
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-gray-900/98 backdrop-blur-md border-b border-gray-700 shadow-sm">
-      <div className="container mx-auto px-6 py-4">
+      <div className="container mx-auto px-6 py-4 relative" ref={headerRef}>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <NexGenLogo variant="full" size="lg" />
@@ -68,31 +90,31 @@ const Header = () => {
         </div>
 
         {isMenuOpen && (
-          <div className="lg:hidden mt-4 bg-gray-800 border border-gray-700 rounded-xl shadow-lg p-6 animate-fade-in">
-            <nav className="flex flex-col space-y-4">
+          <div className="lg:hidden absolute mt-2 inset-x-4 sm:inset-x-auto sm:right-6 sm:left-auto sm:w-64 bg-gray-800 border border-gray-700 rounded-xl shadow-lg p-3 transform transition-all duration-150 ease-out origin-top-right z-50">
+            <nav className="flex flex-col space-y-2">
               {navItems.map((item) => (
                 <a
                   key={item.name}
                   href={item.href}
-                  className="text-gray-300 hover:text-purple-400 transition-colors duration-200 py-2 font-medium"
+                  className="text-gray-300 hover:text-purple-400 transition-colors duration-200 py-2 px-2 rounded-md"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.name}
                 </a>
               ))}
-              <div className="flex flex-col space-y-3 pt-4 border-t border-gray-700">
-                <a href="/talk-to-sales">
-                  <Button variant="ghost" className="text-gray-300 hover:text-gray-100 justify-start w-full font-medium">
+              <div className="pt-2 border-t border-gray-700 mt-2">
+                <a href="/talk-to-sales" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="ghost" className="text-gray-300 hover:text-gray-100 justify-start w-full font-medium text-sm py-2">
                     TALK TO SALES
                   </Button>
                 </a>
-                <a href="/login">
-                  <Button variant="ghost" className="text-gray-300 hover:text-gray-100 justify-start w-full font-medium">
+                <a href="/login" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="ghost" className="text-gray-300 hover:text-gray-100 justify-start w-full font-medium text-sm py-2">
                     SIGN IN
                   </Button>
                 </a>
                 <Button
-                  className="bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 w-full py-3"
+                  className="bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 w-full py-2 mt-2 text-sm"
                   onClick={() => {
                     setIsMenuOpen(false);
                     navigate("/signup");

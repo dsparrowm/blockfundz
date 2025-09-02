@@ -74,20 +74,21 @@ const Hero = () => {
   return (
     <section
       id='home'
-      className='w-full flex xl:flex-row flex-col justify-center bg-coral-black text-white-400 min-h-screen gap-10 max-container relative overflow-hidden'
+      className='w-full flex xl:flex-row flex-col justify-center bg-coral-black text-white-400 min-h-screen gap-10 max-container relative overflow-hidden px-4 sm:px-6 lg:px-0'
     >
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-72 h-72 lg:w-96 lg:h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 lg:w-80 lg:h-80 bg-orange-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        {/* Large decorative blobs hidden on very small screens to avoid overflow */}
+        <div className="hidden sm:block absolute top-1/4 left-1/4 w-72 h-72 lg:w-96 lg:h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="hidden sm:block absolute bottom-1/4 right-1/4 w-64 h-64 lg:w-80 lg:h-80 bg-orange-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
 
-        {/* Floating Elements */}
-        <div className="absolute top-10 left-[10%] w-3 h-3 lg:w-4 lg:h-4 bg-blue-400/20 rounded-full animate-bounce" style={{ animationDelay: '0s', animationDuration: '3s' }}></div>
-        <div className="absolute top-1/3 right-[20%] w-2 h-2 lg:w-3 lg:h-3 bg-orange-400/20 rounded-full animate-bounce" style={{ animationDelay: '1s', animationDuration: '4s' }}></div>
-        <div className="absolute bottom-1/3 left-[15%] w-4 h-4 lg:w-5 lg:h-5 bg-blue-300/20 rounded-full animate-bounce" style={{ animationDelay: '2s', animationDuration: '5s' }}></div>
+        {/* Floating Elements - reduced on xs */}
+        <div className="hidden sm:block absolute top-10 left-[10%] w-3 h-3 lg:w-4 lg:h-4 bg-blue-400/20 rounded-full animate-bounce" style={{ animationDelay: '0s', animationDuration: '3s' }}></div>
+        <div className="hidden sm:block absolute top-1/3 right-[20%] w-2 h-2 lg:w-3 lg:h-3 bg-orange-400/20 rounded-full animate-bounce" style={{ animationDelay: '1s', animationDuration: '4s' }}></div>
+        <div className="hidden sm:block absolute bottom-1/3 left-[15%] w-4 h-4 lg:w-5 lg:h-5 bg-blue-300/20 rounded-full animate-bounce" style={{ animationDelay: '2s', animationDuration: '5s' }}></div>
       </div>
 
-      <div className='relative xl:w-2/5 flex flex-1 flex-col justify-center items-start w-full max-xl:padding-x pt-28'>
+      <div className='relative xl:w-2/5 flex flex-1 flex-col justify-center items-start w-full pt-20 sm:pt-28'>
         {/* Professional Badge */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -100,7 +101,7 @@ const Hero = () => {
         </motion.div>
 
         <motion.h1
-          className='mt-6 font-palanquin text-6xl sm:text-7xl lg:text-8xl max-sm:text-5xl max-sm:leading-[60px] font-bold leading-tight'
+          className='mt-6 font-palanquin text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-tight font-bold'
           initial="hidden"
           animate="visible"
           variants={textVariants}
@@ -119,7 +120,7 @@ const Hero = () => {
         </motion.h1>
 
         <motion.p
-          className='font-montserrat text-gray-400 text-lg sm:text-xl leading-8 mt-6 mb-8 max-w-2xl'
+          className='font-montserrat text-gray-400 text-base sm:text-lg leading-7 sm:leading-8 mt-6 mb-8 max-w-2xl'
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -129,7 +130,7 @@ const Hero = () => {
         </motion.p>
 
         <motion.div
-          className="flex flex-col sm:flex-row gap-4 sm:gap-8 mb-12"
+          className="flex flex-col sm:flex-row gap-3 sm:gap-8 mb-8 sm:mb-12"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
@@ -138,19 +139,19 @@ const Hero = () => {
             label="Get Started"
             iconUrl={arrowRight}
             onClick={() => navigate('/signup')}
-            iconClass="flex justify-center gap-3 items-center px-6 py-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 rounded-lg backdrop-filter backdrop-blur-lg shadow-lg hover:shadow-xl hover:shadow-orange-500/25 transition-all duration-300 transform hover:-translate-y-1 text-white font-semibold text-lg"
+            iconClass="flex justify-center gap-3 items-center px-4 py-3 sm:px-6 sm:py-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 rounded-lg backdrop-filter backdrop-blur-lg shadow-lg hover:shadow-xl hover:shadow-orange-500/25 transition-all duration-300 transform hover:-translate-y-1 text-white font-semibold text-base sm:text-lg"
           />
           <Button
             disabled
             label="View Demo"
             iconUrl={arrowRight}
-            iconClass="flex justify-center gap-3 items-center px-6 py-4 border-2 border-gray-600 hover:border-gray-500 rounded-lg backdrop-filter backdrop-blur-lg shadow-lg hover:bg-white/5 transition-all duration-300 text-white font-semibold text-lg"
+            iconClass="flex justify-center gap-3 items-center px-4 py-3 sm:px-6 sm:py-4 border-2 border-gray-600 hover:border-gray-500 rounded-lg backdrop-filter backdrop-blur-lg shadow-lg hover:bg-white/5 transition-all duration-300 text-white font-semibold text-base sm:text-lg"
           />
         </motion.div>
 
         {/* Stats Section */}
         <motion.div
-          className="mx-auto grid grid-cols-3 gap-6 sm:gap-8 pt-8 border-t border-gray-700/50 w-full max-w-lg"
+          className="mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 pt-8 border-t border-gray-700/50 w-full max-w-lg"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
@@ -179,7 +180,7 @@ const Hero = () => {
       {/* Professional Dashboard Preview */}
       <div className='relative flex-1 flex justify-center items-center xl:min-h-screen max-xl:py-20 bg-center'>
         <motion.div
-          className="w-full max-w-md lg:max-w-lg xl:max-w-xl"
+          className="w-full max-w-md sm:max-w-lg lg:max-w-xl px-2 sm:px-0"
           initial="hidden"
           animate="visible"
           variants={dashboardVariants}

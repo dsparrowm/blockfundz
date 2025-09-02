@@ -53,12 +53,12 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-gray-900 text-gray-200 bg-transparent">
+    <footer className="bg-gray-900 text-gray-200 bg-transparent px-4 sm:px-6">
       {/* Main Footer Content */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-6 sm:mb-8 max-w-6xl mx-auto">
         {footerSections.map((section) => (
           <div key={section.title}>
-            <h3 className="font-semibold text-white mb-4 text-[2rem]">{section.title}</h3>
+            <h3 className="font-semibold text-white mb-4 text-lg sm:text-xl">{section.title}</h3>
             <ul className="space-y-2">
               {section.links.map((link) => (
                 <li key={link.label}>

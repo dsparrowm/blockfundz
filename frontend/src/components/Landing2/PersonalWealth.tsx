@@ -29,10 +29,10 @@ const PersonalWealth = () => {
     ];
 
     return (
-        <section id="personal-wealth" className="py-24 bg-gradient-to-br from-purple-900/20 to-blue-900/20 bg-gray-900">
-            <div className="container mx-auto px-6">
-                <div className="text-center mb-20">
-                    <h2 className="text-5xl md:text-6xl font-bold mb-6 text-gray-100">
+        <section id="personal-wealth" className="py-20 sm:py-24 bg-gradient-to-br from-purple-900/20 to-blue-900/20 bg-gray-900">
+            <div className="container mx-auto px-4 sm:px-6">
+                <div className="text-center mb-12 sm:mb-20">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 text-gray-100">
                         Your{' '}
                         <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
                             personal wealth
@@ -45,7 +45,7 @@ const PersonalWealth = () => {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
                     {wealthBenefits.map((benefit, index) => (
                         <div
                             key={benefit.title}

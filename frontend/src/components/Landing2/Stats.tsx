@@ -105,10 +105,10 @@ const Stats = () => {
   ];
 
   return (
-    <section ref={sectionRef} className="py-24 bg-gray-900">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-20">
-          <h2 className="text-5xl md:text-6xl font-bold mb-6 text-gray-100">
+    <section ref={sectionRef} className="py-20 sm:py-24 bg-gray-900">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="text-center mb-12 sm:mb-20">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 text-gray-100">
             Numbers that{' '}
             <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
               speak for themselves
@@ -119,7 +119,7 @@ const Stats = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
           {stats.map((stat, index) => (
             <div
               key={index}
@@ -129,7 +129,7 @@ const Stats = () => {
                 animationFillMode: 'forwards'
               }}
             >
-              <div className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent transition-all duration-200">
+              <div className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent transition-all duration-200">
                 {stat.value}
               </div>
 

@@ -77,17 +77,17 @@ const HowItWorks = () => {
   }, []);
 
   return (
-    <section id="how-it-works" className="py-24 bg-gray-900 relative overflow-hidden">
-      {/* Animated Background */}
+    <section id="how-it-works" className="py-20 sm:py-24 bg-gray-900 relative overflow-hidden">
+      {/* Animated Background (reduced on xs) */}
       <div className={`absolute inset-0 transition-all duration-2000 ${showBackground ? 'opacity-100' : 'opacity-0'}`}>
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-br from-purple-900/20 to-blue-900/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gradient-to-br from-blue-900/20 to-green-900/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="hidden sm:block absolute top-0 left-1/6 w-56 md:w-72 h-56 md:h-72 bg-gradient-to-br from-purple-900/20 to-blue-900/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="hidden sm:block absolute bottom-0 right-1/6 w-44 md:w-56 h-44 md:h-56 bg-gradient-to-br from-blue-900/20 to-green-900/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
         {/* Title */}
-        <div className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-bold mb-6 text-gray-100">
+        <div className="text-center mb-12 sm:mb-16">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 text-gray-100">
             How NexGen{' '}
             <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
               transforms wealth
@@ -100,15 +100,15 @@ const HowItWorks = () => {
         </div>
 
         {/* Interactive Steps Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl mx-auto">
           {howItWorksSteps.map((step, index) => (
             <div key={step.step} className="relative">
               {/* Step Card */}
-              <div className={`relative p-8 rounded-3xl border-2 transition-all duration-1000 transform ${currentStep === index
+              <div className={`relative p-6 sm:p-8 rounded-2xl border-2 transition-all duration-1000 transform ${currentStep === index
                 ? `${step.bgColor} ${step.borderColor} scale-105 shadow-2xl opacity-100 translate-y-0`
                 : completedSteps.includes(index)
                   ? `bg-gray-800 border-gray-600 opacity-80 translate-y-0`
-                  : 'bg-gray-800/50 border-gray-700 opacity-40 translate-y-4'
+                  : 'bg-gray-800/50 border-gray-700 opacity-40 translate-y-2'
                 }`}>
 
                 {/* Animated Border Glow */}
@@ -126,7 +126,7 @@ const HowItWorks = () => {
 
                 <div className="relative z-10">
                   {/* Step Icon */}
-                  <div className={`w-20 h-20 rounded-2xl flex items-center justify-center mb-6 transition-all duration-700 ${currentStep === index
+                  <div className={`w-16 h-16 rounded-xl flex items-center justify-center mb-4 sm:mb-6 transition-all duration-700 ${currentStep === index
                     ? `bg-gradient-to-br ${step.gradient} shadow-xl scale-110 rotate-12`
                     : completedSteps.includes(index)
                       ? `bg-gradient-to-br ${step.gradient} shadow-lg`
@@ -137,7 +137,7 @@ const HowItWorks = () => {
                   </div>
 
                   {/* Step Number Badge */}
-                  <div className={`absolute top-14 left-14 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-500 ${currentStep === index
+                  <div className={`absolute top-12 left-12 w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-500 ${currentStep === index
                     ? 'bg-white text-purple-600 shadow-lg scale-110'
                     : completedSteps.includes(index)
                       ? 'bg-white text-green-600 shadow-md'
@@ -174,7 +174,7 @@ const HowItWorks = () => {
 
               {/* Connection Arrow (for larger screens) */}
               {index % 2 === 0 && index < howItWorksSteps.length - 1 && (
-                <div className="hidden lg:block absolute top-1/2 -right-4 transform -translate-y-1/2">
+                <div className="hidden lg:block absolute top-1/2 -right-2 transform -translate-y-1/2">
                   <ArrowRight className={`w-8 h-8 transition-all duration-1000 ${completedSteps.includes(index) ? 'text-purple-400 animate-pulse' : 'text-gray-600'
                     }`} />
                 </div>
@@ -182,7 +182,7 @@ const HowItWorks = () => {
 
               {/* Connection Arrow (reverse for right column) */}
               {index % 2 === 1 && index < howItWorksSteps.length - 1 && (
-                <div className="hidden lg:block absolute bottom-0 left-1/2 transform translate-y-4 -translate-x-1/2 rotate-90">
+                <div className="hidden lg:block absolute bottom-0 left-1/2 transform translate-y-2 -translate-x-1/2 rotate-90">
                   <ArrowRight className={`w-8 h-8 transition-all duration-1000 ${completedSteps.includes(index) ? 'text-purple-400 animate-pulse' : 'text-gray-600'
                     }`} />
                 </div>
@@ -207,7 +207,7 @@ const HowItWorks = () => {
           </div>
         )}
       </div>
-    </section>
+    </section >
   );
 };
 

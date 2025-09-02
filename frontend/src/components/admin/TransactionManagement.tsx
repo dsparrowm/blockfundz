@@ -288,7 +288,7 @@ const TransactionManagement = () => {
       <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 rounded-2xl p-8 text-white">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative z-10">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
               <h1 className="text-3xl font-bold mb-2">Transaction Management</h1>
               <p className="text-purple-200 text-lg">Monitor and manage all platform transactions</p>
@@ -377,7 +377,7 @@ const TransactionManagement = () => {
 
       {/* Transaction Cards */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-3">
           <h2 className="text-xl font-semibold text-gray-900">Transaction History</h2>
           <div className="flex items-center space-x-3">
             <div className="relative">
@@ -386,7 +386,7 @@ const TransactionManagement = () => {
                 placeholder="Search transactions..."
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                className="pl-10 w-80 border-gray-200 focus:border-purple-500 focus:ring-purple-500"
+                className="pl-10 w-full sm:w-80 border-gray-200 focus:border-purple-500 focus:ring-purple-500"
               />
             </div>
           </div>
@@ -405,7 +405,7 @@ const TransactionManagement = () => {
                   key={transaction.id}
                   className="group relative bg-gradient-to-r from-gray-50 to-white hover:from-purple-50 hover:to-blue-50 border border-gray-200 hover:border-purple-200 rounded-xl p-6 transition-all duration-300 hover:shadow-lg"
                 >
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div className="flex items-center space-x-4">
                       <div className={`p-3 rounded-xl ${getTypeColor(transaction.type)} border`}>
                         <TypeIcon className="w-5 h-5" />
@@ -432,7 +432,7 @@ const TransactionManagement = () => {
 
                     <div className="flex items-center space-x-4">
                       <div className="text-right">
-                        <p className="text-2xl font-bold text-gray-900">
+                        <p className="text-xl sm:text-2xl font-bold text-gray-900">
                           ${transaction.amount.toLocaleString()}
                         </p>
                         <p className="text-sm text-gray-500">{transaction.asset}</p>
