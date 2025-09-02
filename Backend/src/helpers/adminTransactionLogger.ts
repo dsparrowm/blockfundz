@@ -1,4 +1,5 @@
 import prisma from '../db';
+import cryptoPriceService from '../services/cryptoPriceService';
 
 interface AdminTransactionLog {
     userId: number;
@@ -18,18 +19,38 @@ interface AdminTransactionLog {
 
 export const logAdminBalanceAction = async (logData: AdminTransactionLog) => {
     try {
+        // Ensure we have exchange rate / USD equivalent for non-USD assets when possible
+        let exchangeRate = logData.exchangeRate;
+        let usdEquivalent = logData.usdEquivalent;
+
+        const assetUpper = (logData.asset || '').toUpperCase();
+        if (assetUpper !== 'USD' && (!exchangeRate || !usdEquivalent)) {
+            try {
+                const rate = await cryptoPriceService.getAssetPrice(assetUpper);
+                exchangeRate = exchangeRate ?? rate;
+                usdEquivalent = usdEquivalent ?? (logData.amount * rate);
+            } catch (priceErr) {
+                console.warn('Could not fetch exchange rate for admin log; proceeding without usdEquivalent:', priceErr);
+            }
+        }
+
+        // Preserve original asset information in details to avoid silent remapping issues
+        const originalAssetNote = logData.asset && logData.asset !== (logData.asset === 'USD' ? 'USDT' : logData.asset)
+            ? ` OriginalAsset:${logData.asset};` : '';
+
         const transaction = await prisma.transaction.create({
             data: {
                 type: getTransactionType(logData.action, logData.asset),
-                asset: logData.asset === 'USD' ? 'USDT' : logData.asset, // Map USD to USDT for schema compatibility
+                // Keep mapping for legacy schema compatibility but note original asset in details
+                asset: logData.asset === 'USD' ? 'USDT' : logData.asset,
                 amount: logData.amount,
-                usdEquivalent: logData.usdEquivalent,
-                exchangeRate: logData.exchangeRate,
+                usdEquivalent: usdEquivalent,
+                exchangeRate: exchangeRate,
                 status: 'COMPLETED',
                 userId: logData.userId,
                 name: logData.userName,
                 phone: logData.userPhone,
-                details: logData.details || `Admin ${logData.action.toLowerCase()}: ${logData.amount} ${logData.asset} (Previous: ${logData.previousBalance}, New: ${logData.newBalance}). ${logData.reason ? `Reason: ${logData.reason}` : ''}`
+                details: logData.details || `Admin ${logData.action.toLowerCase()}: ${logData.amount} ${logData.asset} (Previous: ${logData.previousBalance}, New: ${logData.newBalance}). ${logData.reason ? `Reason: ${logData.reason}` : ''}` + originalAssetNote
             }
         });
 
@@ -47,12 +68,14 @@ function getTransactionType(action: string, asset: string): any {
         case 'CREDIT':
             return `CREDIT_${asset}` as any;
         case 'RESET':
+            // Explicit transaction type for admin resets to avoid being classified as withdrawals
+            return 'ADMIN_RESET';
         case 'DEBIT':
             return 'WITHDRAWAL';
         case 'ADJUSTMENT':
-            return 'DEPOSIT';
+            return 'ADJUSTMENT';
         default:
-            return 'DEPOSIT';
+            return 'ADJUSTMENT';
     }
 }
 
@@ -82,6 +105,22 @@ export const logManualBalanceUpdate = async (
             const action = amount > 0 ? 'CREDIT' : 'DEBIT';
             const asset = balanceType === 'main' ? 'USD' : balanceType.toUpperCase() as any;
 
+            // Attempt to enrich with exchange rate and usdEquivalent when dealing with crypto assets
+            let exchangeRate: number | undefined = undefined;
+            let usdEquivalent: number | undefined = undefined;
+            if (asset !== 'USD') {
+                try {
+                    exchangeRate = await cryptoPriceService.getAssetPrice(asset);
+                    usdEquivalent = Math.abs(amount) * exchangeRate;
+                } catch (err) {
+                    console.warn('Failed to fetch exchange rate for manual balance log:', err);
+                }
+            } else {
+                // For USD, usdEquivalent is the same as amount
+                usdEquivalent = Math.abs(amount);
+                exchangeRate = 1;
+            }
+
             return await logAdminBalanceAction({
                 userId,
                 adminId,
@@ -92,7 +131,9 @@ export const logManualBalanceUpdate = async (
                 newBalance: newValue,
                 reason: reason || 'Manual balance adjustment',
                 userName: user.name,
-                userPhone: user.phone
+                userPhone: user.phone,
+                exchangeRate,
+                usdEquivalent
             });
         }
     }

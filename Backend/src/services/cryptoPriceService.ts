@@ -152,7 +152,9 @@ class CryptoPriceService {
             return Number(mainBalance.toFixed(2));
         } catch (error) {
             console.error('Error calculating main balance:', error);
-            return 0;
+            // Rethrow so callers can decide how to handle failures instead of silently
+            // writing an incorrect (zero) main balance to the database.
+            throw error;
         }
     }
 }

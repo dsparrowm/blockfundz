@@ -5,6 +5,7 @@ import {
   ArrowDownLeft,
   TrendingUp,
   Edit3,
+  X,
   Filter,
   Download,
   RefreshCw,
@@ -13,7 +14,6 @@ import {
   CreditCard,
   Zap,
   Search,
-  X,
   Check
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -79,14 +79,14 @@ const TransactionManagement = () => {
         axiosInstance.get('/api/admin/audit/trail?limit=100') // Get more audit entries
       ]);
 
-      let allTransactions: Transaction[] = [];
+      let merged: Transaction[] = [];
 
       // Add regular transactions
       if (transactionsResponse.data && transactionsResponse.data.transactions) {
-        allTransactions = [...transactionsResponse.data.transactions];
+        merged = [...transactionsResponse.data.transactions];
       }
 
-      // Add admin audit trail transactions
+      // Add admin audit trail transactions (may overlap with regular list)
       if (auditResponse.data && auditResponse.data.auditTrail) {
         const auditTransactions: Transaction[] = auditResponse.data.auditTrail.map((audit: any) => ({
           id: audit.id,
@@ -107,13 +107,21 @@ const TransactionManagement = () => {
           isAdminTransaction: true // Flag to identify admin transactions
         }));
 
-        allTransactions = [...allTransactions, ...auditTransactions];
+        merged = [...merged, ...auditTransactions];
       }
 
-      // Sort by date (newest first)
-      allTransactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      // Deduplicate by id (keep the first occurrence) and sort by date (newest first)
+      const byId = new Map<number, Transaction>();
+      for (const tx of merged) {
+        if (!byId.has(tx.id)) {
+          byId.set(tx.id, tx);
+        }
+      }
 
-      setTransactions(allTransactions);
+      const unique = Array.from(byId.values());
+      unique.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+      setTransactions(unique);
     } catch (error: any) {
       console.error('Error fetching transactions:', error);
       console.error('Error response:', error.response?.data);
@@ -233,6 +241,21 @@ const TransactionManagement = () => {
       case 'CREDIT_USDT':
       case 'CREDIT_USDC': return 'text-green-600 bg-green-50 border-green-200';
       default: return 'text-gray-600 bg-gray-50 border-gray-200';
+    }
+  };
+
+  const handleDeleteTransaction = async (id: number) => {
+    if (!confirm('Delete this transaction? This action cannot be undone.')) return;
+    try {
+      setLoading(true);
+      await axiosInstance.delete(`/api/transactions/${id}`);
+      setTransactions(prev => prev.filter(t => t.id !== id));
+      showToastMessage('success', 'Transaction deleted');
+    } catch (error: any) {
+      console.error('Error deleting transaction:', error);
+      showToastMessage('error', error.response?.data?.message || 'Failed to delete transaction');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -543,6 +566,14 @@ const TransactionManagement = () => {
                           </form>
                         </DialogContent>
                       </Dialog>
+
+                      <button
+                        onClick={() => handleDeleteTransaction(transaction.id)}
+                        className="opacity-0 group-hover:opacity-100 p-2 bg-red-100 hover:bg-red-200 text-red-600 rounded-lg transition-all duration-200"
+                        title="Delete transaction"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
                     </div>
                   </div>
                 </div>

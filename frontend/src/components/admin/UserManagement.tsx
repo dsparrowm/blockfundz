@@ -28,7 +28,7 @@ import {
 } from "../ui/alert-dialog";
 import Spinner from '../spinners/Spinner';
 import { toast } from 'sonner';
-import { Users, Search, DollarSign, Shield, TrendingUp, Filter, UserPlus, Edit, Trash, Eye, RotateCcw } from 'lucide-react';
+import { Users, Search, DollarSign, Shield, TrendingUp, Filter, UserPlus, Trash, Eye, RotateCcw } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
 import SlackDashboardCard from '../SlackDashboardCard';
@@ -73,7 +73,6 @@ const UserManagement = ({
   // Dialog states
   const [isAddUserDialogOpen, setIsAddUserDialogOpen] = useState(false);
   const [isBalanceDialogOpen, setIsBalanceDialogOpen] = useState(false);
-  const [isTransactionDialogOpen, setIsTransactionDialogOpen] = useState(false);
 
   // Form states
   const [newUser, setNewUser] = useState({ name: '', email: '', phone: '', password: '' });
@@ -82,7 +81,8 @@ const UserManagement = ({
   const [creditForm, setCreditForm] = useState({
     currency: 'BITCOIN' as 'BITCOIN' | 'ETHEREUM' | 'USDT' | 'USDC',
     amount: 0,
-    reason: ''
+    reason: '',
+    date: new Date()
   });
   const [isCrediting, setIsCrediting] = useState(false);
   const [usdPreview, setUsdPreview] = useState(0);
@@ -105,16 +105,7 @@ const UserManagement = ({
   const [usdcBalance, setUsdcBalance] = useState(0);
   const [bnbBalance, setBnbBalance] = useState(0);
 
-  const [transaction, setTransaction] = useState({
-    type: '',
-    asset: '',
-    amount: 0,
-    status: 'pending',
-    date: new Date(),
-    name: '',
-    phone: '',
-    planName: ''
-  });
+  // transaction creation removed per admin UI request
 
   const itemsPerPage = 10;
   const userData = useStore(state => state.user);
@@ -219,6 +210,7 @@ const UserManagement = ({
         currency: creditForm.currency,
         amount: creditForm.amount,
         reason: creditForm.reason || 'Admin credit',
+        date: creditForm.date ? new Date(creditForm.date).toISOString() : undefined,
         adminId: userData?.id // Pass admin ID if available
       });
 
@@ -228,7 +220,8 @@ const UserManagement = ({
       setCreditForm({
         currency: 'BITCOIN',
         amount: 0,
-        reason: ''
+        reason: '',
+        date: new Date()
       });
       setUsdPreview(0);
       setUsdAmount(0);
@@ -351,33 +344,7 @@ const UserManagement = ({
     }
   };
 
-  const handleCreateTransaction = async () => {
-    if (!selectedUserId) return;
-
-    try {
-      const response = await axiosInstance.post('/api/transactions', {
-        userId: selectedUserId,
-        ...transaction,
-        date: transaction.date.toISOString()
-      });
-
-      toast.success(response.data.message);
-      setIsTransactionDialogOpen(false);
-      setTransaction({
-        type: '',
-        asset: '',
-        amount: 0,
-        status: 'pending',
-        date: new Date(),
-        name: '',
-        phone: '',
-        planName: ''
-      });
-    } catch (error: any) {
-      console.error('Error creating transaction:', error);
-      toast.error(error.response?.data?.message || 'Failed to create transaction');
-    }
-  };
+  // transaction creation handler removed
 
   const handleDeleteUser = async (userId: string) => {
     try {
@@ -671,7 +638,8 @@ const UserManagement = ({
                                     setCreditForm({
                                       currency: 'BITCOIN',
                                       amount: 0,
-                                      reason: ''
+                                      reason: '',
+                                      date: new Date()
                                     });
                                     setUsdPreview(0);
                                   }}
@@ -799,6 +767,20 @@ const UserManagement = ({
                                       className="sm:col-span-3"
                                     />
                                   </div>
+
+                                  <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
+                                    <Label htmlFor="credit-date" className="sm:text-right font-medium">Date</Label>
+                                    <div className="sm:col-span-3">
+                                      <DatePicker
+                                        id="credit-date"
+                                        selected={creditForm.date ? new Date(creditForm.date) : new Date()}
+                                        onChange={(d: Date) => setCreditForm({ ...creditForm, date: d })}
+                                        showTimeSelect
+                                        dateFormat="Pp"
+                                        className="w-full"
+                                      />
+                                    </div>
+                                  </div>
                                 </div>
                                 <DialogFooter>
                                   <Button
@@ -819,130 +801,7 @@ const UserManagement = ({
                               </DialogContent>
                             </Dialog>
 
-                            <Dialog>
-                              <DialogTrigger asChild>
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => setSelectedUserId(user.id)}
-                                  className="text-xs bg-orange-50 text-orange-700 hover:bg-orange-100"
-                                >
-                                  Transaction
-                                </Button>
-                              </DialogTrigger>
-                              <DialogContent className="sm:max-w-[425px]">
-                                <DialogHeader>
-                                  <DialogTitle>Create Transaction</DialogTitle>
-                                  <DialogDescription>
-                                    Create a new transaction record for this user.
-                                  </DialogDescription>
-                                </DialogHeader>
-                                <div className="grid gap-4 py-4">
-                                  <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="txName" className="text-right">
-                                      Name
-                                    </Label>
-                                    <Input
-                                      id="txName"
-                                      value={transaction.name}
-                                      onChange={(e) => setTransaction({ ...transaction, name: e.target.value })}
-                                      className="col-span-3"
-                                    />
-                                  </div>
-                                  <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="txPhone" className="text-right">
-                                      Phone
-                                    </Label>
-                                    <Input
-                                      id="txPhone"
-                                      value={transaction.phone}
-                                      onChange={(e) => setTransaction({ ...transaction, phone: e.target.value })}
-                                      className="col-span-3"
-                                    />
-                                  </div>
-                                  <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="txType" className="text-right">
-                                      Type
-                                    </Label>
-                                    <Select
-                                      onValueChange={(value) => {
-                                        let newStatus = '';
-                                        switch (value) {
-                                          case 'subscription':
-                                            newStatus = 'active';
-                                            break;
-                                          case 'withdrawal':
-                                            newStatus = 'pending';
-                                            break;
-                                          default:
-                                            newStatus = 'pending';
-                                        }
-                                        setTransaction(prev => ({
-                                          ...prev,
-                                          type: value,
-                                          status: newStatus,
-                                          planName: value === 'subscription' ? prev.planName : ''
-                                        }));
-                                      }}
-                                    >
-                                      <SelectTrigger className="col-span-3">
-                                        <SelectValue placeholder="Select type" />
-                                      </SelectTrigger>
-                                      <SelectContent>
-                                        <SelectItem value="deposit">Deposit</SelectItem>
-                                        <SelectItem value="withdrawal">Withdrawal</SelectItem>
-                                        <SelectItem value="subscription">Subscription</SelectItem>
-                                      </SelectContent>
-                                    </Select>
-                                  </div>
-                                  <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="txAmount" className="text-right">
-                                      Amount
-                                    </Label>
-                                    <Input
-                                      id="txAmount"
-                                      type="number"
-                                      value={transaction.amount}
-                                      onChange={(e) => setTransaction({ ...transaction, amount: Number(e.target.value) })}
-                                      className="col-span-3"
-                                    />
-                                  </div>
-                                  <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="txAsset" className="text-right">
-                                      Asset
-                                    </Label>
-                                    <Select
-                                      onValueChange={(value) => setTransaction({ ...transaction, asset: value })}
-                                    >
-                                      <SelectTrigger className="col-span-3">
-                                        <SelectValue placeholder="Select asset" />
-                                      </SelectTrigger>
-                                      <SelectContent>
-                                        <SelectItem value="USD">USD</SelectItem>
-                                        <SelectItem value="BTC">Bitcoin</SelectItem>
-                                        <SelectItem value="ETH">Ethereum</SelectItem>
-                                        <SelectItem value="USDT">USDT</SelectItem>
-                                        <SelectItem value="USDC">USDC</SelectItem>
-                                        <SelectItem value="BNB">BNB</SelectItem>
-                                      </SelectContent>
-                                    </Select>
-                                  </div>
-                                </div>
-                                <DialogFooter>
-                                  <Button type="submit" onClick={handleCreateTransaction}>
-                                    Create Transaction
-                                  </Button>
-                                </DialogFooter>
-                              </DialogContent>
-                            </Dialog>
-
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="text-xs"
-                            >
-                              <Edit className="w-3 h-3" />
-                            </Button>
+                            {/* Transaction and Edit actions removed per admin preference */}
 
                             <AlertDialog>
                               <AlertDialogTrigger asChild>

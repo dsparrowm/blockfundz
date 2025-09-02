@@ -8,10 +8,11 @@ interface CreditRequest {
   amount: number;
   reason?: string;
   adminId?: number;
+  date?: string;
 }
 
 const creditUser = async (req: Request, res: Response) => {
-  const { userId, currency, amount, reason, adminId }: CreditRequest = req.body;
+  const { userId, currency, amount, reason, adminId, date }: CreditRequest = req.body;
 
   try {
     // Validation
@@ -40,7 +41,9 @@ const creditUser = async (req: Request, res: Response) => {
         bitcoinBalance: true,
         ethereumBalance: true,
         usdtBalance: true,
-        usdcBalance: true
+        usdcBalance: true,
+        useCalculatedBalance: true,
+        mainBalance: true
       }
     });
 
@@ -68,7 +71,8 @@ const creditUser = async (req: Request, res: Response) => {
           phone: user.phone,
           reason: reason || 'Admin credit',
           adminId: adminId,
-          details: `Admin credited ${amount} ${currency} (${usdEquivalent.toFixed(2)} USD)`
+          details: `Admin credited ${amount} ${currency} (${usdEquivalent.toFixed(2)} USD)`,
+          date: date ? new Date(date) : undefined
         }
       });
 
@@ -96,21 +100,40 @@ const creditUser = async (req: Request, res: Response) => {
       return { transaction, updatedUser };
     });
 
-    // Calculate new main balance
-    const newMainBalance = await cryptoPriceService.calculateMainBalance(result.updatedUser);
+    // Calculate new main balance (best-effort) only if the user opts into calculated balances.
+    // If price calculation fails, do NOT overwrite the stored main balance — keep the previous value.
+    let newMainBalance: number | null = null;
+    if (user.useCalculatedBalance) {
+      try {
+        newMainBalance = await cryptoPriceService.calculateMainBalance(result.updatedUser);
 
-    // Update main balance
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { mainBalance: newMainBalance }
-    });
+        // Update main balance only when calculation succeeds
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { mainBalance: newMainBalance }
+        });
+      } catch (priceErr) {
+        console.error('Failed to calculate/update main balance after credit; skipping mainBalance update:', priceErr);
+        // keep going — the transactional credit has been recorded and user's crypto balance updated
+      }
+    } else {
+      // User uses manual mainBalance; do not recalculate or overwrite it.
+      newMainBalance = null;
+    }
+
+    // If we didn't calculate a new main balance, read the stored value from DB
+    let finalMainBalance = newMainBalance;
+    if (finalMainBalance === null) {
+      const stored = await prisma.user.findUnique({ where: { id: user.id }, select: { mainBalance: true } });
+      finalMainBalance = stored?.mainBalance ?? 0;
+    }
 
     return res.status(200).json({
       message: `Successfully credited ${amount} ${currency} to ${user.name}`,
       transaction: result.transaction,
       user: {
         ...result.updatedUser,
-        mainBalance: newMainBalance
+        mainBalance: finalMainBalance
       },
       exchangeRate,
       usdEquivalent: usdEquivalent.toFixed(2)

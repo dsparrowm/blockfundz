@@ -6,6 +6,7 @@ import prisma from './db';
 import jwt from 'jsonwebtoken';
 import authMiddleware from './middleware/authMiddleware';
 import editTransaction from './handlers/transactions/editTransactions';
+import deleteTransaction from './handlers/transactions/deleteTransaction';
 import { InterestCalculationService } from './services/InterestCalculationService';
 
 const server = http.createServer(app);
@@ -48,6 +49,7 @@ app.get('/api/online-status', authMiddleware, async (req, res) => {
 });
 
 app.put('/api/transactions/:id', editTransaction);
+app.delete('/api/transactions/:id', deleteTransaction);
 
 // Start the interest calculation scheduler
 InterestCalculationService.startInterestCalculationScheduler();

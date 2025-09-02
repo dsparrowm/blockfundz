@@ -1,6 +1,6 @@
 import prisma from "../../db"
 import { Request, Response } from 'express'
-import priceService from '../../services/priceService'
+import cryptoPriceService from '../../services/cryptoPriceService'
 
 const getUsers = async (req: Request, res: Response) => {
     try {
@@ -41,13 +41,13 @@ const getUsers = async (req: Request, res: Response) => {
             // If user uses calculated balance, calculate from crypto holdings
             if (user.useCalculatedBalance) {
                 try {
-                    const calculation = await priceService.calculateMainBalance({
+                    const calculated = await cryptoPriceService.calculateMainBalance({
                         bitcoinBalance: user.bitcoinBalance,
                         ethereumBalance: user.ethereumBalance,
                         usdtBalance: user.usdtBalance,
                         usdcBalance: user.usdcBalance
                     });
-                    calculatedBalance = calculation.totalBalance;
+                    calculatedBalance = calculated;
                 } catch (error) {
                     console.error(`❌ Error calculating balance for ${user.name}, using manual:`, error);
                     calculatedBalance = user.mainBalance || 0;

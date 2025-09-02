@@ -7,7 +7,8 @@ const editTransaction = async (req: Request, res: Response) => {
         // Destructure all possible fields that can be edited
         const {
             amount,
-            description,
+            details,
+            usdEquivalent,
             date,
             type,
             asset,
@@ -22,7 +23,8 @@ const editTransaction = async (req: Request, res: Response) => {
         // Build the update data object dynamically
         const data: any = {};
         if (amount !== undefined) data.amount = amount;
-        if (description !== undefined) data.description = description;
+        if (details !== undefined) data.details = details;
+        if (usdEquivalent !== undefined) data.usdEquivalent = usdEquivalent;
         if (date !== undefined) data.date = date;
         if (type !== undefined) data.type = type;
         if (asset !== undefined) data.asset = asset;
@@ -36,6 +38,16 @@ const editTransaction = async (req: Request, res: Response) => {
         const updatedTransaction = await prisma.transaction.update({
             where: { id: Number(id) },
             data,
+            include: {
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        phone: true
+                    }
+                }
+            }
         });
 
         res.status(200).json({ transaction: updatedTransaction });

@@ -90,7 +90,10 @@ const adjustUserBalance = async (req: Request, res: Response) => {
             const updatedUser = await tx.user.update({
                 where: { id: parseInt(userId) },
                 data: {
-                    [updateField]: newAmount
+                    // If admin is manually setting the main balance, switch the user
+                    // to manual mode so background/auto-calculations don't overwrite it.
+                    [updateField]: newAmount,
+                    ...(updateField === 'mainBalance' ? { useCalculatedBalance: false } : {})
                 },
                 select: {
                     id: true,

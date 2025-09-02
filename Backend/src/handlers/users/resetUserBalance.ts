@@ -74,12 +74,17 @@ const resetUserBalance = async (req: Request, res: Response) => {
                 }
             });
 
+            // Delete all transactions for this user as part of the reset
+            const deleted = await tx.transaction.deleteMany({
+                where: { userId: parseInt(userId) }
+            });
+
             // Log the reset action for admin audit purposes (console logging only)
             console.log(`Admin reset all balances for user ${user.name} (ID: ${user.id}). Previous balances:`, currentBalances);
             console.log(`Reset reason: ${reason || 'Balance reset by admin'}`);
             console.log(`Reset by admin ID: ${adminId || 'Unknown'}`);
 
-            return { updatedUser };
+            return { updatedUser, deletedCount: deleted.count };
         });
 
         return res.status(200).json({
@@ -87,6 +92,7 @@ const resetUserBalance = async (req: Request, res: Response) => {
             isSuccess: true,
             user: result.updatedUser,
             previousBalances: currentBalances,
+            deletedTransactions: result.deletedCount,
             resetBy: adminId || 'Admin'
         });
 

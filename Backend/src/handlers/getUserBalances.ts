@@ -23,6 +23,7 @@ const getUserBalances = async (req: Request, res: Response) => {
                 usdcBalance: true,
                 bitcoinBalance: true,
                 mainBalance: true,
+                useCalculatedBalance: true
             },
         });
 
@@ -32,24 +33,50 @@ const getUserBalances = async (req: Request, res: Response) => {
             });
         }
 
-        // Calculate real-time main balance
-        const calculatedMainBalance = await cryptoPriceService.calculateMainBalance(user);
+        // Debug: log DB values read for this user to help trace balance mismatches
+        try {
+            console.log('[DEBUG] getUserBalances: fetched from DB', {
+                userId,
+                bitcoinBalance: user.bitcoinBalance,
+                ethereumBalance: user.ethereumBalance,
+                usdtBalance: user.usdtBalance,
+                usdcBalance: user.usdcBalance,
+                mainBalance: user.mainBalance,
+                useCalculatedBalance: user.useCalculatedBalance
+            });
+        } catch (dbgErr) {
+            console.warn('[DEBUG] getUserBalances: failed to log DB debug info', dbgErr);
+        }
 
-        // Update the stored main balance with calculated value
-        await prisma.user.update({
-            where: { id: userId },
-            data: { mainBalance: calculatedMainBalance }
-        });
+        // Only recalculate and overwrite mainBalance when the user prefers calculated balances.
+        let calculatedMainBalance: number | null = null;
+
+        if (user.useCalculatedBalance) {
+            try {
+                calculatedMainBalance = await cryptoPriceService.calculateMainBalance(user as any);
+            } catch (err) {
+                console.error('Price calculation failed in getUserBalances, falling back to stored mainBalance:', err);
+                calculatedMainBalance = null;
+            }
+
+            if (calculatedMainBalance !== null) {
+                // Update the stored main balance with calculated value
+                await prisma.user.update({
+                    where: { id: userId },
+                    data: { mainBalance: calculatedMainBalance }
+                });
+            }
+        }
 
         const balances = {
             ...user,
-            mainBalance: calculatedMainBalance
+            mainBalance: user.useCalculatedBalance ? (calculatedMainBalance !== null ? calculatedMainBalance : (user.mainBalance || 0)) : (user.mainBalance || 0)
         };
 
-        res.json({ balances });
+        return res.json({ balances });
     } catch (error) {
         console.error("Error fetching user balances:", error);
-        res.status(500).json({ error: "Failed to fetch user balances" });
+        return res.status(500).json({ error: "Failed to fetch user balances" });
     }
 };
 

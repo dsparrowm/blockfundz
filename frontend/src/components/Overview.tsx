@@ -46,13 +46,21 @@ const Overview = () => {
   const setUser = useStore(state => state.setUser);
   const setActiveComponent = useStore(state => state.setActiveComponent);
 
+  // Debug: log user store snapshot whenever it changes
+  useEffect(() => {
+    try {
+      console.log('[DEBUG] Overview user from useStore:', user);
+    } catch (err) {
+      console.warn('[DEBUG] Overview failed to log user', err);
+    }
+  }, [user]);
+
   // Memoize user ID to prevent unnecessary effect triggers
   const userId = useMemo(() => user?.id, [user?.id]);
 
   // User data effect
   useEffect(() => {
-    const controller = new AbortController();
-
+    const controller = new AbortController()
     const fetchUserData = async () => {
       try {
         const response = await axiosInstance.get('/api/user', {
