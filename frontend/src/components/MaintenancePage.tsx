@@ -70,7 +70,7 @@ const MaintenancePage = () => {
               d="M13 10V3L4 14h7v7l9-11h-7z"
             />
           </svg> */}
-          <NexGenLogo variant="icon" size="xl" />
+          <NexGenLogo variant="icon" size="2xl" />
         </div>
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
           Scheduled Maintenance
