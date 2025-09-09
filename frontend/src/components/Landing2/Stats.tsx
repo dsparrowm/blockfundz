@@ -105,16 +105,16 @@ const Stats = () => {
   ];
 
   return (
-    <section ref={sectionRef} className="py-20 sm:py-24 bg-gray-900">
+    <section ref={sectionRef} className="py-20 sm:py-24 bg-timberwolf-light">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="text-center mb-12 sm:mb-20">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 text-gray-100">
-            Numbers that{' '}
-            <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              speak for themselves
+            {/* Numbers that{' '} */}
+            <span className="bg-gradient-to-r from-blackred to-bloodred-dark bg-clip-text text-transparent">
+              Numbers that speak for themselves
             </span>
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p className="text-xl text-blackred max-w-3xl mx-auto">
             See why industry leaders choose NexGen for their investment strategies and portfolio growth.
           </p>
         </div>
@@ -129,15 +129,15 @@ const Stats = () => {
                 animationFillMode: 'forwards'
               }}
             >
-              <div className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent transition-all duration-200">
+              <div className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-r from-bloodred to-blockred-dark bg-clip-text text-transparent transition-all duration-200">
                 {stat.value}
               </div>
 
               <div className="space-y-2">
-                <h3 className="text-xl md:text-2xl font-semibold text-gray-100">
+                <h3 className="text-xl md:text-2xl font-semibold text-blackred">
                   {stat.label}
                 </h3>
-                <p className="text-lg text-gray-300 leading-relaxed">
+                <p className="text-lg text-bloodred-dark leading-relaxed">
                   {stat.description}
                 </p>
               </div>
@@ -148,7 +148,7 @@ const Stats = () => {
         {/* Additional Trust Indicators */}
         <div className="mt-20 pt-16 border-t border-gray-700">
           <div className="text-center">
-            <p className="text-sm text-gray-400 mb-8 uppercase tracking-wide opacity-0 animate-fade-in" style={{ animationDelay: '1.5s', animationFillMode: 'forwards' }}>
+            <p className="text-sm text-gray-900 mb-8 uppercase tracking-wide opacity-0 animate-fade-in" style={{ animationDelay: '1.5s', animationFillMode: 'forwards' }}>
               FEATURED IN
             </p>
             <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-8 opacity-0 animate-fade-in" style={{ animationDelay: '1.8s', animationFillMode: 'forwards' }}>

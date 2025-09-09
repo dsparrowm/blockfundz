@@ -19,17 +19,30 @@ export default {
 		},
 		extend: {
 			colors: {
+				white: '#FFFFFF',
 				black: '#000000',
+				blackred: '#660708', // very dark red/black for backgrounds
 				orange: {
 					DEFAULT: '#FF7A00', // main orange
 					light: '#FFA940',
 					dark: '#FF6600',
 				},
-				'dark-blue': {
-					DEFAULT: '#0A2342', // main dark blue
-					dark: '#06172B',
-					light: '#1B3358',
+				'timberwolf': {
+					DEFAULT: '#D9D9D9', // light gray for backgrounds and borders
+					light: '#EDEDED',
+					dark: '#BFBFBF',
 				},
+				'red': {
+					DEFAULT: '#C72C41', // main dark red
+					dark: '#A61E34',
+					light: '#FF4D6D',
+				},
+				'bloodred': {
+					DEFAULT: '#E5383B', // bright red for accents and highlights
+					dark: '#BA181B',
+					light: '#FF6F61',
+				},
+
 				'em-green': {
 					DEFAULT: '#10B981', // Emerald Green for success
 					light: '#34D399',

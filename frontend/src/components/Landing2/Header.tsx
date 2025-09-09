@@ -81,7 +81,7 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-gray-900/95 backdrop-blur-md border-b border-gray-700 shadow-lg">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-[#F5F3F4] text-[#0B090A] backdrop-blur-md border-b border-gray-700 shadow-lg">
       <div className="container mx-auto px-4 sm:px-6 py-3 sm:py-4 relative" ref={headerRef}>
         <div className="flex items-center justify-between">
           {/* Logo */}
@@ -95,7 +95,7 @@ const Header = () => {
               <a
                 key={item.name}
                 href={item.href}
-                className="text-gray-300 hover:text-purple-400 transition-colors duration-200 relative group font-medium text-sm"
+                className="hover:text-bloodred-dark transition-colors duration-200 relative group font-medium text-sm"
                 onClick={(e) => {
                   if (item.href.startsWith('#')) {
                     e.preventDefault();
@@ -104,7 +104,7 @@ const Header = () => {
                 }}
               >
                 {item.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-400 transition-all duration-300 group-hover:w-full"></span>
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-bloodred transition-all duration-300 group-hover:w-full"></span>
               </a>
             ))}
           </nav>
@@ -112,17 +112,17 @@ const Header = () => {
           {/* Desktop CTA Buttons */}
           <div className="hidden lg:flex items-center space-x-3">
             <a href="/talk-to-sales">
-              <Button variant="ghost" className="text-gray-300 hover:text-gray-100 hover:bg-gray-800 font-medium text-sm px-4 py-2 transition-all duration-200">
+              <Button variant="ghost" className="hover:text-gray-100 hover:bg-bloodred-dark font-medium text-sm px-4 py-2 transition-all duration-200">
                 TALK TO SALES
               </Button>
             </a>
             <a href="/login">
-              <Button variant="ghost" className="text-gray-300 hover:text-gray-100 hover:bg-gray-800 font-medium text-sm px-4 py-2 transition-all duration-200">
+              <Button variant="ghost" className="hover:text-gray-100 hover:bg-bloodred-dark font-medium text-sm px-4 py-2 transition-all duration-200">
                 SIGN IN
               </Button>
             </a>
             <Button
-              className="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-2.5 rounded-lg font-medium hover:from-purple-700 hover:to-purple-800 shadow-lg text-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl"
+              className="bg-gradient-to-r from-bloodred-light to-bloodred-dark text-white px-6 py-2.5 rounded-lg font-medium hover:from-[#BA181B] hover:to-[#E5383B] shadow-lg text-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl"
               onClick={() => navigate("/signup")}
             >
               TRY FOR FREE

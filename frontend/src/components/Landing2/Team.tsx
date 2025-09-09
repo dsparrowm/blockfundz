@@ -29,16 +29,16 @@ const Team = () => {
   ];
 
   return (
-    <section id="our-team" className="py-16 sm:py-24 bg-gray-900">
+    <section id="our-team" className="py-16 sm:py-24 bg-timberwolf-light">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="text-center mb-20">
           <h2 className="text-5xl md:text-6xl font-bold mb-6 text-gray-100">
-            Meet the experts helping{' '}
-            <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              you build wealth
+            {/* Meet the experts helping{' '} */}
+            <span className="bg-gradient-to-r from-blackred to-bloodred-dark bg-clip-text text-transparent">
+              Meet the experts helping you build wealth
             </span>
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-blackred max-w-3xl mx-auto leading-relaxed">
             Our leadership team combines decades of experience in finance, technology,
             and cryptocurrency to deliver exceptional results for individual investors.
           </p>
@@ -48,7 +48,7 @@ const Team = () => {
           {teamMembers.map((member, index) => (
             <div
               key={member.name}
-              className="bg-gray-800 p-8 rounded-2xl border border-gray-700 hover:border-purple-500 hover:shadow-xl transition-all duration-300 group text-center animate-fade-in"
+              className="bg-blackred p-8 rounded-2xl border border-gray-700 hover:border-purple-500 hover:shadow-xl transition-all duration-300 group text-center animate-fade-in"
               style={{ animationDelay: `${index * 0.2}s` }}
             >
               <div className="w-24 h-24 mx-auto mb-6 rounded-full overflow-hidden ring-4 ring-gray-600 group-hover:ring-purple-500 transition-all duration-300">
@@ -60,7 +60,7 @@ const Team = () => {
               </div>
 
               <h3 className="text-xl font-bold text-gray-100 mb-2">{member.name}</h3>
-              <p className="text-purple-400 font-semibold mb-4">{member.role}</p>
+              <p className="text-white font-semibold mb-4">{member.role}</p>
               <p className="text-gray-300 text-sm leading-relaxed">{member.bio}</p>
             </div>
           ))}

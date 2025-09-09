@@ -76,7 +76,7 @@ const Footer = () => {
                 placeholder="name@company.com"
                 className="bg-gray-600 border border-gray-500 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 min-w-0 sm:min-w-64"
               />
-              <button className="bg-purple-600 text-white px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-all duration-200 hover:-translate-y-0.5">
+              <button className="bg-blackred text-white px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-all duration-200 hover:-translate-y-0.5">
                 SUBSCRIBE
               </button>
             </div>

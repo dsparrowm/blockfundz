@@ -53,16 +53,16 @@ const Features = () => {
   };
 
   return (
-    <section id="features" className="py-20 sm:py-24 bg-gray-900">
+    <section id="features" className="py-20 sm:py-24 bg-[#F5F3F4]">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="text-center mb-12 sm:mb-20">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 text-gray-100">
-            Move faster with{' '}
-            <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              powerful features
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 text-blackred">
+            {/* Move faster with{' '} */}
+            <span className="bg-gradient-to-r from-blackred to-bloodred-dark bg-clip-text text-transparent">
+              Move faster with powerful features
             </span>
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-blackred max-w-3xl mx-auto leading-relaxed">
             Everything you need to build personal wealth. From AI-powered strategies
             to real-time analytics, we've got you covered.
           </p>
@@ -72,7 +72,7 @@ const Features = () => {
           {features.map((feature, index) => (
             <div
               key={feature.title}
-              className="bg-gray-800 p-8 rounded-2xl border border-gray-700 hover:border-purple-500 hover:shadow-2xl transition-all duration-300 group animate-fade-in"
+              className="bg-blackred backdrop-blur-lg p-8 rounded-2xl border shadow-2xl border-white/40 hover:border-white/60 hover:shadow-3xl hover:bg-white/20 transition-all duration-300 group animate-fade-in"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div className={`w-12 h-12 ${getColorClasses(feature.color)} rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>

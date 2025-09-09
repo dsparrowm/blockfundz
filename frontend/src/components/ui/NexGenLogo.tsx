@@ -45,7 +45,7 @@ const NexGenLogo: React.FC<NexGenLogoProps> = ({
     const LogoText = () => (
         <span className={`font-bold ${textSizeClasses[size]} ${dark
             ? 'text-white'
-            : 'bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent'
+            : 'bg-gradient-to-r from-bloodred-light to-bloodred-dark bg-clip-text text-transparent'
             }`}>
             NexGen
         </span>

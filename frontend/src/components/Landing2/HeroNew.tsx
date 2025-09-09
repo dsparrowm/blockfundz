@@ -153,7 +153,7 @@ const Hero = () => {
 
         return () => clearInterval(interval);
     }, []); return (
-        <section className="relative bg-gray-900 pt-16 sm:pt-20 pb-16 sm:pb-24 overflow-hidden">
+        <section className="relative bg-white pt-16 sm:pt-20 pb-16 sm:pb-24 overflow-hidden">
             {/* Background Elements (hidden on very small screens) */}
             <div className="absolute inset-0">
                 <div className="hidden sm:block absolute top-1/4 left-1/6 w-44 md:w-56 h-44 md:h-56 bg-purple-500/20 rounded-full blur-3xl"></div>
@@ -163,7 +163,7 @@ const Hero = () => {
             <div className="container mx-auto px-4 sm:px-6 relative z-10">
                 <div className="text-center max-w-full sm:max-w-6xl mx-auto">
                     {/* Company Logos */}
-                    <div className="mb-12 pt-4">
+                    {/* <div className="mb-12 pt-4">
                         <p className="text-sm text-gray-400 mb-6 uppercase tracking-wide">TRUSTED BY LEADING COMPANIES</p>
                         <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-8 opacity-60">
                             <div className="text-lg sm:text-xl font-bold text-gray-500">Goldman Sachs</div>
@@ -171,15 +171,15 @@ const Hero = () => {
                             <div className="text-lg sm:text-xl font-bold text-gray-500">Coinbase</div>
                             <div className="text-lg sm:text-xl font-bold text-gray-500">Binance</div>
                         </div>
-                    </div>
+                    </div> */}
 
                     {/* Main Hero Content */}
-                    <div className="space-y-8 mb-16">
-                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-100 leading-tight relative">
+                    <div className="space-y-8 mb-16 mt-20">
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[#660708] leading-tight relative">
                             {/* Animated Background Text Effect */}
                             <div className="absolute inset-0 opacity-10">
                                 <span
-                                    className="bg-gradient-to-r from-purple-600 via-blue-600 to-purple-600 bg-clip-text text-transparent animate-pulse"
+                                    className="bg-gradient-to-r from-[#660708] via-blue-600 to-purple-600 bg-clip-text text-transparent animate-pulse"
                                     style={{
                                         backgroundSize: '200% 100%',
                                         backgroundPosition: `${gradientPosition}% 0%`
@@ -245,7 +245,7 @@ const Hero = () => {
                         </h1>
 
                         {/* Animated subtitle with staggered word reveal */}
-                        <div className="text-base sm:text-lg lg:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                        <div className="text-base sm:text-lg lg:text-xl text-[#660708] max-w-3xl mx-auto leading-relaxed">
                             {subWords.map((word, index) => (
                                 <span
                                     key={index}
@@ -259,7 +259,7 @@ const Hero = () => {
                                     }}
                                 >
                                     {word === 'AI-powered' ? (
-                                        <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent font-semibold animate-gradient-shift">
+                                        <span className="bg-gradient-to-r from-bloodred-light to-bloodred-dark bg-clip-text text-transparent font-semibold animate-gradient-shift">
                                             {word}
                                         </span>
                                     ) : (
@@ -289,7 +289,7 @@ const Hero = () => {
                     {/* CTA Buttons */}
                     <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 animate-fade-in-delay-2">
                         <Button
-                            className="bg-purple-600 hover:bg-purple-700 text-white px-6 sm:px-10 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
+                            className="bg-gradient-to-r from-bloodred-light to-bloodred-dark hover:bg-gradient-to-r hover:from-bloodred-dark hover:to-bloodred-light text-white px-6 sm:px-10 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
                             onClick={() => navigate("/signup")}
                         >
                             TRY FOR FREE
@@ -297,7 +297,7 @@ const Hero = () => {
 
                         <Button
                             variant="outline"
-                            className="border-2 border-purple-400 text-purple-400 hover:bg-purple-900/20 hover:text-purple-300 px-6 sm:px-10 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl transition-all duration-300"
+                            className="border-2 border-[#660708] text-[#660708] hover:border-none hover:bg-bloodred-dark hover:text-white px-6 sm:px-10 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl transition-all duration-300"
                         >
                             FIND YOUR PLAN
                         </Button>
@@ -307,14 +307,14 @@ const Hero = () => {
                     <div className="relative max-w-6xl mx-auto animate-slide-up px-2 sm:px-0 hidden sm:block">
                         <div className="relative">
                             {/* Main Dashboard Screenshot */}
-                            <div className="bg-gray-800 rounded-2xl shadow-2xl border border-gray-700 overflow-hidden">
+                            <div className="bg-red-500 rounded-2xl shadow-2xl border border-gray-700 overflow-hidden">
                                 {/* Browser Bar */}
                                 <div className="bg-gray-900 px-6 py-3 border-b border-gray-700 flex items-center space-x-2">
                                     <div className="w-3 h-3 bg-red-400 rounded-full"></div>
                                     <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
                                     <div className="w-3 h-3 bg-green-400 rounded-full"></div>
                                     <div className="ml-4 bg-gray-800 rounded-lg px-4 py-1 text-sm text-gray-300 flex-1 max-w-md">
-                                        🔒 nexgen.com/dashboard
+                                        🔒 nexgencrypto.live/dashboard
                                     </div>
                                 </div>
 

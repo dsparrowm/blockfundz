@@ -62,16 +62,16 @@ const Pricing = () => {
   ];
 
   return (
-    <section id="pricing" className="py-20 sm:py-24 bg-gray-900">
+    <section id="pricing" className="py-20 sm:py-24 bg-white">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="text-center mb-12 sm:mb-20">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 text-gray-100">
-            Choose a plan that{' '}
-            <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              works for you
+            {/* Choose a plan that{' '} */}
+            <span className="bg-gradient-to-r from-blackred to-bloodred-dark bg-clip-text text-transparent">
+              Choose a plan that works for you
             </span>
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-blackred max-w-3xl mx-auto leading-relaxed">
             Upgrade at any time. For high-net-worth individuals with additional security, compliance,
             and support requirements, contact our sales team.
           </p>
@@ -81,43 +81,43 @@ const Pricing = () => {
           {pricingPlans.map((plan) => (
             <Card
               key={plan.name}
-              className={`bg-gray-800 border-2 hover:shadow-2xl transition-all duration-300 relative group ${plan.popular
-                ? 'border-purple-500 shadow-lg scale-105'
-                : 'border-gray-700 hover:border-purple-500'
+              className={`bg-white/100 border-2 shadow-2xl hover:shadow-2xl transition-all duration-300 relative group ${plan.popular
+                ? 'border-bloodred shadow-lg scale-105'
+                : 'border-blackred hover:border-purple-500'
                 }`}
             >
               {plan.popular && (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-full text-sm font-semibold">
+                  <div className="bg-gradient-to-r from-blackred to-bloodred-dark text-white px-6 py-2 rounded-full text-sm font-semibold">
                     MOST POPULAR
                   </div>
                 </div>
               )}
 
               <CardHeader className="text-center pb-8 pt-8">
-                <CardTitle className="text-gray-100 text-2xl mb-4 font-bold">{plan.name}</CardTitle>
+                <CardTitle className="text-bloodred-dark text-2xl mb-4 font-bold">{plan.name}</CardTitle>
                 <div className="mb-6">
-                  <span className="text-5xl font-bold text-gray-100">{plan.price}</span>
-                  <span className="text-gray-400 text-lg ml-2">{plan.period}</span>
+                  <span className="text-5xl font-bold text-blackred">{plan.price}</span>
+                  <span className="text-blackred-600 text-lg ml-2">{plan.period}</span>
                 </div>
-                <p className="text-gray-300 leading-relaxed">{plan.description}</p>
-                <p className="text-sm text-gray-400 mt-2">{plan.note}</p>
+                <p className="text-blackred leading-relaxed">{plan.description}</p>
+                <p className="text-sm text-blackred-400 mt-2">{plan.note}</p>
               </CardHeader>
 
               <CardContent className="px-6 pb-8">
                 <ul className="space-y-4 mb-8">
                   {plan.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start space-x-3">
-                      <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-300 leading-relaxed">{feature}</span>
+                      <CheckCircle className="w-5 h-5 text-blackred flex-shrink-0 mt-0.5" />
+                      <span className="text-blackred-900 leading-relaxed">{feature}</span>
                     </li>
                   ))}
                 </ul>
 
                 <Button
-                  className={`w-full font-semibold py-4 text-sm transition-all duration-200 ${plan.popular
-                    ? 'bg-purple-600 text-white hover:bg-purple-700 hover:-translate-y-0.5 shadow-lg'
-                    : 'bg-gray-800 text-purple-400 border-2 border-purple-500 hover:bg-purple-900/20'
+                  className={`w-full font-semibold border-none py-4 text-sm transition-all duration-200 ${plan.popular
+                    ? 'bg-blackred text-white hover:bg-blackred-700 hover:-translate-y-0.5 shadow-lg'
+                    : 'bg-bloodred-dark text-white border-2 border-purple-500 hover:bg-purple-900/20'
                     }`}
                   onClick={() => navigate("/signup")}
                 >
@@ -130,17 +130,17 @@ const Pricing = () => {
 
         {/* Trust Banner */}
         <div className="text-center mt-20">
-          <p className="text-lg text-gray-300 mb-8">
-            Still have questions? <span className="text-purple-400 font-semibold cursor-pointer hover:underline">Get in touch</span>
+          <p className="text-lg text-blackred mb-8">
+            Still have questions? <span className="text-blackred font-semibold cursor-pointer hover:underline">Get in touch</span>
           </p>
-          <div className="bg-gray-800 border border-gray-700 rounded-2xl p-8 max-w-full sm:max-w-2xl mx-auto">
-            <h3 className="text-2xl font-bold text-gray-100 mb-4">
+          <div className="bg-white/100 shadow-2xl border border-gray-700 rounded-2xl p-8 max-w-full sm:max-w-2xl mx-auto">
+            <h3 className="text-2xl font-bold text-blackred mb-4">
               Looking for our Enterprise Grid?
             </h3>
-            <p className="text-gray-300 mb-6">
+            <p className="text-blackred mb-6">
               NexGen Enterprise Grid is a version of NexGen built for very large organizations.
             </p>
-            <Button className="bg-purple-600 text-white hover:bg-purple-700 px-8 py-3 font-semibold">
+            <Button className="bg-bloodred text-white hover:bg-bloodred-dark px-8 py-3 font-semibold">
               LEARN MORE
             </Button>
           </div>

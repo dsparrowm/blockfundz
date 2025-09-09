@@ -77,7 +77,7 @@ const HowItWorks = () => {
   }, []);
 
   return (
-    <section id="how-it-works" className="py-20 sm:py-24 bg-gray-900 relative overflow-hidden">
+    <section id="how-it-works" className="py-20 sm:py-24 bg-white/40 relative overflow-hidden">
       {/* Animated Background (reduced on xs) */}
       <div className={`absolute inset-0 transition-all duration-2000 ${showBackground ? 'opacity-100' : 'opacity-0'}`}>
         <div className="hidden sm:block absolute top-0 left-1/6 w-56 md:w-72 h-56 md:h-72 bg-gradient-to-br from-purple-900/20 to-blue-900/20 rounded-full blur-3xl animate-pulse"></div>
@@ -88,12 +88,12 @@ const HowItWorks = () => {
         {/* Title */}
         <div className="text-center mb-12 sm:mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 text-gray-100">
-            How NexGen{' '}
-            <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              transforms wealth
+            {/* How NexGen{' '} */}
+            <span className="text-bloodred-dark">
+              How NexGen transforms wealth
             </span>
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-blackred max-w-3xl mx-auto leading-relaxed">
             Start your crypto investment journey in just four simple steps.
             Our platform makes it easy to begin building personal wealth.
           </p>
