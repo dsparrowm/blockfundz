@@ -33,17 +33,17 @@ const ResetPassword = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col justify-center items-center bg-gray-50">
+        <div className="min-h-screen flex flex-col justify-center items-center bg-white">
             {/* Logo */}
             <div className="mb-6 flex items-center cursor-pointer" onClick={() => navigate('/')}>
                 <NexGenLogo variant="full" size="md" />
             </div>
-            <form onSubmit={handleSubmit} className="bg-white p-8 rounded shadow-md w-full max-w-md">
+            <form onSubmit={handleSubmit} className="bg-white/10 backdrop-blur-sm p-8 rounded shadow-md w-full max-w-md border border-white/20">
                 <h2 className="text-2xl font-bold mb-4 text-center">Reset Password</h2>
                 <input
                     type="password"
                     placeholder="Enter new password"
-                    className="w-full mb-4 p-2 border rounded"
+                    className="w-full border-lg mb-4 p-2 border border-white/30 rounded bg-white/20 text-black placeholder-gray-400 focus:border-white/50"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     required
@@ -51,14 +51,14 @@ const ResetPassword = () => {
                 <input
                     type="password"
                     placeholder="Confirm new password"
-                    className="w-full mb-4 p-2 border rounded"
+                    className="w-full border-lg mb-4 p-2 border border-white/30 rounded bg-white/20 text-black placeholder-grey-400 focus:border-white/50"
                     value={confirmPassword}
                     onChange={e => setConfirmPassword(e.target.value)}
                     required
                 />
                 <button
                     type="submit"
-                    className="w-full bg-orange-500 text-white py-2 rounded"
+                    className="w-full bg-bloodred-dark hover:bg-blackred text-white py-2 rounded"
                     disabled={loading}
                 >
                     {loading ? 'Resetting...' : 'Reset Password'}

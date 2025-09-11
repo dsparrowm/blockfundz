@@ -33,7 +33,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui
 import { Badge } from "../ui/badge";
 import SlackDashboardCard from '../SlackDashboardCard';
 import { useStore } from '../../store/useStore';
-import { useDarkMode } from '../../contexts/DarkModeContext';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -109,7 +108,6 @@ const UserManagement = ({
 
   const itemsPerPage = 10;
   const userData = useStore(state => state.user);
-  const { isDarkMode } = useDarkMode();
   const setUser = useStore(state => state.setUser);
 
   const fetchUsers = async () => {
@@ -358,15 +356,15 @@ const UserManagement = ({
   };
 
   return (
-    <div className={`space-y-6 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+    <div className="space-y-6 text-gray-900">
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <Users className={`h-6 w-6 ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`} />
-            <h1 className={`text-2xl font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>User Management</h1>
+            <Users className="h-6 w-6 text-blue-600" />
+            <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
           </div>
-          <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Monitor and manage all platform users and their activities</p>
+          <p className="text-gray-600">Monitor and manage all platform users and their activities</p>
         </div>
         <div className="flex items-center gap-3">
           <Dialog open={isAddUserDialogOpen} onOpenChange={setIsAddUserDialogOpen}>

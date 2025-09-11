@@ -1,7 +1,6 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useStore } from '../store/useStore';
-import { useDarkMode } from '../contexts/DarkModeContext';
 import NexGenLogo from './ui/NexGenLogo';
 import Cookies from 'js-cookie';
 import {
@@ -47,7 +46,6 @@ export const SlackSidebar: React.FC<SlackSidebarProps> = ({
     const userData = useStore((state) => state.user);
     const setActiveComponent = useStore((state) => state.setActiveComponent);
     const setActiveAdminComponent = useStore((state) => state.setActiveAdminComponent);
-    const { isDarkMode } = useDarkMode();
     const activeComponent = isAdmin
         ? useStore((state) => state.activeAdminComponent)
         : useStore((state) => state.activeComponent);
@@ -124,15 +122,15 @@ export const SlackSidebar: React.FC<SlackSidebarProps> = ({
             'lg:relative lg:translate-x-0 ' +
             (isOpen ? 'fixed inset-y-0 left-0 translate-x-0 z-50' : 'fixed inset-y-0 left-0 -translate-x-full z-50') +
             ' lg:z-auto transition-transform duration-300 ease-in-out'
-            } flex h-screen ${isDarkMode ? 'bg-[#1a1d29]' : 'bg-[#3f0f40]'} text-white ${className}`}>
+            } flex h-screen bg-[#3f0f40] text-white ${className}`}>
             {/* Main Sidebar */}
             <div className="w-64 lg:w-64 flex flex-col">
                 {/* Header */}
-                <div className={`p-4 border-b ${isDarkMode ? 'border-[#2c2d33]' : 'border-[#5a1f5a]'}`}>
+                <div className="p-4 border-b border-[#5a1f5a]">
                     <div className="flex items-center justify-between">
-                        <NexGenLogo size="md" dark={isDarkMode} />
+                        <NexGenLogo size="md" dark={false} />
                         <div className="flex items-center space-x-2">
-                            <ChevronDown className={`w-4 h-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-300'}`} />
+                            <ChevronDown className="w-4 h-4 text-gray-300" />
                             {/* Close button for mobile */}
                             <button
                                 onClick={onClose}
@@ -147,7 +145,7 @@ export const SlackSidebar: React.FC<SlackSidebarProps> = ({
                     </div>
                     <div className="mt-3 flex items-center space-x-2">
                         <Circle className="w-3 h-3 text-green-400 fill-current" />
-                        <span className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-300'}`}>
+                        <span className="text-sm text-gray-300">
                             {userData?.name || 'Admin'}
                         </span>
                     </div>
@@ -160,7 +158,7 @@ export const SlackSidebar: React.FC<SlackSidebarProps> = ({
                         <input
                             type="text"
                             placeholder={`Search ${isAdmin ? 'Admin' : 'NexGen'}`}
-                            className={`w-full ${isDarkMode ? 'bg-[#2c2d33] text-white border border-[#3c3f4c]' : 'bg-[#5a1f5a] text-white'} placeholder-gray-400 rounded-md pl-10 pr-3 py-2 text-sm focus:outline-none focus:ring-2 ${isDarkMode ? 'focus:ring-[#4a154b] focus:border-[#4a154b]' : 'focus:ring-white/20'}`}
+                            className="w-full bg-[#5a1f5a] text-white placeholder-gray-400 rounded-md pl-10 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-white/20"
                         />
                     </div>
                 </div>
@@ -170,10 +168,10 @@ export const SlackSidebar: React.FC<SlackSidebarProps> = ({
                     {Object.entries(groupedItems).map(([section, items]) => (
                         <div key={section} className="mb-6">
                             <div className="flex items-center justify-between px-3 py-1 mb-2">
-                                <span className={`text-xs font-semibold ${isDarkMode ? 'text-gray-400' : 'text-gray-300'} uppercase tracking-wider`}>
+                                <span className="text-xs font-semibold text-gray-300 uppercase tracking-wider">
                                     {sectionTitles[section as keyof typeof sectionTitles]}
                                 </span>
-                                <Plus className={`w-4 h-4 ${isDarkMode ? 'text-gray-500 hover:text-gray-300' : 'text-gray-400 hover:text-white'} cursor-pointer`} />
+                                <Plus className="w-4 h-4 text-gray-400 hover:text-white cursor-pointer" />
                             </div>
                             <div className="space-y-1">
                                 {items.map((item) => {
@@ -184,8 +182,8 @@ export const SlackSidebar: React.FC<SlackSidebarProps> = ({
                                             key={item.name}
                                             onClick={() => handleItemClick(item.name)}
                                             className={`w-full flex items-center space-x-3 px-3 py-2 rounded-md text-sm transition-colors ${isActive
-                                                ? (isDarkMode ? 'bg-[#4a154b] text-white' : 'bg-[#1264a3] text-white')
-                                                : (isDarkMode ? 'text-gray-300 hover:bg-[#2c2d33] hover:text-white' : 'text-gray-300 hover:bg-[#5a1f5a] hover:text-white')
+                                                ? 'bg-[#1264a3] text-white'
+                                                : 'text-gray-300 hover:bg-[#5a1f5a] hover:text-white'
                                                 }`}
                                         >
                                             <Hash className="w-4 h-4" />
@@ -203,26 +201,26 @@ export const SlackSidebar: React.FC<SlackSidebarProps> = ({
                 </div>
 
                 {/* Footer */}
-                <div className={`p-4 border-t ${isDarkMode ? 'border-[#2c2d33]' : 'border-[#5a1f5a]'}`}>
+                <div className="p-4 border-t border-[#5a1f5a]">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
-                            <div className={`w-8 h-8 ${isDarkMode ? 'bg-[#2c2d33]' : 'bg-[#5a1f5a]'} rounded-full flex items-center justify-center`}>
+                            <div className="w-8 h-8 bg-[#5a1f5a] rounded-full flex items-center justify-center">
                                 <User className="w-4 h-4" />
                             </div>
                             <div className="flex-1 min-w-0">
                                 <p className="text-sm font-medium text-white truncate">
                                     {userData?.name || 'Admin'}
                                 </p>
-                                <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-300'} truncate`}>
+                                <p className="text-xs text-gray-300 truncate">
                                     {isAdmin ? 'Administrator' : 'Investor'}
                                 </p>
                             </div>
                         </div>
                         <div className="flex items-center space-x-2">
-                            <Bell className={`w-4 h-4 ${isDarkMode ? 'text-gray-500 hover:text-gray-300' : 'text-gray-400 hover:text-white'} cursor-pointer`} />
+                            <Bell className="w-4 h-4 text-gray-400 hover:text-white cursor-pointer" />
                             <button
                                 onClick={handleLogout}
-                                className={`${isDarkMode ? 'text-gray-500 hover:text-gray-300' : 'text-gray-400 hover:text-white'} transition-colors`}
+                                className="text-gray-400 hover:text-white transition-colors"
                                 title="Sign out"
                             >
                                 <LogOut className="w-4 h-4" />

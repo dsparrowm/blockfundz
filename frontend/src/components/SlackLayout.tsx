@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import SlackSidebar from './SlackSidebar';
 import SlackContentArea from './SlackContentArea';
-import { useDarkMode } from '../contexts/DarkModeContext';
 
 interface SlackLayoutProps {
     children: React.ReactNode;
@@ -13,10 +12,9 @@ export const SlackLayout: React.FC<SlackLayoutProps> = ({
     className = ''
 }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const { isDarkMode } = useDarkMode();
 
     return (
-        <div className={`h-screen overflow-hidden ${isDarkMode ? 'bg-[#121212]' : 'bg-gray-50'} ${className}`}>
+        <div className={`h-screen overflow-hidden bg-gray-50 ${className}`}>
             <div className="flex h-full relative">
                 {/* Mobile Overlay */}
                 {isSidebarOpen && (

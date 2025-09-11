@@ -8,7 +8,6 @@ import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import axiosInstance from "../api/axiosInstance";
 import { useStore } from "../store/useStore";
-import { useDarkMode } from "../contexts/DarkModeContext";
 import {
     User,
     Bell,
@@ -60,7 +59,6 @@ const Settings = () => {
     const [preferences, setPreferences] = useState({
         currency: 'USD',
         language: 'en',
-        darkMode: false,
         autoRefresh: true
     });
     const [pinData, setPinData] = useState({
@@ -74,12 +72,6 @@ const Settings = () => {
     const [showConfirmPin, setShowConfirmPin] = useState(false);
 
     const userData = useStore((state) => state.user);
-    const { isDarkMode, toggleDarkMode } = useDarkMode();
-
-    // Update preferences when dark mode changes
-    useEffect(() => {
-        setPreferences(prev => ({ ...prev, darkMode: isDarkMode }));
-    }, [isDarkMode]);
 
     // Clear messages after 5 seconds
     useEffect(() => {
@@ -920,17 +912,6 @@ const Settings = () => {
                                                 </SelectContent>
                                             </Select>
                                         </div>
-                                    </div>
-
-                                    <div className="flex items-center justify-between p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-200">
-                                        <div>
-                                            <Label className="text-sm font-medium text-gray-900 dark:text-gray-100">Dark Mode</Label>
-                                            <p className="text-sm text-gray-600">Use dark theme for better viewing</p>
-                                        </div>
-                                        <Switch
-                                            checked={isDarkMode}
-                                            onCheckedChange={toggleDarkMode}
-                                        />
                                     </div>
 
                                     <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200">

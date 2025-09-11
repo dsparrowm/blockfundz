@@ -13,7 +13,7 @@ const VerifiedEmailSuccessPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-red-500 flex items-center justify-center p-4">
             <div className="w-full max-w-md space-y-8">
                 {/* Logo Section */}
                 <div className="text-center">
@@ -26,7 +26,7 @@ const VerifiedEmailSuccessPage = () => {
                 </div>
 
                 {/* Main Success Card */}
-                <Card className="shadow-lg border-0 bg-gray-800 border-gray-700">
+                <Card className="shadow-lg border-0 bg-white/10 backdrop-blur-sm border-white/20">
                     <CardHeader className="space-y-1 text-center">
                         <div className="flex justify-center mb-4">
                             <CheckCircle className="w-16 h-16 text-green-400" />

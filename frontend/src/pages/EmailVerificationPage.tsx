@@ -58,7 +58,7 @@ const EmailVerificationPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-red-500 flex items-center justify-center p-4">
             <div className="w-full max-w-md space-y-8">
                 {/* Logo Section */}
                 <div className="text-center">
@@ -71,7 +71,7 @@ const EmailVerificationPage = () => {
                 </div>
 
                 {/* Main Verification Card */}
-                <Card className="shadow-lg border-0 bg-gray-800 border-gray-700">
+                <Card className="shadow-lg border-0 bg-white/10 backdrop-blur-sm border-white/20">
                     <CardHeader className="space-y-1 text-center">
                         <CardTitle className="text-2xl font-bold text-gray-100">
                             Email Verification
@@ -95,7 +95,7 @@ const EmailVerificationPage = () => {
                                             onChange={(e) => handleChange(e, index)}
                                             onKeyDown={(e) => handleKeyDown(e, index)}
                                             ref={(el) => (inputRefs.current[index] = el)}
-                                            className="w-12 h-12 text-center text-2xl border border-gray-600 bg-gray-700 text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                                            className="w-12 h-12 text-center text-2xl border border-white/30 bg-white/20 text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                                             maxLength={1}
                                         />
                                     ))}

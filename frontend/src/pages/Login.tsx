@@ -159,23 +159,23 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center bg-timberwolf-light border-2xl justify-center p-4">
 
       {/* Forgot Password Dialog */}
       <Dialog open={forgotDialogOpen} onOpenChange={setForgotDialogOpen}>
-        <DialogContent className="max-w-md !bg-gray-800 !border-gray-700">
+        <DialogContent className="max-w-md !bg-white !border-gray-700">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 !text-gray-100">
-              <FaLock className="text-purple-400" />
-              Forgot Password?
+              <FaLock className="text-black" />
+              <span className="text-black">Forgot Password?</span>
             </DialogTitle>
-            <DialogDescription className="!text-gray-300">
+            <DialogDescription className="!text-blackred">
               Enter your email address and we'll send you a password reset link.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleForgotPassword} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="forgot-email" className="!text-gray-200">Email Address</Label>
+              <Label htmlFor="forgot-email" className="!text-black">Email Address</Label>
               <Input
                 id="forgot-email"
                 type="email"
@@ -185,7 +185,7 @@ const Login = () => {
                 onChange={e => setForgotEmail(e.target.value)}
                 disabled={forgotLoading}
                 autoFocus
-                className="!bg-gray-700 !border-gray-600 !text-gray-100 placeholder:!text-gray-400"
+                className="!bg-white/50 !text-black placeholder:!text-black"
               />
             </div>
             <div className="flex gap-2 pt-4">
@@ -193,7 +193,7 @@ const Login = () => {
                 type="button"
                 variant="outline"
                 onClick={() => setForgotDialogOpen(false)}
-                className="flex-1 !border-gray-600 !text-gray-300 hover:!bg-gray-700"
+                className="flex-1 !border-gray-600 !text-black hover:!bg-gray-700 hover:!text-white"
                 disabled={forgotLoading}
               >
                 Cancel
@@ -201,7 +201,7 @@ const Login = () => {
               <Button
                 type="submit"
                 disabled={forgotLoading}
-                className="flex-1 bg-purple-600 hover:bg-purple-700"
+                className="flex-1 bg-bloodred-dark hover:bg-blackred"
               >
                 {forgotLoading ? (
                   <>
@@ -229,12 +229,12 @@ const Login = () => {
         </div>
 
         {/* Main Login Card */}
-        <Card className="shadow-lg border-0 !bg-gray-800 !border-gray-700 !text-gray-100">
+        <Card className="shadow-lg !bg-white/10 !backdrop-blur-sm !border-white/40">
           <CardHeader className="space-y-1 text-center">
-            <CardTitle className="text-2xl font-bold !text-gray-100">
+            <CardTitle className="text-2xl font-bold !text-black">
               Welcome back
             </CardTitle>
-            <CardDescription className="!text-gray-300">
+            <CardDescription className="!text-blackred">
               Sign in to your NexGen account
             </CardDescription>
           </CardHeader>
@@ -242,7 +242,7 @@ const Login = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Email Input */}
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium !text-gray-200">
+                <Label htmlFor="email" className="text-sm font-medium !text-black">
                   Email address
                 </Label>
                 <div className="relative">
@@ -254,7 +254,7 @@ const Login = () => {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Enter your email"
-                    className="pl-10 !bg-gray-700 !border-gray-600 !text-gray-100 placeholder:!text-gray-400"
+                    className="pl-10 !bg-white/20 !border-white/30 !text-black placeholder:!text-gray-600 focus:!border-white/50"
                     disabled={loading}
                     required
                   />
@@ -266,7 +266,7 @@ const Login = () => {
 
               {/* Password Input */}
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium !text-gray-200">
+                <Label htmlFor="password" className="text-sm font-medium !text-black">
                   Password
                 </Label>
                 <div className="relative">
@@ -278,7 +278,7 @@ const Login = () => {
                     value={formData.password}
                     onChange={handleChange}
                     placeholder="Enter your password"
-                    className="pl-10 !bg-gray-700 !border-gray-600 !text-gray-100 placeholder:!text-gray-400"
+                    className="pl-10 !bg-white/20 !border-white/30 !text-black placeholder:!text-gray-600 focus:!border-white/50"
                     disabled={loading}
                     required
                   />
@@ -293,7 +293,7 @@ const Login = () => {
                 <Button
                   type="button"
                   variant="link"
-                  className="p-0 h-auto text-purple-400 hover:text-purple-300"
+                  className="p-0 h-auto text-bloodred hover:text-purple-300"
                   onClick={() => setForgotDialogOpen(true)}
                   disabled={loading}
                 >
@@ -305,7 +305,7 @@ const Login = () => {
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3"
+                className="w-full bg-bloodred-dark hover:bg-blackred text-white py-3"
               >
                 {loading ? (
                   <>
@@ -318,12 +318,12 @@ const Login = () => {
               </Button>
 
               {/* Register Link */}
-              <div className="text-center pt-4 border-t !border-gray-700">
-                <p className="text-sm !text-gray-300">
+              <div className="text-center pt-4 border-t !border-white/20">
+                <p className="text-sm !text-black">
                   Don't have an account?{' '}
                   <Link
                     to="/signup"
-                    className="text-purple-400 hover:text-purple-300 font-medium hover:underline"
+                    className="text-blue-500 hover:text-purple-300 font-medium hover:underline"
                   >
                     Sign up
                   </Link>
