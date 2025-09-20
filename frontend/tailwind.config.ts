@@ -1,58 +1,78 @@
-import type { Config } from "tailwindcss";
 
+/** @type {import('tailwindcss').Config} */
 export default {
-	// darkMode: ["class"],
 	content: [
-		"./pages/**/*.{ts,tsx}",
-		"./components/**/*.{ts,tsx}",
-		"./app/**/*.{ts,tsx}",
-		"./src/**/*.{ts,tsx}",
+		"./index.html",
+		"./src/**/*.{js,ts,jsx,tsx}",
 	],
-	prefix: "",
 	theme: {
-		container: {
-			center: true,
-			padding: '2rem',
-			screens: {
-				'2xl': '1400px'
-			}
-		},
 		extend: {
 			colors: {
-				white: '#FFFFFF',
-				black: '#000000',
-				blackred: '#660708', // very dark red/black for backgrounds
-				orange: {
-					DEFAULT: '#FF7A00', // main orange
-					light: '#FFA940',
-					dark: '#FF6600',
+				gold: {
+					50: '#FFFDF7',
+					100: '#FFFAEB',
+					200: '#FFF2CC',
+					300: '#FFE999',
+					400: '#FFDC66',
+					500: '#FFD700',
+					600: '#E6C200',
+					700: '#B8A000',
+					800: '#8A7700',
+					900: '#5C4F00',
 				},
-				'timberwolf': {
-					DEFAULT: '#D9D9D9', // light gray for backgrounds and borders
-					light: '#EDEDED',
-					dark: '#BFBFBF',
+				navy: {
+					50: '#F0F4F8',
+					100: '#D9E2EC',
+					200: '#BCCCDC',
+					300: '#9FB3C8',
+					400: '#829AB1',
+					500: '#627D98',
+					600: '#486581',
+					700: '#334E68',
+					800: '#243B53',
+					900: '#0A2540',
 				},
-				'red': {
-					DEFAULT: '#C72C41', // main dark red
-					dark: '#A61E34',
-					light: '#FF4D6D',
+				dark: {
+					50: '#F8FAFC',
+					100: '#F1F5F9',
+					200: '#E2E8F0',
+					300: '#CBD5E1',
+					400: '#94A3B8',
+					500: '#64748B',
+					600: '#475569',
+					700: '#334155',
+					800: '#1E293B',
+					900: '#0F172A',
+				}
+			},
+			fontFamily: {
+				'sans': ['Inter', 'sans-serif'],
+				'display': ['Poppins', 'sans-serif'],
+			},
+			animation: {
+				'float': 'float 6s ease-in-out infinite',
+				'glow': 'glow 2s ease-in-out infinite alternate',
+				'shimmer': 'shimmer 2.5s linear infinite',
+			},
+			keyframes: {
+				float: {
+					'0%, 100%': { transform: 'translateY(0px)' },
+					'50%': { transform: 'translateY(-20px)' },
 				},
-				'bloodred': {
-					DEFAULT: '#E5383B', // bright red for accents and highlights
-					dark: '#BA181B',
-					light: '#FF6F61',
+				glow: {
+					'0%': { boxShadow: '0 0 20px rgba(255, 215, 0, 0.5)' },
+					'100%': { boxShadow: '0 0 30px rgba(255, 215, 0, 0.8)' },
 				},
-
-				'em-green': {
-					DEFAULT: '#10B981', // Emerald Green for success
-					light: '#34D399',
-					dark: '#047857',
-				},
+				shimmer: {
+					'0%': { transform: 'translateX(-100%)' },
+					'100%': { transform: 'translateX(100%)' },
+				}
 			},
 			backgroundImage: {
-				'crypto-gradient': 'linear-gradient(135deg, #0A2342 0%, #FF7A00 100%)',
+				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+				'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
 			},
 		},
 	},
-	plugins: [require("tailwindcss-animate")],
-} satisfies Config;
+	plugins: [],
+}

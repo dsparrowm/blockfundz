@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { Login, Contact, Register, AdminLogin } from './pages';
+import { Contact } from './pages';
 import TalkToSales from './pages/TalkToSales';
 import Page from './app/dashboard/Page';
 import { DashboardLayout, AuthLayout, MainLayout } from './components/layout';
@@ -14,7 +14,10 @@ import MaintenancePage from './components/MaintenancePage';
 import ResetPassword from './pages/ResetPassword';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Landing from './components/Landing2/Landing';
+import Landing from './components/landinPage/Landing';
+import Login from './components/landinPage/authPages/Login';
+import Signup from './components/landinPage/authPages/Signup';
+import AdminLogin from './components/landinPage/authPages/AdminLogin';
 
 const App = () => {
   const maintenanceMode = import.meta.env.VITE_MAINTENANCE_MODE;
@@ -30,7 +33,7 @@ const App = () => {
           {/* Public Routes - No Socket Connection */}
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<PublicRoute><AuthLayout><Login /></AuthLayout></PublicRoute>} />
-          <Route path="/signup" element={<AuthLayout><Register /></AuthLayout>} />
+          <Route path="/signup" element={<AuthLayout><Signup /></AuthLayout>} />
           <Route path="/admin/login" element={<AuthLayout><AdminLogin /></AuthLayout>} />
           <Route path="/contact" element={<MainLayout><Contact /></MainLayout>} />
           <Route path="/verify-email" element={<EmailVerificationPage />} />
