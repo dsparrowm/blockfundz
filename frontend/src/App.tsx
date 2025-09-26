@@ -17,6 +17,10 @@ import "slick-carousel/slick/slick-theme.css";
 import Login from './components/landinPage/authPages/Login';
 import Signup from './components/landinPage/authPages/Signup';
 import AdminLogin from './components/landinPage/authPages/AdminLogin';
+import ForgotPassword from './components/landinPage/authPages/ForgotPassword';
+import ResetPasswordNew from './components/landinPage/authPages/ResetPassword';
+import EmailVerificationPageNew from './components/landinPage/authPages/EmailVerificationPage';
+import VerifiedEmailSuccessPageNew from './components/landinPage/authPages/VerifiedEmailSuccessPage';
 import Landing from './components/landinPage/Landing';
 
 const App = () => {
@@ -34,11 +38,12 @@ const App = () => {
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<PublicRoute><AuthLayout><Login /></AuthLayout></PublicRoute>} />
           <Route path="/signup" element={<AuthLayout><Signup /></AuthLayout>} />
+          <Route path="/forgot-password" element={<AuthLayout><ForgotPassword /></AuthLayout>} />
           <Route path="/admin/login" element={<AuthLayout><AdminLogin /></AuthLayout>} />
           <Route path="/contact" element={<MainLayout><Contact /></MainLayout>} />
-          <Route path="/verify-email" element={<EmailVerificationPage />} />
-          <Route path="/email-verified" element={<VerifiedEmailSuccessPage />} />
-          <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/verify-email" element={<EmailVerificationPageNew />} />
+          <Route path="/email-verified" element={<VerifiedEmailSuccessPageNew />} />
+          <Route path="/reset-password/:token" element={<ResetPasswordNew />} />
 
           <Route path="/talk-to-sales" element={<TalkToSales />} />
           <Route path="/test" element={<TestToast />} />

@@ -38,7 +38,7 @@ const AdminLogin = () => {
         try {
             const response = await axiosInstance.post('/api/auth/admin/login', formData);
 
-            if (response.data.success) {
+            if (response.data.isSuccess) {
                 toast.success('Admin login successful!');
                 navigate('/admin/dashboard');
             }
