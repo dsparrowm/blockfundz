@@ -59,7 +59,7 @@ export const SlackSidebar: React.FC<SlackSidebarProps> = ({
             localStorage.removeItem('userId');
             localStorage.removeItem('userEmail');
             localStorage.setItem('isLoggedIn', 'no');
-            navigate('/login');
+            navigate('/');
         }
     };
 

@@ -36,10 +36,9 @@ const Login = () => {
         setError('');
 
         try {
-            const response = await axiosInstance.post('/api/auth/signin', formData);
-            console.log(response)
+            const response = await axiosInstance.post('/api/auth/login', formData);
 
-            if (response.data.isSuccess) {
+            if (response.data.success) {
                 toast.success('Login successful!');
                 navigate('/dashboard');
             }

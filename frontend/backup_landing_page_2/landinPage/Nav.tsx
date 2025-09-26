@@ -1,9 +1,8 @@
 
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, Coins } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import NexGenLogo from '../ui/NexGenLogo'
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false)
@@ -40,7 +39,12 @@ const Navbar = () => {
                         whileHover={{ scale: 1.05 }}
                         className="flex items-center space-x-2"
                     >
-                        <NexGenLogo size="md" variant="full" showText={true} dark={true} />
+                        <div className="w-10 h-10 bg-gradient-to-br from-gold-400 to-gold-600 rounded-lg flex items-center justify-center">
+                            <Coins className="w-6 h-6 text-navy-900" />
+                        </div>
+                        <span className="text-xl font-bold font-display text-white">
+                            Nex<span className="text-gold-500">Gen</span>
+                        </span>
                     </motion.div>
 
                     {/* Desktop Navigation */}

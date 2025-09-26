@@ -1,5 +1,4 @@
 import React from 'react';
-import logoImage from '../../assets/icons/logo.png';
 
 interface NexGenLogoProps {
     size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
@@ -35,7 +34,7 @@ const NexGenLogo: React.FC<NexGenLogoProps> = ({
     const LogoIcon = () => {
         return (
             <img
-                src={logoImage}
+                src="/newLogo.png"
                 alt="NexGen Logo"
                 className={`${sizeClasses[size]} object-contain ${className}`}
             />
@@ -43,11 +42,9 @@ const NexGenLogo: React.FC<NexGenLogoProps> = ({
     };
 
     const LogoText = () => (
-        <span className={`font-bold ${textSizeClasses[size]} ${dark
-            ? 'text-white'
-            : 'bg-gradient-to-r from-bloodred-light to-bloodred-dark bg-clip-text text-transparent'
-            }`}>
-            NexGen
+        <span className={`font-bold font-display ${textSizeClasses[size]}`}>
+            <span className="text-white">NEX</span>
+            <span className="text-gold-500">GEN</span>
         </span>
     );
 

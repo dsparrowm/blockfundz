@@ -127,7 +127,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const handleLogout = () => {
     // Clear user data from local storage or state management
-    localStorage.removeItem('token');
+    if (isAdmin) {
+      localStorage.removeItem('adminToken');
+    } else {
+      localStorage.removeItem('token');
+    }
     localStorage.setItem('isLoggedIn', 'no');
     // Redirect to Home page
     navigate('/');

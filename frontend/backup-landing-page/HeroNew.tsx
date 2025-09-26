@@ -175,7 +175,7 @@ const Hero = () => {
 
                     {/* Main Hero Content */}
                     <div className="space-y-8 mb-16 mt-20">
-                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[#660708] leading-tight relative">
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight relative">
                             {/* Animated Background Text Effect */}
                             <div className="absolute inset-0 opacity-10">
                                 <span
@@ -245,7 +245,7 @@ const Hero = () => {
                         </h1>
 
                         {/* Animated subtitle with staggered word reveal */}
-                        <div className="text-base sm:text-lg lg:text-xl text-[#660708] max-w-3xl mx-auto leading-relaxed">
+                        <div className="text-base sm:text-lg lg:text-xl text-white max-w-3xl mx-auto leading-relaxed">
                             {subWords.map((word, index) => (
                                 <span
                                     key={index}

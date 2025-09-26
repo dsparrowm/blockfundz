@@ -1,8 +1,7 @@
 
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Mail, Phone, MapPin, Twitter, Linkedin, Facebook, Instagram } from 'lucide-react'
-import NexGenLogo from '../ui/NexGenLogo'
+import { Coins, Mail, Phone, MapPin, Twitter, Linkedin, Facebook, Instagram } from 'lucide-react'
 
 const Footer = () => {
     const footerLinks = {
@@ -63,7 +62,12 @@ const Footer = () => {
                             className="mb-6"
                         >
                             <div className="flex items-center space-x-2 mb-4">
-                                <NexGenLogo size="md" variant="full" showText={true} dark={true} />
+                                <div className="w-10 h-10 bg-gradient-to-br from-gold-400 to-gold-600 rounded-lg flex items-center justify-center">
+                                    <Coins className="w-6 h-6 text-navy-900" />
+                                </div>
+                                <span className="text-xl font-bold font-display text-white">
+                                    Nex<span className="text-gold-500">Gen</span>
+                                </span>
                             </div>
                             <p className="text-gray-400 leading-relaxed mb-6">
                                 Leading the future of cryptocurrency mining and gold investments with automated systems,

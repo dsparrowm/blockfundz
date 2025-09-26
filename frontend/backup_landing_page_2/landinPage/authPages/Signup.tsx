@@ -1,26 +1,34 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaUser, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
-import { ArrowRight, Mail, AlertCircle } from 'lucide-react';
+import { FaUser, FaLock, FaEnvelope, FaEye, FaEyeSlash, FaPhone } from 'react-icons/fa';
+import { ArrowRight, Mail, AlertCircle, CheckCircle } from 'lucide-react';
 import axiosInstance from '../../../api/axiosInstance';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
 
-interface LoginFormData {
+interface SignupFormData {
+    name: string;
     email: string;
+    phone: string;
     password: string;
+    confirmPassword: string;
 }
 
-const Login = () => {
+const Signup = () => {
     const navigate = useNavigate();
-    const [formData, setFormData] = useState<LoginFormData>({
+    const [formData, setFormData] = useState<SignupFormData>({
+        name: '',
         email: '',
+        phone: '',
         password: '',
+        confirmPassword: '',
     });
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [acceptTerms, setAcceptTerms] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
@@ -35,17 +43,33 @@ const Login = () => {
         setLoading(true);
         setError('');
 
-        try {
-            const response = await axiosInstance.post('/api/auth/signin', formData);
-            console.log(response)
+        if (formData.password !== formData.confirmPassword) {
+            setError('Passwords do not match');
+            setLoading(false);
+            return;
+        }
 
-            if (response.data.isSuccess) {
-                toast.success('Login successful!');
-                navigate('/dashboard');
+        if (!acceptTerms) {
+            setError('Please accept the terms and conditions');
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const response = await axiosInstance.post('/api/auth/register', {
+                name: formData.name,
+                email: formData.email,
+                phone: formData.phone,
+                password: formData.password,
+            });
+
+            if (response.data.success) {
+                toast.success('Account created successfully! Please check your email for verification.');
+                navigate('/login');
             }
         } catch (err) {
             const axiosError = err as AxiosError;
-            const errorMessage = axiosError.response?.data?.message || 'Login failed. Please try again.';
+            const errorMessage = axiosError.response?.data?.message || 'Registration failed. Please try again.';
             setError(errorMessage);
             toast.error(errorMessage);
         } finally {
@@ -84,7 +108,7 @@ const Login = () => {
                             transition={{ delay: 0.3, duration: 0.8 }}
                             className="text-3xl font-bold mb-4"
                         >
-                            Join Thousands of Successful Investors
+                            Start Your Investment Journey Today
                         </motion.h2>
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}
@@ -92,7 +116,7 @@ const Login = () => {
                             transition={{ delay: 0.5, duration: 0.8 }}
                             className="text-lg opacity-90"
                         >
-                            Start your journey to financial freedom with our proven mining technology.
+                            Join thousands of investors who are already earning passive income through our advanced mining technology.
                         </motion.p>
                     </motion.div>
                 </div>
@@ -103,7 +127,7 @@ const Login = () => {
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8 }}
-                className="w-full lg:w-1/2 flex items-center justify-center p-8"
+                className="w-full lg:w-1/2 flex items-center justify-center p-8 overflow-y-auto"
             >
                 <div className="w-full max-w-md">
                     {/* Header */}
@@ -114,10 +138,10 @@ const Login = () => {
                         className="text-center mb-8"
                     >
                         <h1 className="text-4xl font-bold text-white mb-2">
-                            Welcome Back
+                            Create Account
                         </h1>
                         <p className="text-gray-200">
-                            Sign in to access your <span className="text-gold-500">NexGen</span> dashboard
+                            Join our community of successful investors
                         </p>
                     </motion.div>
 
@@ -129,6 +153,28 @@ const Login = () => {
                         onSubmit={handleSubmit}
                         className="space-y-6"
                     >
+                        {/* Name Field */}
+                        <div>
+                            <label htmlFor="name" className="block text-sm font-medium text-gray-200 mb-2">
+                                Full Name
+                            </label>
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <FaUser className="h-5 w-5 text-gray-400" />
+                                </div>
+                                <input
+                                    id="name"
+                                    name="name"
+                                    type="text"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    className="block w-full pl-10 pr-3 py-3 border border-gray-300/30 rounded-lg bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all duration-200"
+                                    placeholder="Enter your full name"
+                                    required
+                                />
+                            </div>
+                        </div>
+
                         {/* Email Field */}
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-gray-200 mb-2">
@@ -136,7 +182,7 @@ const Login = () => {
                             </label>
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <Mail className="h-5 w-5 text-gray-300" />
+                                    <Mail className="h-5 w-5 text-gray-400" />
                                 </div>
                                 <input
                                     id="email"
@@ -151,6 +197,28 @@ const Login = () => {
                             </div>
                         </div>
 
+                        {/* Phone Field */}
+                        <div>
+                            <label htmlFor="phone" className="block text-sm font-medium text-gray-200 mb-2">
+                                Phone Number
+                            </label>
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <FaPhone className="h-5 w-5 text-gray-400" />
+                                </div>
+                                <input
+                                    id="phone"
+                                    name="phone"
+                                    type="tel"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    className="block w-full pl-10 pr-3 py-3 border border-gray-300/30 rounded-lg bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all duration-200"
+                                    placeholder="Enter your phone number"
+                                    required
+                                />
+                            </div>
+                        </div>
+
                         {/* Password Field */}
                         <div>
                             <label htmlFor="password" className="block text-sm font-medium text-gray-200 mb-2">
@@ -158,7 +226,7 @@ const Login = () => {
                             </label>
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <FaLock className="h-5 w-5 text-gray-300" />
+                                    <FaLock className="h-5 w-5 text-gray-400" />
                                 </div>
                                 <input
                                     id="password"
@@ -167,7 +235,7 @@ const Login = () => {
                                     value={formData.password}
                                     onChange={handleChange}
                                     className="block w-full pl-10 pr-12 py-3 border border-gray-300/30 rounded-lg bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all duration-200"
-                                    placeholder="Enter your password"
+                                    placeholder="Create a strong password"
                                     required
                                 />
                                 <button
@@ -176,12 +244,66 @@ const Login = () => {
                                     className="absolute inset-y-0 right-0 pr-3 flex items-center"
                                 >
                                     {showPassword ? (
-                                        <FaEyeSlash className="h-5 w-5 text-gray-300 hover:text-gray-200" />
+                                        <FaEyeSlash className="h-5 w-5 text-gray-400 hover:text-gray-300" />
                                     ) : (
-                                        <FaEye className="h-5 w-5 text-gray-300 hover:text-gray-200" />
+                                        <FaEye className="h-5 w-5 text-gray-400 hover:text-gray-300" />
                                     )}
                                 </button>
                             </div>
+                        </div>
+
+                        {/* Confirm Password Field */}
+                        <div>
+                            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-200 mb-2">
+                                Confirm Password
+                            </label>
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <FaLock className="h-5 w-5 text-gray-400" />
+                                </div>
+                                <input
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    type={showConfirmPassword ? 'text' : 'password'}
+                                    value={formData.confirmPassword}
+                                    onChange={handleChange}
+                                    className="block w-full pl-10 pr-12 py-3 border border-gray-300/30 rounded-lg bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all duration-200"
+                                    placeholder="Confirm your password"
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                                >
+                                    {showConfirmPassword ? (
+                                        <FaEyeSlash className="h-5 w-5 text-gray-400 hover:text-gray-300" />
+                                    ) : (
+                                        <FaEye className="h-5 w-5 text-gray-400 hover:text-gray-300" />
+                                    )}
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Terms and Conditions */}
+                        <div className="flex items-start space-x-3">
+                            <input
+                                id="acceptTerms"
+                                type="checkbox"
+                                checked={acceptTerms}
+                                onChange={(e) => setAcceptTerms(e.target.checked)}
+                                className="mt-1 h-4 w-4 text-gold-500 bg-white/10 border-gray-300/30 rounded focus:ring-gold-500 focus:ring-2"
+                            />
+                            <label htmlFor="acceptTerms" className="text-sm text-gray-300">
+                                I agree to the{' '}
+                                <Link to="/terms" className="text-gold-400 hover:text-gold-300 underline">
+                                    Terms of Service
+                                </Link>
+                                {' '}and{' '}
+                                <Link to="/privacy" className="text-gold-400 hover:text-gold-300 underline">
+                                    Privacy Policy
+                                </Link>
+                            </label>
                         </div>
 
                         {/* Error Message */}
@@ -201,14 +323,14 @@ const Login = () => {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             type="submit"
-                            disabled={loading}
+                            disabled={loading || !acceptTerms}
                             className="w-full flex items-center justify-center px-6 py-3 bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-white font-semibold rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {loading ? (
                                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                             ) : (
                                 <>
-                                    Sign In
+                                    Create Account
                                     <ArrowRight className="ml-2 w-5 h-5" />
                                 </>
                             )}
@@ -220,24 +342,15 @@ const Login = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.6, duration: 0.8 }}
-                        className="mt-8 text-center space-y-4"
+                        className="mt-8 text-center"
                     >
                         <div className="text-gray-300">
-                            <span>Don't have an account? </span>
+                            <span>Already have an account? </span>
                             <Link
-                                to="/signup"
+                                to="/login"
                                 className="text-gold-400 hover:text-gold-300 font-semibold transition-colors duration-200"
                             >
-                                Sign up here
-                            </Link>
-                        </div>
-
-                        <div>
-                            <Link
-                                to="/forgot-password"
-                                className="text-gray-300 hover:text-gray-200 text-sm transition-colors duration-200"
-                            >
-                                Forgot your password?
+                                Sign in here
                             </Link>
                         </div>
                     </motion.div>
@@ -247,4 +360,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Signup;

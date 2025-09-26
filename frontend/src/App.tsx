@@ -14,10 +14,10 @@ import MaintenancePage from './components/MaintenancePage';
 import ResetPassword from './pages/ResetPassword';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Landing from './components/landinPage/Landing';
 import Login from './components/landinPage/authPages/Login';
 import Signup from './components/landinPage/authPages/Signup';
 import AdminLogin from './components/landinPage/authPages/AdminLogin';
+import Landing from './components/landinPage/Landing';
 
 const App = () => {
   const maintenanceMode = import.meta.env.VITE_MAINTENANCE_MODE;
