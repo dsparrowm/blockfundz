@@ -24,7 +24,7 @@ import VerifiedEmailSuccessPageNew from './components/landinPage/authPages/Verif
 import Landing from './components/landinPage/Landing';
 
 const App = () => {
-  const maintenanceMode = import.meta.env.VITE_MAINTENANCE_MODE;
+  const maintenanceMode = true
 
   return (
     <>
